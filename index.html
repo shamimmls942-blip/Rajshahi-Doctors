@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="bn"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><meta name="theme-color" content="#0a4d3c"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ডাক্তার"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet"><title>রাজশাহী ডাক্তার নির্দেশিকা</title>
+<script>window.__ip=null;addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__ip=e});</script><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><meta name="theme-color" content="#0a4d3c"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ডাক্তার"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet"><title>রাজশাহী ডাক্তার নির্দেশিকা</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4f8f6;--card:#fff;--tx:#17302a;--mu:#5f7a72;--pr:#0f8a6a;--bd:#dbe7e2}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -516,7 +516,7 @@ function tools(){$("v").innerHTML=`<div class="card"><b>🚨 জরুরি ন
  <div class="row"><button class="btn g" onclick="bkE()">কপি করুন</button><button class="btn" onclick="bkI()">রিস্টোর করুন</button></div></div>
  <div class="card"><b>📲 ফোনে ইনস্টল করুন</b><div id="ins" style="margin-top:8px"></div></div>
  <p class="mu" style="text-align:center">সংস্করণ ২.৩ • তথ্য শুধু আপনার ডিভাইসে সংরক্ষিত</p>`}
-let DP=null;addEventListener("beforeinstallprompt",e=>{e.preventDefault();DP=e;insUI()});addEventListener("appinstalled",()=>{DP=null;toast("অ্যাপ ইনস্টল হয়েছে");insUI()});
+let DP=window.__ip||null;addEventListener("beforeinstallprompt",e=>{e.preventDefault();DP=e;insUI()});addEventListener("appinstalled",()=>{DP=null;toast("অ্যাপ ইনস্টল হয়েছে");insUI()});
 function insUI(){const e=$("ins");if(!e)return;const sa=matchMedia("(display-mode:standalone)").matches||navigator.standalone;
  if(sa){e.innerHTML='<span class="mu">✅ অ্যাপটি ইতিমধ্যে ইনস্টল করা আছে।</span>';return}
  if(DP){e.innerHTML='<button class="btn" style="width:100%" onclick="doIns()">📲 এখনই ইনস্টল করুন</button>';return}
@@ -979,34 +979,67 @@ tab=function(n){const r=_t.apply(this,arguments),h=document.querySelector("heade
 try{
 var ua=navigator.userAgent,KEY="rinsHide";
 if(matchMedia("(display-mode:standalone)").matches||navigator.standalone)return;
-try{var h=+localStorage.getItem(KEY)||0;if(Date.now()-h<3*864e5)return}catch(e){}
-var ios=/iphone|ipad|ipod/i.test(ua),inapp=/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\/|Snapchat|; wv\)/i.test(ua),ev=null,bar=null;
+try{var h=+localStorage.getItem(KEY)||0;if(Date.now()-h<864e5)return}catch(e){}
+var ios=/iphone|ipad|ipod/i.test(ua),android=/android/i.test(ua);
+var inapp=/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\/|Snapchat|Telegram|WhatsApp|; wv\)/i.test(ua)||(ios&&!/Safari\//.test(ua));
+var ev=window.__ip||null,bar=null,clean=location.href.split("#")[0];
 var st=document.createElement("style");
-st.textContent="#ib{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--card,#fff);color:var(--tx,#111);border:1px solid var(--pr,#0f8a6a);border-radius:16px;box-shadow:0 8px 28px #0006;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:1.45;max-width:620px;margin:0 auto}#ib b{display:block;font-size:14.5px}#ib .t{flex:1}#ib button{font-family:inherit;border:0;border-radius:10px;cursor:pointer}#ib .go{background:var(--pr,#0f8a6a);color:#fff;padding:10px 14px;font-weight:700;font-size:14px;white-space:nowrap}#ib .x{background:none;color:var(--mu,#666);font-size:22px;padding:2px 6px}";
+st.textContent="#ib{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--card,#fff);color:var(--tx,#111);border:1px solid var(--pr,#0f8a6a);border-radius:16px;box-shadow:0 8px 28px #0006;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:1.45;max-width:620px;margin:0 auto}#ib b{display:block;font-size:14.5px}#ib .t{flex:1}#ib .bs{display:flex;flex-direction:column;gap:6px}#ib button{font-family:inherit;border:0;border-radius:10px;cursor:pointer}#ib .go{background:var(--pr,#0f8a6a);color:#fff;padding:10px 14px;font-weight:700;font-size:14px;white-space:nowrap}#ib .cp{background:none;color:var(--pr,#0f8a6a);border:1px solid var(--pr,#0f8a6a)!important;padding:6px 10px;font-size:12.5px;white-space:nowrap}#ib .x{background:none;color:var(--mu,#666);font-size:22px;padding:2px 6px}";
 document.head.appendChild(st);
 function hide(save){if(bar){bar.remove();bar=null}if(save){try{localStorage.setItem(KEY,Date.now())}catch(e){}}}
-function show(title,text,btn,fn){
+function copy(btn){var done=function(){btn.textContent="কপি হয়েছে ✓"};try{navigator.clipboard.writeText(clean).then(done,function(){prompt("লিংক কপি করুন",clean)})}catch(e){prompt("লিংক কপি করুন",clean)}}
+function show(title,text,btn,fn,withCopy){
  if(bar)bar.remove();
  bar=document.createElement("div");bar.id="ib";
- bar.innerHTML='<span style="font-size:26px">📲</span><div class="t"><b></b><span></span></div>'+(btn?'<button class="go"></button>':'')+'<button class="x" aria-label="বন্ধ">×</button>';
+ bar.innerHTML='<span style="font-size:26px">📲</span><div class="t"><b></b><span></span></div><div class="bs">'+(btn?'<button class="go"></button>':'')+(withCopy?'<button class="cp">লিংক কপি</button>':'')+'</div><button class="x" aria-label="বন্ধ">×</button>';
  bar.querySelector("b").textContent=title;bar.querySelector(".t span").textContent=text;
  if(btn){var g=bar.querySelector(".go");g.textContent=btn;g.onclick=fn}
+ if(withCopy){var c=bar.querySelector(".cp");c.onclick=function(){copy(c)}}
  bar.querySelector(".x").onclick=function(){hide(true)};
  document.body.appendChild(bar);
 }
+function rgoChrome(u,f){var a=document.createElement("a");a.href="intent://"+u+"#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+encodeURIComponent(f)+";end";a.target="_blank";a.rel="noopener";a.style.display="none";document.body.appendChild(a);a.click();setTimeout(function(){a.remove()},500)}function openChrome(){rgoChrome(location.host+location.pathname+location.search,clean)}
 function doInstall(){if(!ev)return;ev.prompt();ev.userChoice.then(function(c){ev=null;hide(c&&c.outcome==="accepted")}).catch(function(){})}
 function offerInstall(){show("অ্যাপ ইনস্টল করুন","হোম স্ক্রিনে রাখুন, এক ট্যাপে খুলুন","ইনস্টল",doInstall)}
-addEventListener("beforeinstallprompt",function(e){ev=e;if(!inapp)offerInstall()});
+addEventListener("beforeinstallprompt",function(e){ev=e;offerInstall()});
 addEventListener("appinstalled",function(){hide(true)});
-if(inapp&&!ios){
- var u=location.host+location.pathname+location.search;
- show("Chrome-এ খুলুন","এই ব্রাউজারে ইনস্টল হয় না। Chrome-এ খুলে ইনস্টল করুন।","Chrome-এ খুলুন",function(){location.href="intent://"+u+"#Intent;scheme=https;package=com.android.chrome;end"});
-}else if(ios){
- setTimeout(function(){show("অ্যাপ ইনস্টল করুন","Safari-এর নিচের Share (⬆️) বাটন → \"Add to Home Screen\" চাপুন",null)},2500);
+function androidFallback(){if(ev)return;show("অ্যাপ ইনস্টল করুন","ইনস্টল বাটন না এলে Chrome-এ খুলুন, অথবা Chrome-এর ⋮ মেনু → \"Install app\" / \"Add to Home screen\"","Chrome-এ খুলুন",openChrome,true)}
+if(android){setTimeout(androidFallback,inapp?300:3500)}
+else if(ios){
+ setTimeout(function(){show("অ্যাপ ইনস্টল করুন",inapp?"এই ব্রাউজারে ইনস্টল হয় না। লিংক কপি করে Safari-তে খুলুন, তারপর Share (⬆️) → \"Add to Home Screen\"":"Safari-র নিচের Share (⬆️) বাটন → \"Add to Home Screen\" চাপুন",null,null,inapp)},inapp?300:2500)
 }else{
- setTimeout(function(){if(!ev&&!bar)show("অ্যাপ ইনস্টল করুন","Chrome-এর ⋮ মেনু → \"Install app\" বা \"Add to Home screen\" চাপুন",null)},6000);
+ setTimeout(function(){if(!ev&&!bar)show("অ্যাপ ইনস্টল করুন","ব্রাউজারের মেনু → \"Install app\" বা \"Add to Home screen\" চাপুন",null)},5000)
 }
 }catch(e){}
 })();
 </script>
-</body></html>
+<script>
+(function(){
+try{
+if(matchMedia("(display-mode:standalone)").matches||navigator.standalone)return;
+var ua=navigator.userAgent,ios=/iphone|ipad|ipod/i.test(ua),android=/android/i.test(ua);
+var inapp=/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\/|Snapchat|Telegram|WhatsApp|; wv\)/i.test(ua)||(ios&&!/Safari\//.test(ua));
+var clean=location.href.split("#")[0],st=document.createElement("style");
+st.textContent="#ifab{position:fixed;right:12px;bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:59;background:var(--pr,#0f8a6a);color:#fff;border:0;border-radius:999px;padding:11px 16px;font:700 14px inherit;font-family:inherit;box-shadow:0 6px 20px #0005;cursor:pointer}#imd{position:fixed;inset:0;background:#000a;z-index:80;display:flex;align-items:flex-end;justify-content:center}#imd>div{background:var(--card,#fff);color:var(--tx,#111);width:100%;max-width:620px;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));font-size:14.5px;line-height:1.7}#imd h3{margin:0 0 8px;font-size:17px}#imd ol{margin:6px 0 12px;padding-left:20px}#imd button{font-family:inherit;border:0;border-radius:10px;padding:11px 16px;font-weight:700;font-size:14px;cursor:pointer;background:var(--pr,#0f8a6a);color:#fff;margin-right:8px}#imd .s{background:none;color:var(--pr,#0f8a6a);border:1px solid var(--pr,#0f8a6a)}";
+document.head.appendChild(st);
+var ev=window.__ip||null,b=document.createElement("button");b.id="ifab";b.textContent="📲 ইনস্টল";
+addEventListener("beforeinstallprompt",function(e){ev=e});
+addEventListener("appinstalled",function(){b.remove();var m=document.getElementById("imd");if(m)m.remove()});
+function modal(){
+ var m=document.createElement("div");m.id="imd";
+ var steps=ios?(inapp?'<li>নিচের লিংক কপি করুন</li><li>Safari খুলে লিংকটি পেস্ট করুন</li><li>Share (⬆️) → <b>Add to Home Screen</b> চাপুন</li>':'<li>নিচের Share (⬆️) বাটন চাপুন</li><li><b>Add to Home Screen</b> চাপুন</li><li><b>Add</b> চাপুন</li>'):(inapp?'<li>নিচের <b>Chrome-এ খুলুন</b> চাপুন</li><li>Chrome-এ খুললে ইনস্টল বাটন আসবে</li>':'<li>Chrome-এর উপরের ডানে ⋮ চাপুন</li><li><b>Install app</b> বা <b>Add to Home screen</b> চাপুন</li><li><b>Install</b> চাপুন</li>');
+ m.innerHTML='<div><h3>📲 ফোনে অ্যাপ ইনস্টল করুন</h3><ol>'+steps+'</ol><div><button class="ok">ঠিক আছে</button>'+((android&&inapp)?'<button class="ch">Chrome-এ খুলুন</button>':'')+((ios&&inapp)?'<button class="s cp">লিংক কপি</button>':'')+'</div></div>';
+ m.onclick=function(e){if(e.target===m)m.remove()};
+ document.body.appendChild(m);
+ m.querySelector(".ok").onclick=function(){m.remove()};
+ var ch=m.querySelector(".ch");if(ch)ch.onclick=function(){rgoChrome(location.host+location.pathname+location.search,clean)};
+ var cp=m.querySelector(".cp");if(cp)cp.onclick=function(){try{navigator.clipboard.writeText(clean).then(function(){cp.textContent="কপি হয়েছে ✓"},function(){prompt("লিংক কপি করুন",clean)})}catch(e){prompt("লিংক কপি করুন",clean)}};
+}
+b.onclick=function(){
+ if(ev){ev.prompt();ev.userChoice.then(function(c){if(c&&c.outcome==="accepted")b.remove();ev=null}).catch(function(){})}
+ else modal();
+};
+document.body.appendChild(b);
+}catch(e){}
+})();
+</script></body></html>
