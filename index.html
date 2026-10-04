@@ -973,4 +973,40 @@ document.title="Rajshahi Doctor Guide";tr(document.body);const ob=new MutationOb
 
 {const BN={4:"test",1:"aid",5:"amb",6:"health"},_t=tab;
 tab=function(n){const r=_t.apply(this,arguments),h=document.querySelector("header");if(h){if(BN[n])h.setAttribute("data-bn",BN[n]);else h.removeAttribute("data-bn")}return r}}
-</script></body></html>
+</script>
+<script>
+(function(){
+try{
+var ua=navigator.userAgent,KEY="rinsHide";
+if(matchMedia("(display-mode:standalone)").matches||navigator.standalone)return;
+try{var h=+localStorage.getItem(KEY)||0;if(Date.now()-h<3*864e5)return}catch(e){}
+var ios=/iphone|ipad|ipod/i.test(ua),inapp=/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\/|Snapchat|; wv\)/i.test(ua),ev=null,bar=null;
+var st=document.createElement("style");
+st.textContent="#ib{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--card,#fff);color:var(--tx,#111);border:1px solid var(--pr,#0f8a6a);border-radius:16px;box-shadow:0 8px 28px #0006;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:1.45;max-width:620px;margin:0 auto}#ib b{display:block;font-size:14.5px}#ib .t{flex:1}#ib button{font-family:inherit;border:0;border-radius:10px;cursor:pointer}#ib .go{background:var(--pr,#0f8a6a);color:#fff;padding:10px 14px;font-weight:700;font-size:14px;white-space:nowrap}#ib .x{background:none;color:var(--mu,#666);font-size:22px;padding:2px 6px}";
+document.head.appendChild(st);
+function hide(save){if(bar){bar.remove();bar=null}if(save){try{localStorage.setItem(KEY,Date.now())}catch(e){}}}
+function show(title,text,btn,fn){
+ if(bar)bar.remove();
+ bar=document.createElement("div");bar.id="ib";
+ bar.innerHTML='<span style="font-size:26px">📲</span><div class="t"><b></b><span></span></div>'+(btn?'<button class="go"></button>':'')+'<button class="x" aria-label="বন্ধ">×</button>';
+ bar.querySelector("b").textContent=title;bar.querySelector(".t span").textContent=text;
+ if(btn){var g=bar.querySelector(".go");g.textContent=btn;g.onclick=fn}
+ bar.querySelector(".x").onclick=function(){hide(true)};
+ document.body.appendChild(bar);
+}
+function doInstall(){if(!ev)return;ev.prompt();ev.userChoice.then(function(c){ev=null;hide(c&&c.outcome==="accepted")}).catch(function(){})}
+function offerInstall(){show("অ্যাপ ইনস্টল করুন","হোম স্ক্রিনে রাখুন, এক ট্যাপে খুলুন","ইনস্টল",doInstall)}
+addEventListener("beforeinstallprompt",function(e){ev=e;if(!inapp)offerInstall()});
+addEventListener("appinstalled",function(){hide(true)});
+if(inapp&&!ios){
+ var u=location.host+location.pathname+location.search;
+ show("Chrome-এ খুলুন","এই ব্রাউজারে ইনস্টল হয় না। Chrome-এ খুলে ইনস্টল করুন।","Chrome-এ খুলুন",function(){location.href="intent://"+u+"#Intent;scheme=https;package=com.android.chrome;end"});
+}else if(ios){
+ setTimeout(function(){show("অ্যাপ ইনস্টল করুন","Safari-এর নিচের Share (⬆️) বাটন → \"Add to Home Screen\" চাপুন",null)},2500);
+}else{
+ setTimeout(function(){if(!ev&&!bar)show("অ্যাপ ইনস্টল করুন","Chrome-এর ⋮ মেনু → \"Install app\" বা \"Add to Home screen\" চাপুন",null)},6000);
+}
+}catch(e){}
+})();
+</script>
+</body></html>
