@@ -490,16 +490,8 @@ nav button::before,nav button.on::after{display:none}
 .hsw .qc{right:98px;top:15px}
 </style>
 <style id="hfcolors">
-#hf .chip{--c:#0f7459;font-weight:600;border:1.5px solid var(--c);color:var(--c);background:color-mix(in srgb,var(--c) 12%,var(--card))}
-#hf .chip.hc-all{--c:#0f7459}
-#hf .chip.hc-g{--c:#2b7bd9}
-#hf .chip.hc-p{--c:#8a4fd1}
-#hf .chip.hc-e{--c:#d93b3b}
-#hf .chip.hc-b{--c:#c2255c}
-#hf .chip.hc-i{--c:#e07b00}
-#hf .chip.on{background:var(--c);color:#fff;border-color:var(--c);box-shadow:0 3px 10px color-mix(in srgb,var(--c) 45%,transparent)}
-:root[data-theme="dark"] #hf .chip:not(.on){color:color-mix(in srgb,var(--c) 55%,#fff)}
-:root:not([data-theme="light"]) #hf .chip:not(.on){color:color-mix(in srgb,var(--c) 55%,#fff)}
+#hf .chip{--c:var(--pr)}
+#hf .chip.on{--c:var(--pr)}
 </style>
 <style>
 /* ===== হাসপাতাল ট্যাব: নতুন ডিজাইন ===== */
@@ -515,17 +507,6 @@ nav button::before,nav button.on::after{display:none}
 .hx-st b{display:block;font-size:19px;font-weight:700;line-height:1.3;color:#f0d9a0;font-family:var(--sans);font-variant-numeric:lining-nums}
 .hx-st small{font-size:11px;color:#bfd3c8}
 
-.hx-em{border:1px solid #d93b3b55;border-radius:18px;padding:12px;margin-bottom:12px;background:linear-gradient(180deg,var(--card),color-mix(in srgb,var(--card) 93%,#d93b3b))}
-.hx-emt{display:flex;align-items:center;gap:9px;margin-bottom:10px}
-.hx-emt b{font-family:var(--sans);font-size:13.5px;color:#d93b3b}
-.hx-pulse{flex:none;width:9px;height:9px;border-radius:50%;background:#d93b3b;animation:hxp 1.8s infinite}
-@keyframes hxp{0%{box-shadow:0 0 0 0 #d93b3b99}70%{box-shadow:0 0 0 9px #d93b3b00}100%{box-shadow:0 0 0 0 #d93b3b00}}
-.hx-emb{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.hx-emb>*{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:54px;padding:6px 4px;border-radius:14px;border:0;font-family:inherit;text-decoration:none;cursor:pointer;color:#fff;background:linear-gradient(180deg,#d94545,#b52c2c);box-shadow:0 1px 0 #ffffff2e inset,0 4px 12px #b52c2c40}
-.hx-emb b{font-size:16px;font-weight:700;line-height:1.3;font-variant-numeric:lining-nums}
-.hx-emb small{font-size:10.5px;opacity:.92;line-height:1.3}
-.hx-emb .g{background:var(--card);color:var(--pr);border:1px solid var(--au);box-shadow:none}
-.hx-emb .g b{font-size:14px}
 
 .hx-s{position:relative;margin:0 0 10px}
 .hx-s input{height:50px;margin:0;padding:0 46px 0 46px;border-radius:25px;border:1px solid var(--au);font-size:15px;box-shadow:0 8px 22px #0a4d3a14}
@@ -535,24 +516,17 @@ nav button::before,nav button.on::after{display:none}
 .hx-ct{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--mu);margin:0 2px 10px}
 .hx-ct:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--au),transparent);opacity:.7}
 
-.hx-c{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:14px 14px 10px 17px;margin-bottom:12px;box-shadow:0 1px 0 #fff inset,0 6px 20px #3a2c0f0d;animation:rise .38s cubic-bezier(.2,.7,.2,1) both}
-.hx-c:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--vc)}
+.hx-c{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+.hx-c:before{display:none}
 .hx-top{display:flex;gap:12px;align-items:flex-start}
-.hx-av{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:14px;color:var(--c);background:color-mix(in srgb,var(--c) 13%,var(--card));border:1px solid color-mix(in srgb,var(--c) 30%,transparent)}
+.hx-av{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:12px;color:var(--pr);background:var(--bg);border:1px solid var(--bd)}
 .hx-av svg{width:25px;height:25px}
-.hx-av.g{--c:#2b7bd9}
-.hx-av.p{--c:#8a4fd1}
 .hx-tt{min-width:0;flex:1}
 .hx-nm{display:block;font-size:15.5px;font-weight:700;line-height:1.4;font-family:var(--sans)}
 .hx-en{font-size:11.5px;color:var(--mu);margin-top:1px;line-height:1.35}
 .hx-bg{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
-.hx-b{display:inline-flex;align-items:center;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:600;line-height:1.6;color:color-mix(in srgb,var(--c) 82%,var(--tx));background:color-mix(in srgb,var(--c) 12%,var(--card));border:1px solid color-mix(in srgb,var(--c) 30%,transparent)}
-.hx-b.g{--c:#2b7bd9}
-.hx-b.p{--c:#8a4fd1}
-.hx-b.e{--c:#d93b3b}
-.hx-b.b{--c:#c2255c}
-.hx-b.i{--c:#e07b00}
-.hx-v{display:flex;align-items:flex-start;gap:6px;margin-top:8px;padding:6px 10px;border-radius:10px;font-size:12px;font-weight:600;line-height:1.5;color:color-mix(in srgb,var(--vc) 82%,var(--tx));background:color-mix(in srgb,var(--vc) 9%,var(--card));border:1px solid color-mix(in srgb,var(--vc) 28%,transparent)}
+.hx-b{display:inline-flex;align-items:center;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:600;line-height:1.6;color:var(--mu);background:var(--bg);border:1px solid var(--bd)}
+.hx-v{display:flex;align-items:flex-start;gap:6px;margin-top:8px;font-size:12px;line-height:1.5;color:var(--mu)}
 .hx-ad{display:flex;gap:8px;align-items:flex-start;margin-top:11px;font-size:13.5px;line-height:1.55}
 .hx-ad svg{flex:none;width:17px;height:17px;margin-top:2px;color:var(--pr)}
 .hx-fs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
@@ -560,8 +534,8 @@ nav button::before,nav button.on::after{display:none}
 .hx-nt{display:flex;gap:8px;margin-top:10px;padding:9px 11px;border-radius:12px;font-size:12.5px;line-height:1.6;color:var(--mu);background:color-mix(in srgb,var(--pr) 6%,var(--card));border:1px dashed var(--bd)}
 .hx-nt svg{flex:none;width:16px;height:16px;margin-top:2px;color:var(--pr)}
 .hx-cl{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;margin-top:12px}
-.hx-cb{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:14px;text-decoration:none;color:#fff;background:linear-gradient(180deg,#0f7459,#0a5440);border:1px solid #0a4a39;box-shadow:0 1px 0 #ffffff2e inset,0 4px 12px #0c5f4a33}
-.hx-cb.sos{background:linear-gradient(180deg,#d94545,#b52c2c);border-color:#9c2323;box-shadow:0 1px 0 #ffffff2e inset,0 4px 12px #b52c2c40}
+.hx-cb{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;text-decoration:none;color:#fff;background:var(--pr);border:1px solid var(--pr)}
+.hx-cb.sos{background:var(--pr);border-color:var(--pr)}
 .hx-cb:active{transform:translateY(1px)}
 .hx-cb svg{flex:none;width:20px;height:20px}
 .hx-cb span{display:flex;flex-direction:column;min-width:0;line-height:1.3}
@@ -588,13 +562,13 @@ nav button::before,nav button.on::after{display:none}
 .hx-lg>b{display:block;font-family:var(--serif);font-size:15px;margin-bottom:8px}
 .hx-lr{display:flex;flex-direction:column;gap:5px}
 .hx-lr span{display:flex;align-items:center;gap:8px;font-size:12.5px}
-.hx-lr i{flex:none;width:10px;height:10px;border-radius:50%;background:var(--vc)}
+.hx-lr i{display:none}
 .hx-lg p{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--bd);font-size:12.3px;line-height:1.65;color:var(--mu)}
-:root[data-theme="dark"] .hx-pl b,:root[data-theme="dark"] .hx-ac a,:root[data-theme="dark"] .hx-ac button,:root[data-theme="dark"] .hx-emb .g{color:var(--au2)}
+:root[data-theme="dark"] .hx-pl b,:root[data-theme="dark"] .hx-ac a,:root[data-theme="dark"] .hx-ac button{color:var(--au2)}
 @media(prefers-color-scheme:dark){
-:root:not([data-theme="light"]) .hx-pl b,:root:not([data-theme="light"]) .hx-ac a,:root:not([data-theme="light"]) .hx-ac button,:root:not([data-theme="light"]) .hx-emb .g{color:var(--au2)}
+:root:not([data-theme="light"]) .hx-pl b,:root:not([data-theme="light"]) .hx-ac a,:root:not([data-theme="light"]) .hx-ac button{color:var(--au2)}
 }
-@media(max-width:340px){.hx-st b{font-size:17px}.hx-emb small{display:none}}
+@media(max-width:340px){.hx-st b{font-size:17px}}
 .sosc{padding:9px 11px!important;border-radius:14px!important;margin-bottom:8px!important}.sosc>b{font-size:13px!important}.sosc>.mu{font-size:11px!important;line-height:1.35}.sosc .row{gap:6px}.sosc .btn{font-size:11.5px!important;padding:6px 6px!important;border-radius:10px!important;box-shadow:none!important}
 </style>
 </head><body>
@@ -891,8 +865,7 @@ search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
 info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>'};
 const hxI=k=>hxS(HXP[k]);
 function hxCnt(k){return HOSPD.filter(h=>k=="all"||h.t==k||h.tg.includes(k)).length}
-function hsp(){$("v").innerHTML=HI("hosp")+`<section class="hx-em"><div class="hx-emt"><span class="hx-pulse"></span><b>জরুরি হলে আগে কল করুন</b></div><div class="hx-emb"><a href="tel:999"><b>${bn(999)}</b><small>জাতীয় জরুরি সেবা</small></a><a href="tel:01321180514"><b>RMCH</b><small>জরুরি বিভাগ</small></a><button class="g" onclick="tab(5)"><b>অ্যাম্বুলেন্স</b><small>নম্বর তালিকা</small></button></div></section>
-<div class="hx-s">${hxI("search").replace("<svg ",'<svg class="hx-si" ')}<input id="hq" type="text" enterkeyhint="search" placeholder="হাসপাতালের নাম বা এলাকা খুঁজুন" oninput="hspQ=this.value;hspR()" value="${esc(hspQ)}" autocomplete="off" aria-label="হাসপাতাল খুঁজুন"><button class="hx-x" id="hxclr" onclick="hspQ='';$('hq').value='';hspR();$('hq').focus()" aria-label="মুছুন">✕</button></div>
+function hsp(){$("v").innerHTML=HI("hosp")+`<div class="hx-s">${hxI("search").replace("<svg ",'<svg class="hx-si" ')}<input id="hq" type="text" enterkeyhint="search" placeholder="হাসপাতালের নাম বা এলাকা খুঁজুন" oninput="hspQ=this.value;hspR()" value="${esc(hspQ)}" autocomplete="off" aria-label="হাসপাতাল খুঁজুন"><button class="hx-x" id="hxclr" onclick="hspQ='';$('hq').value='';hspR();$('hq').focus()" aria-label="মুছুন">✕</button></div>
 <div class="chips ff" id="hf"></div><div class="hx-ct" id="hc"></div><div id="hl"></div>
 <div class="hx-lg"><b>তথ্যের নির্ভরযোগ্যতা</b><div class="hx-lr">${["o","d","c"].map(k=>`<span style="--vc:${HV[k][2]}"><i></i>${HV[k][0]} ${HV[k][1]}</span>`).join("")}</div><p>ℹ️ তথ্য যাচাইয়ের তারিখ: ৮ অক্টোবর ২০২৬। ✅ চিহ্নিত নম্বর হাসপাতালের নিজস্ব ওয়েবসাইট থেকে নেওয়া। 🔎 ও 📞 চিহ্নিত তথ্য ডিরেক্টরি বা পুরোনো তালিকা থেকে, তাই সময়, শয্যা ও নম্বর বদলে যেতে পারে। শয্যা ও ICU-র সংখ্যা সংবাদ বা ওয়েবসাইটের আনুমানিক তথ্য; সরাসরি খালি আছে কি না জানতে কল করুন।</p></div>`;hspR()}
 function hspR(){const q=hspQ.trim().toLowerCase(),L=HOSPD.map((h,i)=>[h,i]).filter(([h])=>(hspF=="all"||h.t==hspF||h.tg.includes(hspF))&&(!q||(h.n+" "+h.en+" "+h.a+" "+h.f.join(" ")).toLowerCase().includes(q))).sort((a,b)=>"odc".indexOf(a[0].v)-"odc".indexOf(b[0].v));
