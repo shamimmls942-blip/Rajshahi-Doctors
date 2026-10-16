@@ -662,42 +662,44 @@ addEventListener('pageshow',function(e){if(e.persisted)show()});
 #xo .ic svg{width:30px;height:30px}
 #xo h3{margin:0 0 6px;font-size:19px;font-weight:700}
 #xo p{margin:0 0 18px;font-size:14px;line-height:1.55;color:var(--mu,#64748b)}
-#xo .bt{display:flex;flex-direction:column;gap:9px}
-#xo button{font:inherit;font-size:15.5px;font-weight:700;border:0;border-radius:14px;padding:14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#xo .bt{display:flex;gap:10px}
+#xo button{flex:1;font:inherit;font-size:15.5px;font-weight:700;border:0;border-radius:14px;padding:14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
 #xo .st{background:var(--pr,#0f8a6a);color:#fff;box-shadow:0 6px 16px rgba(15,138,106,.35)}
-#xo .ex{background:transparent;color:var(--mu,#64748b);font-weight:600}
+#xo .ex{background:rgba(220,60,60,.12);color:#d64545}
 #xo button:active{transform:scale(.97)}
 </style>
-<div id="xo" role="dialog" aria-modal="true" aria-labelledby="xt"><div class="bx"><div class="ic"><svg viewBox="0 0 64 60" aria-hidden="true"><path d="M32 56C10 40 4 28 4 18 4 10 10 5 17 5c6 0 11 3 15 8 4-5 9-8 15-8 7 0 13 5 13 13 0 10-6 22-28 38z" fill="#fff"/><path d="M32 20v14M25 27h14" stroke="#0f8a6a" stroke-width="4.5" stroke-linecap="round"/></svg></div>
-<h3 id="xt">চলে যাচ্ছেন?</h3><p id="xp">রাজশাহীর ডাক্তার, হাসপাতাল ও জরুরি সেবা সবসময় আপনার হাতের কাছেই আছে।</p>
-<div class="bt"><button class="st" id="xs">থাকুন</button><button class="ex" id="xe">বের হন</button></div></div></div>
+<div id="xo" role="dialog" aria-modal="true" aria-labelledby="xh"><div class="bx"><div class="ic"><svg viewBox="0 0 64 60" aria-hidden="true"><path d="M32 56C10 40 4 28 4 18 4 10 10 5 17 5c6 0 11 3 15 8 4-5 9-8 15-8 7 0 13 5 13 13 0 10-6 22-28 38z" fill="#fff"/><path d="M32 20v14M25 27h14" stroke="#0f8a6a" stroke-width="4.5" stroke-linecap="round"/></svg></div>
+<h3 id="xh">অ্যাপ থেকে বের হবেন?</h3><p>রাজশাহীর ডাক্তার, হাসপাতাল ও জরুরি সেবা সবসময় আপনার হাতের কাছেই আছে।</p>
+<div class="bt"><button class="ex" id="xe">বের হন</button><button class="st" id="xs">থাকুন</button></div></div></div>
 <script>(function(){
-var o=document.getElementById('xo'),open=false,K='rdguard';
+var o=document.getElementById('xo'),K='rdguard',open=false,ex=false;
 function pushTop(){try{history.pushState({n:0},"")}catch(e){}}
 function show(){open=true;o.classList.add('on')}
 function hide(){open=false;o.classList.remove('on')}
-/* হোমের নিচে একটা guard এন্ট্রি বসাই, যাতে back চাপলে সরাসরি বের না হয়ে ডায়ালগ আসে */
+/* হোমের নিচে guard: ব্যাক চাপলে অ্যাপ বের হয় না, শুধু ডায়ালগ আসে */
 try{
- var hs=history.state;
- if(!sessionStorage.getItem(K)&&hs&&hs.n===0){
-  sessionStorage.setItem(K,'1');
+ var hs=history.state,fl=parseInt(sessionStorage.getItem(K)||'0',10);
+ if((!fl||history.length<fl)&&hs&&hs.n===0){
+  sessionStorage.setItem(K,String(history.length+1));
   history.replaceState({guard:1},"");history.pushState({n:0},"");
  }
 }catch(e){}
+function closeApp(){
+ try{window.close()}catch(e){}
+ try{history.go(-history.length)}catch(e){}
+ setTimeout(function(){try{window.close()}catch(e){}},150);
+ setTimeout(function(){try{window.open('','_self');window.close()}catch(e){}},300);
+}
 addEventListener('popstate',function(e){
  var s=e.state;
  if(s&&s.guard){
-  if(open){hide();pushTop();return}   /* ডায়ালগ খোলা অবস্থায় আবার back = থেকে যান */
-  pushTop();show();
+  if(ex){closeApp();return}
+  pushTop();                 /* ব্যাকে বের হবে না, আবার হোমে ফিরি */
+  if(open)hide();else show();
  }
 });
-document.getElementById('xs').onclick=function(){hide()};
+document.getElementById('xs').onclick=hide;
 o.addEventListener('click',function(e){if(e.target===o)hide()});
-document.getElementById('xe').onclick=function(){
- var sa=false;try{sa=matchMedia('(display-mode: standalone)').matches||navigator.standalone}catch(e){}
- try{window.close()}catch(e){}
- try{history.go(-2)}catch(e){}
- if(!sa)setTimeout(function(){try{location.replace('about:blank')}catch(e){}},250);
-};
+document.getElementById('xe').onclick=function(){ex=true;hide();closeApp()};
 })();</script>
 </body></html>
