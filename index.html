@@ -2568,7 +2568,7 @@ function setup(){SCR="setup";V(bk(SS?"TM.home()":"TM.am('l')","ফিরে য�
 
 /* ---------- লগইন / রেজিস্ট্রেশন ---------- */
 function auth(){SCR="auth";const r=AM=="r",dr=AR=="d";
- V(bk("tab(0)","ফিরে যান","হোম")+`<h3>🩺 অনলাইন ডাক্তার সেবা</h3><div class="card"><p class="mu" style="margin:0 0 8px">রোগী ডাক্তারকে রিকোয়েস্ট পাঠাবেন, ডাক্তার সময় ও পেমেন্ট নম্বর দিয়ে নিশ্চিত করবেন, তারপর ভিডিও কল।</p>
+ V(bk("tab(0)","ফিরে যান","হোম")+`<h3>🩺 অনলাইন ডাক্তার সেবা</h3><div class="card"><p class="mu" style="margin:0 0 8px">রোগী ডাক্তারকে রিকোয়েস্ট পাঠাবেন, ডাক্তার সময় ও পেমেন্ট নম্বর দিয়ে নিশ্চিত করবেন, তারপর WhatsApp-এ ভিডিও কল।</p>
  <div class="seg"><button class="${!r?"on l":""}" onclick="TM.am('l')">🔑 লগইন</button><button class="${r?"on l":""}" onclick="TM.am('r')">📝 নতুন অ্যাকাউন্ট</button></div>
  ${r?`<div class="seg"><button class="${!dr?"on l":""}" onclick="TM.ar('p')">🧑 আমি রোগী</button><button class="${dr?"on l":""}" onclick="TM.ar('d')">👨‍⚕️ আমি ডাক্তার</button></div><input id="tn" placeholder="পুরো নাম" autocomplete="name">`:""}
  <input id="tp" type="tel" inputmode="numeric" placeholder="মোবাইল নম্বর (০১৭XXXXXXXX)" autocomplete="tel"><input id="tw" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" autocomplete="${r?"new-password":"current-password"}">
@@ -2602,11 +2602,11 @@ const dash=()=>{if(window.navRep)window.navRep("tm",["home"]);return PF.r=="p"?p
 const joinable=a=>{const t=at(a);return a.type=="v"&&a.st=="conf"&&t&&(PF.r=="d"||(Date.now()>=t-10*60000&&Date.now()<=t.getTime()+60*60000))};
 function acard(a){const d=PF.r=="d",x=at(a);
  return `<div class="card" style="margin-bottom:8px"><div class="fh"><b>${esc(d?a.pn:a.dn)}</b>${chip(a.st)}</div>
- <div class="mu" style="margin:4px 0">${a.type=="v"?"🎥 ভিডিও পরামর্শ":"🏥 চেম্বারে সাক্ষাৎ"}<br>${x?`🕒 ${dl(a.date)}, ${bnT(a.time)}`:`📅 চাওয়া সময়: ${dl(a.pd)} (${esc(a.pt)})`}${d?`<br>📞 ${esc(a.pp)}`:""}${a.type=="v"&&a.fee&&a.st!="req"?`<br>💳 ফি: ৳${B(a.fee)}`:""}</div>
+ <div class="mu" style="margin:4px 0">${a.type=="v"?"🎥 ভিডিও পরামর্শ":"🏥 চেম্বারে সাক্ষাৎ"}<br>${x?`🕒 ${dl(a.date)}, ${bnT(a.time)}`:`📅 চাওয়া সময়: ${dl(a.pd)} (${esc(a.pt)})`}${d?`<br>📞 ${esc(a.pp)}${a.type=="v"&&a.pw?`<br>🟢 রোগীর WhatsApp: ${B(a.pw)}`:""}`:(a.type=="v"&&a.dwa&&a.st=="conf"?`<br>🟢 ডাক্তারের WhatsApp: ${B(a.dwa)}`:"")}${a.type=="v"&&a.fee&&a.st!="req"?`<br>💳 ফি: ৳${B(a.fee)}`:""}</div>
  ${a.reason?`<div class="tn">${esc(a.reason)}</div>`:""}${a.rn&&a.st=="rej"?`<div class="tn">কারণ: ${esc(a.rn)}</div>`:""}${a.pnote&&a.st=="sch"?`<div class="tn" style="color:#d93b3b">${esc(a.pnote)}</div>`:""}${a.snote&&a.st!="req"?`<div class="tn">ডাক্তারের নোট: ${esc(a.snote)}</div>`:""}
  ${d&&a.st=="paid"?`<div class="tn">💳 TrxID: <b>${esc(a.trx)}</b> • প্রেরক: ${esc(a.sn)} • ৳${B(a.fee)} (${esc(a.pm.m)})</div>`:""}
- ${!d&&a.st=="conf"&&a.type=="v"&&!joinable(a)?`<div class="tn">ভিডিও কলের বাটন সময়ের ১০ মিনিট আগে সক্রিয় হবে।</div>`:""}
- <div class="row" style="margin-top:6px">${joinable(a)?`<button class="btn" onclick="TM.call('${a.id}')">🎥 ভিডিও কলে যোগ দিন</button>`:""}
+ ${!d&&a.st=="conf"&&a.type=="v"&&!joinable(a)?`<div class="tn">WhatsApp ভিডিও কলের বাটন সময়ের ১০ মিনিট আগে সক্রিয় হবে।</div>`:""}
+ <div class="row" style="margin-top:6px">${joinable(a)?`<button class="btn" style="background:#25D366;color:#fff" onclick="TM.call('${a.id}')">🟢 WhatsApp ভিডিও কল</button>`:""}
  ${d&&a.st=="req"?`<button class="btn" onclick="TM.sch('${a.id}')">✅ গ্রহণ: সময় ও পেমেন্ট দিন</button><button class="btn g" onclick="TM.rej('${a.id}')">❌ প্রত্যাখ্যান</button>`:""}
  ${d&&a.st=="paid"?`<button class="btn" onclick="TM.vp('${a.id}',1)">✅ পেমেন্ট পেয়েছি</button><button class="btn g" onclick="TM.vp('${a.id}',0)">❌ পাইনি</button>`:""}
  ${d&&a.st=="sch"?`<button class="btn g" onclick="TM.sch('${a.id}')">🕒 সময়/পেমেন্ট বদলান</button>`:""}
@@ -2615,6 +2615,7 @@ function acard(a){const d=PF.r=="d",x=at(a);
  ${a.st=="done"?`<button class="btn g" onclick="TM.view('${a.id}')">📄 প্রেসক্রিপশন</button>`:""}
  ${((!d&&(a.st=="req"||a.st=="sch"))||(d&&(a.st=="sch"||a.st=="conf")))?`<button class="btn g" style="color:#d93b3b" onclick="TM.can('${a.id}')">বাতিল</button>`:""}</div></div>`}
 const find=id=>A.find(x=>x.id==id);
+const wn=n=>{n=String(n||"").replace(/\D/g,"");return /^01\d{9}$/.test(n)?"88"+n:n},waL=(no,m)=>"https://wa.me/"+wn(no)+"?text="+encodeURIComponent(m),okWa=n=>/^01[3-9]\d{8}$/.test(n);
 async function act(f){if(BUSY)return;BUSY=1;try{await f();await ld()}catch(e){net()}BUSY=0;return home()}
 function can(id){if(!confirm("অ্যাপয়েন্টমেন্টটি বাতিল করবেন?"))return;act(()=>upd(find(id),{st:"cancel"}))}
 function rej(id){const r=prompt("প্রত্যাখ্যানের কারণ (ঐচ্ছিক):");if(r===null)return;act(()=>upd(find(id),{st:"rej",rn:r.trim()}))}
@@ -2635,38 +2636,38 @@ async function book(did,type){if(!SS){BK={pend:did};AM="r";AR="p";toast("আগ�
  if(!PF||PF.r!="p")return toast("রোগী অ্যাকাউন্ট থেকে রিকোয়েস্ট পাঠান");
  try{if(!(OD[did]))OD=await fb("docmap","GET",undefined,1)||{}}catch(e){return net()}
  if(!OD[did])return toast("এই ডাক্তার এখনো অনলাইন সেবায় যুক্ত নন");
- BK={did,type:type||"v",pd:dk(new Date(Date.now()+864e5)),pt:"সন্ধ্যা/রাত",reason:""};bview()}
+ BK={did,type:type||"v",pd:dk(new Date(Date.now()+864e5)),pt:"সন্ধ্যা/রাত",reason:"",pw:PF.ph||""};bview()}
 function bview(){SCR="form";const d=dd(BK.did);
  V(bk("TM.pick()","ফিরে যান","ডাক্তার বাছাই")+`<div class="card"><b>${esc(d.name)}</b><div class="mu">${esc(d.deg)}<br>🏥 ${esc(d.hosp)}</div></div>
  <h3>পরামর্শের ধরন</h3><div class="seg"><button class="${BK.type=="v"?"on l":""}" onclick="TM.bs('type','v')">🎥 ভিডিও কল</button><button class="${BK.type=="c"?"on l":""}" onclick="TM.bs('type','c')">🏥 চেম্বারে</button></div>
  <h3>কবে দেখাতে চান</h3><input id="pd" type="date" min="${dk(new Date())}" value="${BK.pd}" onchange="TM.bs('pd',this.value)"><div class="seg">${["সকাল","বিকাল","সন্ধ্যা/রাত"].map(x=>`<button class="${BK.pt==x?"on l":""}" onclick="TM.bs('pt','${x}')">${x}</button>`).join("")}</div>
- <h3>সমস্যার বিবরণ</h3><textarea id="tr" rows="3" placeholder="যেমন: তিন দিন ধরে জ্বর ও কাশি">${esc(BK.reason)}</textarea>
+ ${BK.type=="v"?`<h3>🟢 আপনার WhatsApp নম্বর</h3><input id="bw" type="tel" inputmode="numeric" placeholder="WhatsApp নম্বর (০১৭XXXXXXXX)" value="${esc(BK.pw||"")}"><p class="mu" style="margin:-4px 0 8px">ডাক্তার এই নম্বরে WhatsApp ভিডিও কল দেবেন।</p>`:""}<h3>সমস্যার বিবরণ</h3><textarea id="tr" rows="3" placeholder="যেমন: তিন দিন ধরে জ্বর ও কাশি">${esc(BK.reason)}</textarea>
  <button class="btn" style="width:100%" onclick="TM.ok()">রিকোয়েস্ট পাঠান</button><p class="mu" style="margin-top:8px">ডাক্তার রিকোয়েস্ট গ্রহণ করে আপনাকে নির্দিষ্ট সময় ও পেমেন্ট নম্বর জানাবেন।</p>`)}
-function bs(k,v){const r=$("tr");if(r)BK.reason=r.value;BK[k]=v;bview()}
-async function ok(){if(BUSY)return;const d=dd(BK.did);BK.reason=$("tr").value.trim();if(BK.reason.length<5)return toast("সমস্যার বিবরণ লিখুন");if(!BK.pd||BK.pd<dk(new Date()))return toast("সঠিক তারিখ দিন");
+function bs(k,v){const r=$("tr");if(r)BK.reason=r.value;const w=$("bw");if(w)BK.pw=w.value;BK[k]=v;bview()}
+async function ok(){if(BUSY)return;const d=dd(BK.did);BK.reason=$("tr").value.trim();if($("bw"))BK.pw=$("bw").value;const pw=nz(BK.pw||"").replace(/\D/g,"");if(BK.type=="v"&&!okWa(pw))return toast("সঠিক WhatsApp নম্বর দিন");if(BK.reason.length<5)return toast("সমস্যার বিবরণ লিখুন");if(!BK.pd||BK.pd<dk(new Date()))return toast("সঠিক তারিখ দিন");
  if(A.some(a=>a.did==BK.did&&a.pid==SS.uid&&!DEAD.includes(a.st)))return toast("এই ডাক্তারের কাছে আপনার একটি অনুরোধ ইতিমধ্যে চলমান");
- const a={id:uid()+uid(),pid:SS.uid,pn:PF.n,pp:PF.ph,did:BK.did,duid:OD[BK.did],dn:d.name,type:BK.type,pd:BK.pd,pt:BK.pt,reason:BK.reason,st:"req",room:"rsh-"+uid()+uid()+uid(),at:Date.now()};
+ const a={id:uid()+uid(),pid:SS.uid,pn:PF.n,pp:PF.ph,did:BK.did,duid:OD[BK.did],dn:d.name,type:BK.type,pd:BK.pd,pt:BK.pt,reason:BK.reason,pw:BK.type=="v"?pw:null,st:"req",room:"rsh-"+uid()+uid()+uid(),at:Date.now()};
  BUSY=1;try{const m={};m["ua/"+a.pid+"/"+a.id]=a;m["ua/"+a.duid+"/"+a.id]=a;await fb("","PATCH",m);toast("রিকোয়েস্ট পাঠানো হয়েছে ✅");BK={}}catch(e){BUSY=0;return net()}BUSY=0;home()}
 
 /* ---------- ডাক্তারের ড্যাশবোর্ড ---------- */
 function ddash(){const pay=PF.pay||{m:"bKash",no:"",fee:""},g=s=>A.filter(a=>a.st==s),d=dd(PF.di),td=dk(new Date()),hs=A.filter(a=>DEAD.includes(a.st));
  V(`<div class="fh"><h3>👨‍⚕️ ${esc(PF.n)}</h3><button class="rm" onclick="TM.out()">লগআউট</button></div><p class="mu" style="margin:-6px 0 10px">${d?esc(d.hosp):""} • BMDC: ${esc(PF.bm)}</p>
  <div class="grid" style="margin-bottom:10px"><div class="card sp"><span>⏳</span><b>${B(g("req").length+g("paid").length)}</b><div class="mu">করণীয়</div></div><div class="card sp"><span>🗓️</span><b>${B(A.filter(a=>a.date==td&&a.st=="conf").length)}</b><div class="mu">আজকের রোগী</div></div></div>
- <details class="card fa" style="margin-bottom:10px"><summary><b>💳 আমার পেমেন্ট সেটিং</b></summary><p><div class="mu">রোগী এই নম্বরে ফি পাঠাবে (Send Money / Personal)</div><select id="pm">${["bKash","Nagad","Rocket"].map(m=>`<option ${m==pay.m?"selected":""}>${m}</option>`).join("")}</select><input id="pn" type="tel" inputmode="numeric" placeholder="পেমেন্ট নম্বর" value="${esc(pay.no)}"><input id="pf" type="number" min="0" placeholder="ভিডিও পরামর্শ ফি (৳)" value="${esc(pay.fee)}"><button class="btn" onclick="TM.sp()">সংরক্ষণ করুন</button></p></details>
+ <details class="card fa" style="margin-bottom:10px"><summary><b>💳 আমার পেমেন্ট সেটিং</b></summary><p><div class="mu">রোগী এই নম্বরে ফি পাঠাবে (Send Money / Personal)</div><select id="pm">${["bKash","Nagad","Rocket"].map(m=>`<option ${m==pay.m?"selected":""}>${m}</option>`).join("")}</select><input id="pn" type="tel" inputmode="numeric" placeholder="পেমেন্ট নম্বর" value="${esc(pay.no)}"><input id="pf" type="number" min="0" placeholder="ভিডিও পরামর্শ ফি (৳)" value="${esc(pay.fee)}"><div class="mu">🟢 আপনার WhatsApp নম্বর (রোগী এই নম্বরে কল পাবে)</div><input id="pw" type="tel" inputmode="numeric" placeholder="WhatsApp নম্বর" value="${esc(pay.wa||PF.ph||"")}"><button class="btn" onclick="TM.sp()">সংরক্ষণ করুন</button></p></details>
  ${g("req").length?`<h3>🔔 নতুন রিকোয়েস্ট</h3>${g("req").map(acard).join("")}`:""}${g("paid").length?`<h3>💳 পেমেন্ট যাচাই করুন</h3>${g("paid").map(acard).join("")}`:""}
  ${g("sch").length?`<h3>রোগীর পেমেন্টের অপেক্ষা</h3>${g("sch").map(acard).join("")}`:""}
  <h3>নিশ্চিত অ্যাপয়েন্টমেন্ট</h3>${g("conf").length?g("conf").sort((x,y)=>at(x)-at(y)).map(acard).join(""):'<div class="card empty"><div class="big">🗓️</div><p class="mu">কোনো নিশ্চিত অ্যাপয়েন্টমেন্ট নেই</p></div>'}${hs.length?`<h3>ইতিহাস</h3>${hs.map(acard).join("")}`:""}`)}
-async function sp(){const m=$("pm").value,no=nz($("pn").value).replace(/\D/g,""),fee=+$("pf").value;if(!/^01[3-9]\d{8}$/.test(no)||!(fee>0))return toast("সঠিক নম্বর ও ফি দিন");
- try{PF.pay={m,no,fee};await fb("users/"+SS.uid+"/pay","PUT",PF.pay);sv();toast("সংরক্ষিত হয়েছে ✅")}catch(e){net()}}
+async function sp(){const m=$("pm").value,no=nz($("pn").value).replace(/\D/g,""),fee=+$("pf").value,wa=nz($("pw").value).replace(/\D/g,"");if(!/^01[3-9]\d{8}$/.test(no)||!(fee>0))return toast("সঠিক নম্বর ও ফি দিন");if(!okWa(wa))return toast("সঠিক WhatsApp নম্বর দিন");
+ try{PF.pay={m,no,fee,wa};await fb("users/"+SS.uid+"/pay","PUT",PF.pay);sv();toast("সংরক্ষিত হয়েছে ✅")}catch(e){net()}}
 function sch(id){SCR="form";const a=find(id),p=PF.pay||{m:"bKash",no:"",fee:""},v=a.type=="v";
  V(bk("TM.home()","ফিরে যান","ড্যাশবোর্ড")+`<h3>সময় ও পেমেন্ট নির্ধারণ</h3><div class="card"><b>${esc(a.pn)}</b><div class="mu">চেয়েছে: ${dl(a.pd)} (${esc(a.pt)})<br>${esc(a.reason)}</div></div>
  <div class="card" style="margin-top:8px"><div class="mu">অ্যাপয়েন্টমেন্টের তারিখ</div><input id="sd" type="date" min="${dk(new Date())}" value="${a.date||a.pd}"><div class="mu">সময়</div><input id="st" type="time" value="${a.time||"18:00"}">
- ${v?`<div class="mu">ফি (৳)</div><input id="sf" type="number" min="1" value="${a.fee||p.fee}"><div class="mu">পেমেন্ট মাধ্যম ও নম্বর</div><select id="sm">${["bKash","Nagad","Rocket"].map(m=>`<option ${m==((a.pm||p).m)?"selected":""}>${m}</option>`).join("")}</select><input id="sn" type="tel" inputmode="numeric" placeholder="পেমেন্ট নম্বর" value="${esc((a.pm||p).no)}">`:""}
+ ${v?`<div class="mu">ফি (৳)</div><input id="sf" type="number" min="1" value="${a.fee||p.fee}"><div class="mu">পেমেন্ট মাধ্যম ও নম্বর</div><select id="sm">${["bKash","Nagad","Rocket"].map(m=>`<option ${m==((a.pm||p).m)?"selected":""}>${m}</option>`).join("")}</select><input id="sn" type="tel" inputmode="numeric" placeholder="পেমেন্ট নম্বর" value="${esc((a.pm||p).no)}"><div class="mu">🟢 আপনার WhatsApp নম্বর (ভিডিও কলের জন্য)</div><input id="sw" type="tel" inputmode="numeric" placeholder="WhatsApp নম্বর" value="${esc(a.dwa||p.wa||PF.ph||"")}">`:""}
  <textarea id="so" rows="2" placeholder="রোগীর জন্য নোট (ঐচ্ছিক)">${esc(a.snote||"")}</textarea><button class="btn" style="width:100%" onclick="TM.ss('${id}')">${v?"নিশ্চিত করে রোগীকে পাঠান":"সময় নিশ্চিত করুন"}</button></div>`)}
 async function ss(id){const a=find(id),v=a.type=="v",date=$("sd").value,time=$("st").value;if(!date||!time||new Date(date+"T"+time)<Date.now())return toast("ভবিষ্যতের সঠিক সময় দিন");
  if(A.some(z=>z.id!=id&&z.duid==SS.uid&&z.date==date&&z.time==time&&!DEAD.includes(z.st)))return toast("এই সময়ে আপনার আরেকটি অ্যাপয়েন্টমেন্ট আছে");
  let f={date,time,snote:$("so").value.trim(),pnote:null};
- if(v){const fee=+$("sf").value,no=nz($("sn").value).replace(/\D/g,"");if(!(fee>0)||!/^01[3-9]\d{8}$/.test(no))return toast("সঠিক ফি ও পেমেন্ট নম্বর দিন");f.fee=fee;f.pm={m:$("sm").value,no};f.st=a.st=="conf"?"conf":"sch";PF.pay={m:f.pm.m,no,fee};sv();fb("users/"+SS.uid+"/pay","PUT",PF.pay).catch(()=>{})}else{f.st="conf"}
+ if(v){const fee=+$("sf").value,no=nz($("sn").value).replace(/\D/g,"");if(!(fee>0)||!/^01[3-9]\d{8}$/.test(no))return toast("সঠিক ফি ও পেমেন্ট নম্বর দিন");const wa=nz($("sw").value).replace(/\D/g,"");if(!okWa(wa))return toast("সঠিক WhatsApp নম্বর দিন");f.dwa=wa;f.fee=fee;f.pm={m:$("sm").value,no};f.st=a.st=="conf"?"conf":"sch";PF.pay={m:f.pm.m,no,fee,wa};sv();fb("users/"+SS.uid+"/pay","PUT",PF.pay).catch(()=>{})}else{f.st="conf"}
  act(()=>upd(a,f)).then(()=>toast("রোগীকে জানানো হয়েছে ✅"))}
 function vp(id,y){const a=find(id);if(y)return act(()=>upd(a,{st:"conf"})).then(()=>toast("পেমেন্ট নিশ্চিত — কল প্রস্তুত ✅"));
  act(()=>upd(a,{st:"sch",pnote:"TrxID মেলেনি। সঠিক TrxID দিয়ে আবার জমা দিন।",trx:null,sn:null}))}
@@ -2689,7 +2690,17 @@ function view(id){SCR="form";const a=find(id),r=a.rx,d=dd(a.did);
 
 /* ---------- ভিডিও কনসালটেশন ---------- */
 function stopM(){if(CALL&&CALL.ms){CALL.ms.getTracks().forEach(t=>t.stop());CALL.ms=null}}
-async function call(id){const a=find(id);if(!a||!joinable(a))return toast("কলের সময় এখনো হয়নি");CALL={id,ms:null};SCR="call";
+function call(id){const a=find(id);if(!a||!joinable(a))return toast("কলের সময় এখনো হয়নি");CALL={id,ms:null};SCR="call";
+ const d=PF.r=="d",no=d?(a.pw||a.pp):a.dwa,nm=d?a.pn:a.dn,t=dl(a.date)+", "+bnT(a.time),
+ msg=d?"আসসালামু আলাইকুম "+a.pn+", আমি "+a.dn+"। আপনার "+t+"-এর ভিডিও পরামর্শের জন্য এখন WhatsApp-এ ভিডিও কল দিচ্ছি। অনুগ্রহ করে কলটি রিসিভ করুন।":"আসসালামু আলাইকুম ডাক্তার সাহেব, আমি "+a.pn+"। "+t+"-এর ভিডিও পরামর্শের জন্য প্রস্তুত আছি। অনুগ্রহ করে WhatsApp-এ ভিডিও কল দিন।";
+ V(bk("TM.end(1)","ফিরে যান","ড্যাশবোর্ড").replace('class="back"','class="back" data-keep="1"')+`<h3>🟢 WhatsApp ভিডিও কল</h3><div class="card" id="tmw"><b>${esc(nm)}</b><div class="mu" style="margin:4px 0 10px">🕒 ${t}${no?`<br>📱 WhatsApp: <b>${B(no)}</b>`:""}</div>
+ ${no?`<a class="btn" href="${waL(no,msg)}" target="_blank" rel="noopener" style="display:block;text-align:center;background:#25D366;color:#fff;text-decoration:none;font-weight:700;font-size:16px;padding:14px">🟢 WhatsApp খুলুন${d?" ও কল দিন":""}</a>
+ <ol class="mu" style="padding-left:18px;margin:10px 0 0"><li>উপরের বাটনে চাপলে WhatsApp-এ ${d?"রোগীর":"ডাক্তারের"} চ্যাট খুলবে, মেসেজ আগে থেকেই লেখা থাকবে</li><li>মেসেজটি <b>সেন্ড</b> করুন</li><li>${d?"চ্যাটের উপরে ডানদিকের <b>🎥 ভিডিও কল</b> আইকনে চাপুন":"ডাক্তার কল দিলে রিসিভ করুন, অথবা চ্যাটের উপরের <b>🎥 ভিডিও কল</b> আইকনে চাপুন"}</li></ol>
+ <div class="row" style="margin-top:8px"><button class="btn g" onclick="navigator.clipboard&&navigator.clipboard.writeText('${wn(no)}');toast('WhatsApp নম্বর কপি হয়েছে')">📋 নম্বর কপি</button></div>
+ <p class="mu" style="margin:8px 0 0">ℹ️ WhatsApp লিংক থেকে সরাসরি কল শুরু হয় না — চ্যাট খুলে 🎥 আইকনে চাপতে হবে। ফোনে WhatsApp ইনস্টল থাকতে হবে।</p>`
+ :`<div class="tn" style="color:#d93b3b">${d?"রোগী":"ডাক্তার"} এখনো WhatsApp নম্বর দেননি। নিচের বিকল্প কল ব্যবহার করুন।</div>`}</div>
+ <div class="row" style="margin-top:8px"><button class="btn g" onclick="TM.alt('${id}')">🎥 বিকল্প: অ্যাপের ভেতরে ভিডিও কল</button><button class="btn sos" onclick="TM.end()">✅ কল শেষ হয়েছে</button></div>`)}
+async function alt(id){const a=find(id);if(!a)return;CALL={id,ms:null};SCR="call";
  V(bk("TM.end(1)","ফিরে যান","ড্যাশবোর্ড").replace('class="back"','class="back" data-keep="1"')+`<h3>🎥 ${PF.r=="d"?esc(a.pn):esc(a.dn)}</h3><div class="card"><div class="tm-v"><video id="tv" autoplay muted playsinline></video></div><div class="mu" id="tc" style="margin:8px 0">ক্যামেরা ও মাইক পরীক্ষা হচ্ছে…</div><div class="row"><button class="btn" id="tj" onclick="TM.join()" disabled>কলে যোগ দিন</button></div><p class="mu" style="margin:8px 0 0">📶 ভালো ইন্টারনেট ও শান্ত জায়গা বেছে নিন।</p></div>`);
  try{CALL.ms=await navigator.mediaDevices.getUserMedia({video:true,audio:true});$("tv").srcObject=CALL.ms;$("tc").textContent="✅ ক্যামেরা ও মাইক ঠিক আছে"}catch(e){$("tc").textContent="⚠️ ক্যামেরা/মাইকের অনুমতি পাওয়া যায়নি — ব্রাউজার সেটিংসে অনুমতি দিন (না দিলেও শুধু শোনার জন্য যোগ দেওয়া যাবে)।"}$("tj")&&($("tj").disabled=false)}
 function join(){const a=find(CALL.id);stopM();const t0=Date.now(),src="https://meet.jit.si/"+a.room+"#userInfo.displayName="+encodeURIComponent('"'+PF.n+'"')+"&config.prejoinPageEnabled=false&config.disableDeepLinking=true";
@@ -2699,7 +2710,6 @@ function end(back){const c=CALL;stopM();if(c)clearInterval(c.tm);CALL=null;const
 
 /* ---------- হোম/ডাক্তার পেজ/মেনুতে সংযোগ ---------- */
 const od=window.doc;window.doc=function(id){od.apply(this,arguments);const c=document.querySelector("#v .dc.full");if(c&&!$("tmb")){const x=document.createElement("div");x.id="tmb";x.className="row";x.style.margin="8px 0";x.innerHTML=`<button class="btn" onclick="TM.book('${id}','c')">📅 অ্যাপয়েন্টমেন্ট রিকোয়েস্ট</button><button class="btn" onclick="TM.book('${id}','v')">🎥 ভিডিও পরামর্শ</button>`;c.after(x)}};
-const oh=window.home;window.home=function(){oh.apply(this,arguments);const v=$("v");if(v.querySelector("#tmh"))return;const s=v.querySelector(".slb"),x=document.createElement("div");x.id="tmh";x.className="card tm-h";x.onclick=()=>TM.home();x.innerHTML='<span style="font-size:32px">🩺</span><div><b>অনলাইন ডাক্তার ও ভিডিও পরামর্শ</b><div class="mu">রিকোয়েস্ট পাঠান • ঘরে বসে ডাক্তারের সাথে কথা বলুন</div></div>';s?s.before(x):v.prepend(x)};
 const dv=document.querySelector("#dr .dv");if(dv&&!$("m9")){const b=document.createElement("button");b.className="mi";b.id="m9";b.onclick=()=>TM.home();b.innerHTML="<em>🩺</em><div>অনলাইন ডাক্তার<small>রিকোয়েস্ট, ভিডিও কল, ড্যাশবোর্ড</small></div>";dv.before(b)}
 const ot=window.tab;window.tab=function(n){if(n==9)return TM.home();const r=ot.apply(this,arguments);clr();return r};
 ["docs","spec","hs","tg"].forEach(f=>{const o=window[f];if(typeof o=="function")window[f]=function(){clr();return o.apply(this,arguments)}});
@@ -2771,8 +2781,8 @@ setInterval(()=>{if(!document.hidden)nChk(false)},20000);
 const RAW={home,pick,book,sch,pay,rx,view,setup};
 window.__tmR=function(n){const a=[].slice.call(arguments,1);return RAW[n]&&RAW[n].apply(null,a)};
 const NV=n=>function(){const a=[].slice.call(arguments);return window.tm?window.tm.apply(null,[n].concat(a)):RAW[n].apply(null,a)};
-new MutationObserver(()=>{if(CALL&&!$("tv")&&!document.querySelector("#v .tm-f")){stopM();clearInterval(CALL.tm);CALL=null}}).observe($("v"),{childList:true});
-window.TM={setup:NV("setup"),home:NV("home"),am:m=>{AM=m;auth()},ar:r=>{AR=r;auth()},go,out,pick:NV("pick"),pl,book:NV("book"),bs,ok,can,rej,sch:NV("sch"),ss,vp,pay:NV("pay"),ps,sp,rx:NV("rx"),rs,view:NV("view"),call,join,end};
+new MutationObserver(()=>{if(CALL&&!$("tv")&&!$("tmw")&&!document.querySelector("#v .tm-f")){stopM();clearInterval(CALL.tm);CALL=null}}).observe($("v"),{childList:true});
+window.TM={alt,setup:NV("setup"),home:NV("home"),am:m=>{AM=m;auth()},ar:r=>{AR=r;auth()},go,out,pick:NV("pick"),pl,book:NV("book"),bs,ok,can,rej,sch:NV("sch"),ss,vp,pay:NV("pay"),ps,sp,rx:NV("rx"),rs,view:NV("view"),call,join,end};
 })();
 </script>
 </body></html>
