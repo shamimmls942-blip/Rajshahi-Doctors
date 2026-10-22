@@ -963,18 +963,6 @@ nav button.on{color:var(--pr);font-weight:700}
 .adx{padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--bd);font-size:14px}.adx code{display:block;white-space:pre-wrap;background:var(--bg);padding:8px;border-radius:8px;margin:6px 0;font-size:12px;direction:ltr;text-align:left}
 #admfab{position:fixed;right:14px;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:15;width:46px;height:46px;border-radius:50%;border:0;background:#0a3329;color:#fff;font-size:20px;box-shadow:0 8px 22px #0006}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-
-/* ===== Hero banner: international-standard 2:1 (matches 600x300 source), no crop, no layout shift ===== */
-.hb.hbfull{--hbr:20px;position:relative;display:block;width:100%;max-width:640px;margin:-20px auto 0!important;padding:0;aspect-ratio:2/1;height:auto;min-height:0;overflow:hidden;line-height:0;background:#e6f1f3;border-radius:var(--hbr) var(--hbr) 0 0!important;box-shadow:none!important;contain:layout paint;isolation:isolate}
-.hb.hbfull img,.hb.hbfull img.hs,.hb.hbfull img.hs:first-child{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;object-position:center;display:block;border-radius:0;opacity:0;transition:opacity .8s ease;image-rendering:auto;-webkit-user-select:none;user-select:none;-webkit-user-drag:none;transform:translateZ(0);backface-visibility:hidden}
-.hb.hbfull img.hs.on{opacity:1;z-index:1}
-.mq{margin:0 auto!important;max-width:640px;border-radius:0 0 var(--hbr,20px) var(--hbr,20px)!important}
-@media(max-width:360px){.hb.hbfull{--hbr:16px}}
-@media(prefers-reduced-motion:reduce){.hb.hbfull img.hs{transition:none}}
-/* Banner: original width (4px side gutter), slightly shorter height */
-.hb.hbfull{aspect-ratio:2.2/1}
-.hb.hbfull img.hs{object-position:50% 100%}
-@media(max-width:667px){.hb.hbfull{--hbr:22px;width:calc(100% + 20px);max-width:none;margin:-20px -10px 0!important;border-radius:var(--hbr) var(--hbr) 0 0!important}.mq{width:calc(100% + 20px);max-width:none;margin:0 -10px!important;border-radius:0 0 14px 14px!important}}
 </style><script>(function(){
 const C={db:"https://admin-faf11-default-rtdb.asia-southeast1.firebasedatabase.app",apiKey:"AIzaSyB79LzFJzaYZ_vS-OC1Jr1RsA2cB3sAM5U"}; /* ক্লায়েন্টের Firebase তথ্য এখানে বসান (নিচের গাইড দেখুন) */
 const $=s=>document.getElementById(s),LS=localStorage,E=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
