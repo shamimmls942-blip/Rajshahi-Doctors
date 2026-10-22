@@ -2519,4 +2519,187 @@ setInterval(function(){if(document.hidden)return;ob.disconnect();tr(document.bod
 /*__TEST__*/
 })();
 </script>
+<style id="tmcss">.tm-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.tm-s{padding:10px 2px;border:1.5px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;font-family:inherit;font-size:14px;font-weight:600;line-height:1.2}
+.tm-s small{display:block;font-size:10.5px;font-weight:400;color:var(--mu);min-height:12px}
+.tm-s.on{border-color:var(--pr);background:var(--pr);color:#fff}.tm-s.on small{color:#fff}
+.tm-s:disabled{opacity:.4}
+.tm-h{display:flex;align-items:center;gap:12px;cursor:pointer;margin:10px 14px;padding:12px 14px}
+.tm-v{aspect-ratio:4/3;background:#0b1f1a;border-radius:14px;overflow:hidden}.tm-v video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);margin:0}
+.tm-f{height:calc(100vh - 230px);min-height:360px;border-radius:14px;overflow:hidden;background:#000}.tm-f iframe{width:100%;height:100%;border:0;display:block}
+@media print{body>*:not(main),nav,header,.back,#th,#mb,.btn,.mu+p{display:none!important}#tmrx{border:0;box-shadow:none}}
+</style>
+<script id="tm">/* ===== Telehealth v2 (ক্লাউড সিঙ্ক): রিকোয়েস্ট → ডাক্তার সময়+পেমেন্ট → TrxID → যাচাই → ভিডিও কল ===== */
+(function(){
+const DB="https://admin-faf11-default-rtdb.asia-southeast1.firebasedatabase.app",KEY="AIzaSyB79LzFJzaYZ_vS-OC1Jr1RsA2cB3sAM5U",LS=localStorage,K="tm2",$=id=>document.getElementById(id),p2=n=>String(n).padStart(2,"0");
+let SS=null,PF=null,A=[],OD={},CALL=null,SCR="",AM="l",AR="p",BK={},BUSY=0,POLL=null,SIG="";
+try{const o=JSON.parse(LS.getItem(K));if(o){SS=o.s;PF=o.p}}catch(e){}
+const sv=()=>{try{LS.setItem(K,JSON.stringify({s:SS,p:PF}))}catch(e){}};
+const uid=()=>Math.random().toString(36).slice(2,10),B=x=>bn(String(x)),V=h=>{$("v").innerHTML=h;scrollTo(0,0)},dd=id=>D.find(x=>x.id==id);
+const dk=d=>d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate());
+const dl=s=>new Date(s+"T00:00").toLocaleDateString("bn-BD",{weekday:"short",day:"numeric",month:"short"});
+const at=a=>a.date?new Date(a.date+"T"+a.time):null;
+const bnT=t=>{const[h,m]=t.split(":").map(Number);return B(p2(h%12||12)+":"+p2(m))+(h<12?" সকাল":h<16?" দুপুর":h<18?" বিকাল":" রাত")};
+const bk=(f,t,s)=>`<button class="back" onclick="${f}"><span class="ar">←</span><span>${t}<small>${s||""}</small></span></button>`;
+const ST={req:["m","অনুরোধ পাঠানো হয়েছে"],sch:["m","পেমেন্ট বাকি"],paid:["m","পেমেন্ট যাচাই চলছে"],conf:["l","নিশ্চিত"],done:["l","সম্পন্ন"],rej:["h","প্রত্যাখ্যাত"],cancel:["h","বাতিল"]};
+const chip=s=>`<span class="fee ${ST[s][0]}"><small>${ST[s][1]}</small></span>`,DEAD=["rej","cancel","done"];
+const mark=()=>{[0,1,2,3,4,5,6,7,8].forEach(i=>{$("t"+i)&&$("t"+i).classList.remove("on");$("m"+i)&&$("m"+i).classList.remove("on")});["t9","m9"].forEach(i=>$(i)&&$(i).classList.add("on"));menu(0)};const clr=()=>["t9","m9"].forEach(i=>$(i)&&$(i).classList.remove("on"));
+const net=()=>toast("ইন্টারনেট/সার্ভার সমস্যা — আবার চেষ্টা করুন");
+const EM={EMAIL_EXISTS:"এই নম্বরে অ্যাকাউন্ট আছে, লগইন করুন",INVALID_LOGIN_CREDENTIALS:"নম্বর বা পাসওয়ার্ড ভুল",INVALID_PASSWORD:"নম্বর বা পাসওয়ার্ড ভুল",EMAIL_NOT_FOUND:"এই নম্বরে অ্যাকাউন্ট নেই",OPERATION_NOT_ALLOWED:"Firebase Console → Authentication-এ Email/Password চালু করুন",CONFIGURATION_NOT_FOUND:"Firebase Console → Authentication চালু করুন",TOO_MANY_ATTEMPTS_TRY_LATER:"অনেকবার চেষ্টা হয়েছে, কিছুক্ষণ পর চেষ্টা করুন"};
+const em=e=>{const raw=String(e&&e.message||e||""),m=raw.split(" ")[0];return (EM[m]||(/^db(401|403)/.test(m)?"ডাটাবেস রুলস Publish হয়নি/ভুল (Rules দেখুন)":/API key|API_KEY|PERMISSION|blocked/i.test(raw)?"Firebase API key/Authentication সমস্যা":/fetch|network|Failed/i.test(raw)?"ইন্টারনেট সংযোগ নেই":"সমস্যা হয়েছে"))+" ["+raw.slice(0,60)+"]"};
+
+/* ---------- Firebase (Auth + Realtime DB, REST) ---------- */
+async function ac(mode,ph,pw){const r=await fetch("https://identitytoolkit.googleapis.com/v1/accounts:"+mode+"?key="+KEY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:ph+"@rsh-app.com",password:pw,returnSecureToken:true})}),j=await r.json();if(!r.ok)throw new Error(j.error&&j.error.message||"auth");return j}
+async function tok(){if(!SS)throw new Error("nosess");if(Date.now()>SS.exp-60000){const r=await fetch("https://securetoken.googleapis.com/v1/token?key="+KEY,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:"grant_type=refresh_token&refresh_token="+encodeURIComponent(SS.rt)}),j=await r.json();if(!r.ok)throw new Error("nosess");SS.tok=j.id_token;SS.rt=j.refresh_token;SS.exp=Date.now()+j.expires_in*1000;sv()}return SS.tok}
+async function fb(p,m,b,pub){const u=DB+"/tm"+(p?"/"+p:"")+".json"+(pub?"":"?auth="+await tok()),r=await fetch(u,{method:m||"GET",headers:b!==undefined?{"Content-Type":"application/json"}:undefined,body:b!==undefined?JSON.stringify(b):undefined});if(!r.ok)throw new Error("db"+r.status);return r.json()}
+async function upd(a,f){Object.assign(a,f);const m={};[a.pid,a.duid].forEach(u=>Object.keys(f).forEach(k=>m["ua/"+u+"/"+a.id+"/"+k]=f[k]===undefined?null:f[k]));await fb("","PATCH",m)}
+async function ld(){const o=await fb("ua/"+SS.uid)||{};A=Object.values(o).sort((x,y)=>(y.at||0)-(x.at||0));return SIG=JSON.stringify(A)}
+
+/* ---------- মালিকের সেটআপ গাইড ---------- */
+const RULES="{\n  \"tm\": {\n    \"users\": {\n      \"$u\": {\n        \".read\": \"auth != null && auth.uid == $u\",\n        \".write\": \"auth != null && auth.uid == $u\"\n      }\n    },\n    \"docmap\": {\n      \".read\": true,\n      \"$d\": {\n        \".write\": \"auth != null && !data.exists() && newData.val() == auth.uid\"\n      }\n    },\n    \"ua\": {\n      \"$u\": {\n        \".read\": \"auth != null && auth.uid == $u\",\n        \"$a\": {\n          \".write\": \"auth != null && (!newData.exists() || newData.child('pid').val() == auth.uid || newData.child('duid').val() == auth.uid)\"\n        }\n      }\n    }\n  }\n}";
+function setup(){SCR="setup";V(bk(SS?"TM.home()":"TM.am('l')","ফিরে যান","")+`<h3>⚙️ মালিকের এককালীন সেটআপ</h3><div class="card"><ol style="padding-left:18px;margin:0" class="mu"><li><b>Firebase Console</b> খুলুন → প্রজেক্ট <b>admin-faf11</b></li><li><b>Authentication → Sign-in method → Email/Password</b> চালু করুন (Enable → Save)</li><li><b>Realtime Database → Rules</b> খুলুন। যে রুলস আছে তা মুছবেন না। শুধু নিচের <code>"tm"</code> অংশটি <code>"rules"</code>-এর ভেতরে অন্য নোডগুলোর পাশে বসান</li><li><b>Publish</b> চাপুন</li><li>দুটো ফোনে দুটি অ্যাকাউন্ট (একটি রোগী, একটি ডাক্তার) দিয়ে একবার পুরো ফ্লো পরীক্ষা করুন</li></ol></div>
+ <h3>বসানোর রুলস</h3><textarea id="tru" rows="12" readonly style="font-family:monospace;font-size:12px">${esc(RULES)}</textarea><button class="btn" style="width:100%" onclick="$('tru').select();navigator.clipboard&&navigator.clipboard.writeText(RULES);toast('রুলস কপি হয়েছে')">📋 রুলস কপি করুন</button>`)}
+
+/* ---------- লগইন / রেজিস্ট্রেশন ---------- */
+function auth(){SCR="auth";const r=AM=="r",dr=AR=="d";
+ V(bk("tab(0)","ফিরে যান","হোম")+`<h3>🩺 অনলাইন ডাক্তার সেবা</h3><div class="card"><p class="mu" style="margin:0 0 8px">রোগী ডাক্তারকে রিকোয়েস্ট পাঠাবেন, ডাক্তার সময় ও পেমেন্ট নম্বর দিয়ে নিশ্চিত করবেন, তারপর ভিডিও কল।</p>
+ <div class="seg"><button class="${!r?"on l":""}" onclick="TM.am('l')">🔑 লগইন</button><button class="${r?"on l":""}" onclick="TM.am('r')">📝 নতুন অ্যাকাউন্ট</button></div>
+ ${r?`<div class="seg"><button class="${!dr?"on l":""}" onclick="TM.ar('p')">🧑 আমি রোগী</button><button class="${dr?"on l":""}" onclick="TM.ar('d')">👨‍⚕️ আমি ডাক্তার</button></div><input id="tn" placeholder="পুরো নাম" autocomplete="name">`:""}
+ <input id="tp" type="tel" inputmode="numeric" placeholder="মোবাইল নম্বর (০১৭XXXXXXXX)" autocomplete="tel"><input id="tw" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" autocomplete="${r?"new-password":"current-password"}">
+ ${r&&dr?`<select id="td"><option value="">— আপনার প্রোফাইল বাছাই করুন —</option>${D.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(d=>`<option value="${esc(d.id)}">${esc(d.name)} — ${esc(d.hosp)}</option>`).join("")}</select><input id="tb" placeholder="BMDC রেজিস্ট্রেশন নম্বর">`:""}
+ <button class="btn" style="width:100%" onclick="TM.go()">${r?"অ্যাকাউন্ট খুলুন":"লগইন করুন"}</button><p class="mu" style="margin:10px 0 0">🔒 লগইন Firebase Authentication দিয়ে সুরক্ষিত; যেকোনো ডিভাইস থেকে একই অ্যাকাউন্টে ঢুকতে পারবেন।</p><p class="mu" style="margin:6px 0 0"><a onclick="TM.setup()" style="color:var(--pr);cursor:pointer">⚙️ সাইট মালিকের জন্য সেটআপ গাইড</a></p></div>`)}
+async function go(){if(BUSY)return;const ph=nz($("tp").value).replace(/\D/g,""),pw=$("tw").value;
+ if(!/^01[3-9]\d{8}$/.test(ph))return toast("সঠিক মোবাইল নম্বর দিন");if(pw.length<6)return toast("পাসওয়ার্ড কমপক্ষে ৬ অক্ষর");
+ BUSY=1;toast("অপেক্ষা করুন…");
+ try{let j;
+  if(AM=="l"){j=await ac("signInWithPassword",ph,pw);SS={uid:j.localId,rt:j.refreshToken,tok:j.idToken,exp:Date.now()+j.expiresIn*1000};PF=await fb("users/"+SS.uid);
+   if(!PF){let q=null;try{q=JSON.parse(LS.getItem("tm2p"))}catch(e){}
+    if(q&&q.u==SS.uid){PF=q.p;await fb("users/"+SS.uid,"PUT",PF);if(PF.di)await fb("docmap/"+PF.di,"PUT",SS.uid);LS.removeItem("tm2p")}
+    else throw new Error("প্রোফাইল পাওয়া যায়নি: আগের নিবন্ধন অসম্পূর্ণ ছিল। নতুন নম্বর দিয়ে অ্যাকাউন্ট খুলুন")}}
+  else{const n=$("tn").value.trim();if(n.length<3){BUSY=0;return toast("নাম লিখুন")}let p={r:AR,n,ph};
+   if(AR=="d"){const di=$("td").value,bm=$("tb").value.trim();if(!di){BUSY=0;return toast("আপনার প্রোফাইল বাছাই করুন")}if(!/^[A-Za-z]?-?\d{4,7}$/.test(bm)){BUSY=0;return toast("সঠিক BMDC নম্বর দিন")}
+    if(await fb("docmap/"+di,"GET",undefined,1)){BUSY=0;return toast("এই প্রোফাইলে আগেই অ্যাকাউন্ট খোলা হয়েছে")}p.di=di;p.bm=bm;p.n=dd(di).name}
+   j=await ac("signUp",ph,pw);SS={uid:j.localId,rt:j.refreshToken,tok:j.idToken,exp:Date.now()+j.expiresIn*1000};PF=p;
+   try{LS.setItem("tm2p",JSON.stringify({u:SS.uid,p}))}catch(e){}
+   await fb("users/"+SS.uid,"PUT",p);if(p.di)await fb("docmap/"+p.di,"PUT",SS.uid);try{LS.removeItem("tm2p")}catch(e){}}
+  sv();BUSY=0;toast("স্বাগতম, "+PF.n);
+  if(BK.pend&&PF.r=="p"){const x=BK.pend;BK={};return book(x)}home()}
+ catch(e){BUSY=0;SS=null;PF=null;sv();toast(em(e))}}
+function out(){if(!confirm("লগআউট করবেন?"))return;clearInterval(POLL);SS=PF=null;A=[];sv();auth()}
+async function home(){mark();if(!SS)return auth();SCR="dash";V('<div class="card empty"><div class="big">⏳</div><p class="mu">লোড হচ্ছে…</p></div>');
+ try{if(!PF)PF=await fb("users/"+SS.uid);if(!PF)throw new Error("nosess");sv();await ld();dash();clearInterval(POLL);POLL=setInterval(poll,7000)}
+ catch(e){if(String(e.message)=="nosess"){SS=PF=null;sv();return auth()}V(bk("tab(0)","ফিরে যান","হোম")+`<div class="card empty"><div class="big">📡</div><p class="mu">${em(e)}</p><button class="btn" onclick="TM.home()">আবার চেষ্টা করুন</button></div>`)}}
+async function poll(){if(document.hidden||!SS||CALL)return;try{const o=SIG;await ld();if(SIG!==o&&SCR=="dash"){dash();toast("🔔 নতুন আপডেট এসেছে")}}catch(e){}}
+const dash=()=>PF.r=="p"?pdash():ddash();
+
+/* ---------- অ্যাপয়েন্টমেন্ট কার্ড ---------- */
+const joinable=a=>{const t=at(a);return a.type=="v"&&a.st=="conf"&&t&&(PF.r=="d"||(Date.now()>=t-10*60000&&Date.now()<=t.getTime()+60*60000))};
+function acard(a){const d=PF.r=="d",x=at(a);
+ return `<div class="card" style="margin-bottom:8px"><div class="fh"><b>${esc(d?a.pn:a.dn)}</b>${chip(a.st)}</div>
+ <div class="mu" style="margin:4px 0">${a.type=="v"?"🎥 ভিডিও পরামর্শ":"🏥 চেম্বারে সাক্ষাৎ"}<br>${x?`🕒 ${dl(a.date)}, ${bnT(a.time)}`:`📅 চাওয়া সময়: ${dl(a.pd)} (${esc(a.pt)})`}${d?`<br>📞 ${esc(a.pp)}`:""}${a.type=="v"&&a.fee&&a.st!="req"?`<br>💳 ফি: ৳${B(a.fee)}`:""}</div>
+ ${a.reason?`<div class="tn">${esc(a.reason)}</div>`:""}${a.rn&&a.st=="rej"?`<div class="tn">কারণ: ${esc(a.rn)}</div>`:""}${a.pnote&&a.st=="sch"?`<div class="tn" style="color:#d93b3b">${esc(a.pnote)}</div>`:""}${a.snote&&a.st!="req"?`<div class="tn">ডাক্তারের নোট: ${esc(a.snote)}</div>`:""}
+ ${d&&a.st=="paid"?`<div class="tn">💳 TrxID: <b>${esc(a.trx)}</b> • প্রেরক: ${esc(a.sn)} • ৳${B(a.fee)} (${esc(a.pm.m)})</div>`:""}
+ ${!d&&a.st=="conf"&&a.type=="v"&&!joinable(a)?`<div class="tn">ভিডিও কলের বাটন সময়ের ১০ মিনিট আগে সক্রিয় হবে।</div>`:""}
+ <div class="row" style="margin-top:6px">${joinable(a)?`<button class="btn" onclick="TM.call('${a.id}')">🎥 ভিডিও কলে যোগ দিন</button>`:""}
+ ${d&&a.st=="req"?`<button class="btn" onclick="TM.sch('${a.id}')">✅ গ্রহণ: সময় ও পেমেন্ট দিন</button><button class="btn g" onclick="TM.rej('${a.id}')">❌ প্রত্যাখ্যান</button>`:""}
+ ${d&&a.st=="paid"?`<button class="btn" onclick="TM.vp('${a.id}',1)">✅ পেমেন্ট পেয়েছি</button><button class="btn g" onclick="TM.vp('${a.id}',0)">❌ পাইনি</button>`:""}
+ ${d&&a.st=="sch"?`<button class="btn g" onclick="TM.sch('${a.id}')">🕒 সময়/পেমেন্ট বদলান</button>`:""}
+ ${d&&a.st=="conf"?`<button class="btn g" onclick="TM.rx('${a.id}')">📝 শেষ করে প্রেসক্রিপশন দিন</button>`:""}
+ ${!d&&a.st=="sch"?`<button class="btn" onclick="TM.pay('${a.id}')">💳 পেমেন্ট করুন</button>`:""}
+ ${a.st=="done"?`<button class="btn g" onclick="TM.view('${a.id}')">📄 প্রেসক্রিপশন</button>`:""}
+ ${((!d&&(a.st=="req"||a.st=="sch"))||(d&&(a.st=="sch"||a.st=="conf")))?`<button class="btn g" style="color:#d93b3b" onclick="TM.can('${a.id}')">বাতিল</button>`:""}</div></div>`}
+const find=id=>A.find(x=>x.id==id);
+async function act(f){if(BUSY)return;BUSY=1;try{await f();await ld()}catch(e){net()}BUSY=0;return home()}
+function can(id){if(!confirm("অ্যাপয়েন্টমেন্টটি বাতিল করবেন?"))return;act(()=>upd(find(id),{st:"cancel"}))}
+function rej(id){const r=prompt("প্রত্যাখ্যানের কারণ (ঐচ্ছিক):");if(r===null)return;act(()=>upd(find(id),{st:"rej",rn:r.trim()}))}
+
+/* ---------- রোগীর ড্যাশবোর্ড ---------- */
+function pdash(){const up=A.filter(a=>!DEAD.includes(a.st)),hs=A.filter(a=>DEAD.includes(a.st)),need=A.filter(a=>a.st=="sch").length;
+ V(`<div class="fh"><h3>🧑 ${esc(PF.n)}</h3><button class="rm" onclick="TM.out()">লগআউট</button></div>
+ <div class="grid" style="margin-bottom:10px"><div class="card sp"><span>📅</span><b>${B(up.length)}</b><div class="mu">চলমান</div></div><div class="card sp"><span>💳</span><b>${B(need)}</b><div class="mu">পেমেন্ট বাকি</div></div></div>
+ <button class="btn" style="width:100%;margin-bottom:6px" onclick="TM.pick()">➕ ডাক্তারকে রিকোয়েস্ট পাঠান</button>
+ <h3>চলমান অ্যাপয়েন্টমেন্ট</h3>${up.length?up.map(acard).join(""):'<div class="card empty"><div class="big">📅</div><p class="mu">কোনো চলমান অ্যাপয়েন্টমেন্ট নেই</p></div>'}${hs.length?`<h3>ইতিহাস</h3>${hs.map(acard).join("")}`:""}`)}
+async function pick(q=""){SCR="pick";V(bk("TM.home()","ফিরে যান","ড্যাশবোর্ড")+`<h3>অনলাইন ডাক্তার বাছাই করুন</h3><input id="tq" placeholder="🔍 নাম, বিভাগ বা হাসপাতাল" oninput="TM.pl(this.value)"><div id="tl"><p class="mu">লোড হচ্ছে…</p></div>`);
+ try{OD=await fb("docmap","GET",undefined,1)||{}}catch(e){OD={}}pl(q)}
+function pl(q){const sp=x=>(SP.find(s=>s[0]==x.sp)||[0,"","বিশেষজ্ঞ"])[2],L=D.filter(d=>OD[d.id]&&(!q.trim()||mt(d.name+" "+d.hosp+" "+d.deg+" "+sp(d),q)));
+ $("tl").innerHTML=L.map(d=>`<div class="card" style="margin-bottom:8px;cursor:pointer" onclick="TM.book('${d.id}')"><b>${esc(d.name)}</b> <span class="fee l"><small>অনলাইন</small></span><div class="mu">${sp(d)} • ${esc(d.hosp)}</div></div>`).join("")||'<div class="card empty"><p class="mu">এখনো কোনো ডাক্তার অনলাইন সেবায় যুক্ত হননি। ডাক্তাররা “নতুন অ্যাকাউন্ট → আমি ডাক্তার” থেকে যুক্ত হতে পারবেন।</p></div>'}
+
+/* ---------- রিকোয়েস্ট ফর্ম ---------- */
+async function book(did,type){if(!SS){BK={pend:did};AM="r";AR="p";toast("আগে রোগী অ্যাকাউন্ট খুলুন");return auth()}
+ if(!PF||PF.r!="p")return toast("রোগী অ্যাকাউন্ট থেকে রিকোয়েস্ট পাঠান");
+ try{if(!(OD[did]))OD=await fb("docmap","GET",undefined,1)||{}}catch(e){return net()}
+ if(!OD[did])return toast("এই ডাক্তার এখনো অনলাইন সেবায় যুক্ত নন");
+ BK={did,type:type||"v",pd:dk(new Date(Date.now()+864e5)),pt:"সন্ধ্যা/রাত",reason:""};bview()}
+function bview(){SCR="form";const d=dd(BK.did);
+ V(bk("TM.pick()","ফিরে যান","ডাক্তার বাছাই")+`<div class="card"><b>${esc(d.name)}</b><div class="mu">${esc(d.deg)}<br>🏥 ${esc(d.hosp)}</div></div>
+ <h3>পরামর্শের ধরন</h3><div class="seg"><button class="${BK.type=="v"?"on l":""}" onclick="TM.bs('type','v')">🎥 ভিডিও কল</button><button class="${BK.type=="c"?"on l":""}" onclick="TM.bs('type','c')">🏥 চেম্বারে</button></div>
+ <h3>কবে দেখাতে চান</h3><input id="pd" type="date" min="${dk(new Date())}" value="${BK.pd}" onchange="TM.bs('pd',this.value)"><div class="seg">${["সকাল","বিকাল","সন্ধ্যা/রাত"].map(x=>`<button class="${BK.pt==x?"on l":""}" onclick="TM.bs('pt','${x}')">${x}</button>`).join("")}</div>
+ <h3>সমস্যার বিবরণ</h3><textarea id="tr" rows="3" placeholder="যেমন: তিন দিন ধরে জ্বর ও কাশি">${esc(BK.reason)}</textarea>
+ <button class="btn" style="width:100%" onclick="TM.ok()">রিকোয়েস্ট পাঠান</button><p class="mu" style="margin-top:8px">ডাক্তার রিকোয়েস্ট গ্রহণ করে আপনাকে নির্দিষ্ট সময় ও পেমেন্ট নম্বর জানাবেন।</p>`)}
+function bs(k,v){const r=$("tr");if(r)BK.reason=r.value;BK[k]=v;bview()}
+async function ok(){if(BUSY)return;const d=dd(BK.did);BK.reason=$("tr").value.trim();if(BK.reason.length<5)return toast("সমস্যার বিবরণ লিখুন");if(!BK.pd||BK.pd<dk(new Date()))return toast("সঠিক তারিখ দিন");
+ if(A.some(a=>a.did==BK.did&&a.pid==SS.uid&&!DEAD.includes(a.st)))return toast("এই ডাক্তারের কাছে আপনার একটি অনুরোধ ইতিমধ্যে চলমান");
+ const a={id:uid()+uid(),pid:SS.uid,pn:PF.n,pp:PF.ph,did:BK.did,duid:OD[BK.did],dn:d.name,type:BK.type,pd:BK.pd,pt:BK.pt,reason:BK.reason,st:"req",room:"rsh-"+uid()+uid()+uid(),at:Date.now()};
+ BUSY=1;try{const m={};m["ua/"+a.pid+"/"+a.id]=a;m["ua/"+a.duid+"/"+a.id]=a;await fb("","PATCH",m);toast("রিকোয়েস্ট পাঠানো হয়েছে ✅");BK={}}catch(e){BUSY=0;return net()}BUSY=0;home()}
+
+/* ---------- ডাক্তারের ড্যাশবোর্ড ---------- */
+function ddash(){const pay=PF.pay||{m:"bKash",no:"",fee:""},g=s=>A.filter(a=>a.st==s),d=dd(PF.di),td=dk(new Date()),hs=A.filter(a=>DEAD.includes(a.st));
+ V(`<div class="fh"><h3>👨‍⚕️ ${esc(PF.n)}</h3><button class="rm" onclick="TM.out()">লগআউট</button></div><p class="mu" style="margin:-6px 0 10px">${d?esc(d.hosp):""} • BMDC: ${esc(PF.bm)}</p>
+ <div class="grid" style="margin-bottom:10px"><div class="card sp"><span>⏳</span><b>${B(g("req").length+g("paid").length)}</b><div class="mu">করণীয়</div></div><div class="card sp"><span>🗓️</span><b>${B(A.filter(a=>a.date==td&&a.st=="conf").length)}</b><div class="mu">আজকের রোগী</div></div></div>
+ <details class="card fa" style="margin-bottom:10px"><summary><b>💳 আমার পেমেন্ট সেটিং</b></summary><p><div class="mu">রোগী এই নম্বরে ফি পাঠাবে (Send Money / Personal)</div><select id="pm">${["bKash","Nagad","Rocket"].map(m=>`<option ${m==pay.m?"selected":""}>${m}</option>`).join("")}</select><input id="pn" type="tel" inputmode="numeric" placeholder="পেমেন্ট নম্বর" value="${esc(pay.no)}"><input id="pf" type="number" min="0" placeholder="ভিডিও পরামর্শ ফি (৳)" value="${esc(pay.fee)}"><button class="btn" onclick="TM.sp()">সংরক্ষণ করুন</button></p></details>
+ ${g("req").length?`<h3>🔔 নতুন রিকোয়েস্ট</h3>${g("req").map(acard).join("")}`:""}${g("paid").length?`<h3>💳 পেমেন্ট যাচাই করুন</h3>${g("paid").map(acard).join("")}`:""}
+ ${g("sch").length?`<h3>রোগীর পেমেন্টের অপেক্ষা</h3>${g("sch").map(acard).join("")}`:""}
+ <h3>নিশ্চিত অ্যাপয়েন্টমেন্ট</h3>${g("conf").length?g("conf").sort((x,y)=>at(x)-at(y)).map(acard).join(""):'<div class="card empty"><div class="big">🗓️</div><p class="mu">কোনো নিশ্চিত অ্যাপয়েন্টমেন্ট নেই</p></div>'}${hs.length?`<h3>ইতিহাস</h3>${hs.map(acard).join("")}`:""}`)}
+async function sp(){const m=$("pm").value,no=nz($("pn").value).replace(/\D/g,""),fee=+$("pf").value;if(!/^01[3-9]\d{8}$/.test(no)||!(fee>0))return toast("সঠিক নম্বর ও ফি দিন");
+ try{PF.pay={m,no,fee};await fb("users/"+SS.uid+"/pay","PUT",PF.pay);sv();toast("সংরক্ষিত হয়েছে ✅")}catch(e){net()}}
+function sch(id){SCR="form";const a=find(id),p=PF.pay||{m:"bKash",no:"",fee:""},v=a.type=="v";
+ V(bk("TM.home()","ফিরে যান","ড্যাশবোর্ড")+`<h3>সময় ও পেমেন্ট নির্ধারণ</h3><div class="card"><b>${esc(a.pn)}</b><div class="mu">চেয়েছে: ${dl(a.pd)} (${esc(a.pt)})<br>${esc(a.reason)}</div></div>
+ <div class="card" style="margin-top:8px"><div class="mu">অ্যাপয়েন্টমেন্টের তারিখ</div><input id="sd" type="date" min="${dk(new Date())}" value="${a.date||a.pd}"><div class="mu">সময়</div><input id="st" type="time" value="${a.time||"18:00"}">
+ ${v?`<div class="mu">ফি (৳)</div><input id="sf" type="number" min="1" value="${a.fee||p.fee}"><div class="mu">পেমেন্ট মাধ্যম ও নম্বর</div><select id="sm">${["bKash","Nagad","Rocket"].map(m=>`<option ${m==((a.pm||p).m)?"selected":""}>${m}</option>`).join("")}</select><input id="sn" type="tel" inputmode="numeric" placeholder="পেমেন্ট নম্বর" value="${esc((a.pm||p).no)}">`:""}
+ <textarea id="so" rows="2" placeholder="রোগীর জন্য নোট (ঐচ্ছিক)">${esc(a.snote||"")}</textarea><button class="btn" style="width:100%" onclick="TM.ss('${id}')">${v?"নিশ্চিত করে রোগীকে পাঠান":"সময় নিশ্চিত করুন"}</button></div>`)}
+async function ss(id){const a=find(id),v=a.type=="v",date=$("sd").value,time=$("st").value;if(!date||!time||new Date(date+"T"+time)<Date.now())return toast("ভবিষ্যতের সঠিক সময় দিন");
+ if(A.some(z=>z.id!=id&&z.duid==SS.uid&&z.date==date&&z.time==time&&!DEAD.includes(z.st)))return toast("এই সময়ে আপনার আরেকটি অ্যাপয়েন্টমেন্ট আছে");
+ let f={date,time,snote:$("so").value.trim(),pnote:null};
+ if(v){const fee=+$("sf").value,no=nz($("sn").value).replace(/\D/g,"");if(!(fee>0)||!/^01[3-9]\d{8}$/.test(no))return toast("সঠিক ফি ও পেমেন্ট নম্বর দিন");f.fee=fee;f.pm={m:$("sm").value,no};f.st=a.st=="conf"?"conf":"sch";PF.pay={m:f.pm.m,no,fee};sv();fb("users/"+SS.uid+"/pay","PUT",PF.pay).catch(()=>{})}else{f.st="conf"}
+ act(()=>upd(a,f)).then(()=>toast("রোগীকে জানানো হয়েছে ✅"))}
+function vp(id,y){const a=find(id);if(y)return act(()=>upd(a,{st:"conf"})).then(()=>toast("পেমেন্ট নিশ্চিত — কল প্রস্তুত ✅"));
+ act(()=>upd(a,{st:"sch",pnote:"TrxID মেলেনি। সঠিক TrxID দিয়ে আবার জমা দিন।",trx:null,sn:null}))}
+
+/* ---------- রোগীর পেমেন্ট ---------- */
+function pay(id){SCR="form";const a=find(id);
+ V(bk("TM.home()","ফিরে যান","ড্যাশবোর্ড")+`<h3>💳 পেমেন্ট করুন</h3><div class="card"><div class="mu">${esc(a.dn)} • ${dl(a.date)}, ${bnT(a.time)}</div><div style="font-size:26px;font-weight:700;margin:6px 0">৳${B(a.fee)}</div>
+ <div class="tn"><b>${esc(a.pm.m)}</b> (Send Money) নম্বর:<br><span style="font-size:20px;font-weight:700">${B(a.pm.no)}</span> <button class="rm" style="color:var(--pr)" onclick="navigator.clipboard&&navigator.clipboard.writeText('${a.pm.no}');toast('নম্বর কপি হয়েছে')">কপি</button></div>
+ <ol class="mu" style="padding-left:18px"><li>উপরের নম্বরে ঠিক ৳${B(a.fee)} পাঠান</li><li>মেসেজে আসা TrxID নিচে লিখুন</li><li>ডাক্তার যাচাই করলে কল চালু হবে</li></ol>
+ <input id="px" placeholder="TrxID (যেমন: 9K3L2M1N0P)" autocapitalize="characters"><input id="ps" type="tel" inputmode="numeric" placeholder="যে নম্বর থেকে পাঠিয়েছেন" value="${esc(PF.ph)}"><button class="btn" style="width:100%" onclick="TM.ps('${id}')">পেমেন্ট জমা দিন</button></div>`)}
+function ps(id){const t=$("px").value.trim().toUpperCase(),s=nz($("ps").value).replace(/\D/g,"");if(!/^[A-Z0-9]{6,14}$/.test(t))return toast("সঠিক TrxID দিন");if(!/^01[3-9]\d{8}$/.test(s))return toast("প্রেরকের সঠিক নম্বর দিন");
+ act(()=>upd(find(id),{st:"paid",trx:t,sn:s,paidAt:Date.now(),pnote:null})).then(()=>toast("জমা হয়েছে — ডাক্তার যাচাই করবেন ✅"))}
+
+/* ---------- প্রেসক্রিপশন ---------- */
+function rx(id){SCR="form";const a=find(id),r=a.rx||{};
+ V(bk("TM.home()","ফিরে যান","ড্যাশবোর্ড")+`<h3>📝 প্রেসক্রিপশন — ${esc(a.pn)}</h3><div class="card"><input id="rd" placeholder="রোগ নির্ণয়" value="${esc(r.dx||"")}"><textarea id="rm" rows="5" placeholder="ওষুধ (প্রতি লাইনে একটি): নাপা ৫০০ মি.গ্রা., ১+১+১, ৩ দিন">${esc(r.med||"")}</textarea><textarea id="ra" rows="3" placeholder="পরামর্শ ও সতর্কতা">${esc(r.adv||"")}</textarea><div class="mu">ফলো-আপ তারিখ (ঐচ্ছিক)</div><input id="rf" type="date" value="${r.fu||""}"><button class="btn" style="width:100%" onclick="TM.rs('${id}')">সংরক্ষণ করে শেষ করুন</button></div>`)}
+function rs(id){const dx=$("rd").value.trim(),med=$("rm").value.trim();if(!dx||!med)return toast("রোগ নির্ণয় ও ওষুধ লিখুন");act(()=>upd(find(id),{st:"done",rx:{dx,med,adv:$("ra").value.trim(),fu:$("rf").value,at:Date.now()}})).then(()=>toast("প্রেসক্রিপশন পাঠানো হয়েছে ✅"))}
+function view(id){SCR="form";const a=find(id),r=a.rx,d=dd(a.did);
+ V(bk("TM.home()","ফিরে যান","ড্যাশবোর্ড")+`<div class="card" id="tmrx"><div style="text-align:center"><b style="font-size:17px">${esc(a.dn)}</b><div class="mu">${d?esc(d.deg)+"<br>"+esc(d.hosp):""}</div></div><div class="dv"></div><div class="mu">রোগী: <b>${esc(a.pn)}</b> • ${dl(a.date)}</div><h3>রোগ নির্ণয়</h3><div>${esc(r.dx)}</div><h3>ওষুধ</h3>${r.med.split("\n").map((l,i)=>`<div class="rv">${B(i+1)}. ${esc(l)}</div>`).join("")}${r.adv?`<h3>পরামর্শ</h3><div>${esc(r.adv).replace(/\n/g,"<br>")}</div>`:""}${r.fu?`<h3>ফলো-আপ</h3><div>${dl(r.fu)}</div>`:""}</div><button class="btn" style="width:100%;margin-top:8px" onclick="print()">🖨️ প্রিন্ট / PDF সংরক্ষণ</button>`)}
+
+/* ---------- ভিডিও কনসালটেশন ---------- */
+function stopM(){if(CALL&&CALL.ms){CALL.ms.getTracks().forEach(t=>t.stop());CALL.ms=null}}
+async function call(id){const a=find(id);if(!a||!joinable(a))return toast("কলের সময় এখনো হয়নি");CALL={id,ms:null};SCR="call";
+ V(bk("TM.end(1)","ফিরে যান","ড্যাশবোর্ড")+`<h3>🎥 ${PF.r=="d"?esc(a.pn):esc(a.dn)}</h3><div class="card"><div class="tm-v"><video id="tv" autoplay muted playsinline></video></div><div class="mu" id="tc" style="margin:8px 0">ক্যামেরা ও মাইক পরীক্ষা হচ্ছে…</div><div class="row"><button class="btn" id="tj" onclick="TM.join()" disabled>কলে যোগ দিন</button></div><p class="mu" style="margin:8px 0 0">📶 ভালো ইন্টারনেট ও শান্ত জায়গা বেছে নিন।</p></div>`);
+ try{CALL.ms=await navigator.mediaDevices.getUserMedia({video:true,audio:true});$("tv").srcObject=CALL.ms;$("tc").textContent="✅ ক্যামেরা ও মাইক ঠিক আছে"}catch(e){$("tc").textContent="⚠️ ক্যামেরা/মাইকের অনুমতি পাওয়া যায়নি — ব্রাউজার সেটিংসে অনুমতি দিন (না দিলেও শুধু শোনার জন্য যোগ দেওয়া যাবে)।"}$("tj")&&($("tj").disabled=false)}
+function join(){const a=find(CALL.id);stopM();const t0=Date.now(),src="https://meet.jit.si/"+a.room+"#userInfo.displayName="+encodeURIComponent('"'+PF.n+'"')+"&config.prejoinPageEnabled=false&config.disableDeepLinking=true";
+ V(`<div class="fh"><h3>🔴 কল চলছে</h3><b id="tt" class="mu">০০:০০</b></div><div class="tm-f"><iframe src="${src}" allow="camera; microphone; fullscreen; display-capture; autoplay" title="ভিডিও কল"></iframe></div><div class="row" style="margin-top:8px"><button class="btn sos" onclick="TM.end()">📵 কল শেষ করুন</button></div>`);
+ clearInterval(CALL.tm);CALL.tm=setInterval(()=>{const s=(Date.now()-t0)/1000|0;$("tt")?$("tt").textContent=B(p2(s/60|0)+":"+p2(s%60)):clearInterval(CALL.tm)},1000)}
+function end(back){const c=CALL;stopM();if(c)clearInterval(c.tm);CALL=null;const a=c&&find(c.id);if(!back&&PF.r=="d"&&a&&a.st=="conf"&&confirm("প্রেসক্রিপশন লিখবেন?"))return rx(a.id);home()}
+
+/* ---------- হোম/ডাক্তার পেজ/মেনুতে সংযোগ ---------- */
+const od=window.doc;window.doc=function(id){od.apply(this,arguments);const c=document.querySelector("#v .dc.full");if(c&&!$("tmb")){const x=document.createElement("div");x.id="tmb";x.className="row";x.style.margin="8px 0";x.innerHTML=`<button class="btn" onclick="TM.book('${id}','c')">📅 অ্যাপয়েন্টমেন্ট রিকোয়েস্ট</button><button class="btn" onclick="TM.book('${id}','v')">🎥 ভিডিও পরামর্শ</button>`;c.after(x)}};
+const oh=window.home;window.home=function(){oh.apply(this,arguments);const v=$("v");if(v.querySelector("#tmh"))return;const s=v.querySelector(".slb"),x=document.createElement("div");x.id="tmh";x.className="card tm-h";x.onclick=()=>TM.home();x.innerHTML='<span style="font-size:32px">🩺</span><div><b>অনলাইন ডাক্তার ও ভিডিও পরামর্শ</b><div class="mu">রিকোয়েস্ট পাঠান • ঘরে বসে ডাক্তারের সাথে কথা বলুন</div></div>';s?s.before(x):v.prepend(x)};
+const dv=document.querySelector("#dr .dv");if(dv&&!$("m9")){const b=document.createElement("button");b.className="mi";b.id="m9";b.onclick=()=>TM.home();b.innerHTML="<em>🩺</em><div>অনলাইন ডাক্তার<small>রিকোয়েস্ট, ভিডিও কল, ড্যাশবোর্ড</small></div>";dv.before(b)}
+/* নিচের নেভিগেশনে ৯ নম্বর ট্যাব: অনলাইন ডাক্তার */
+const nv=document.querySelector("nav");if(nv&&!$("t9")){const b=document.createElement("button");b.id="t9";b.onclick=()=>TM.home();b.innerHTML='<svg class="qi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg><span>অনলাইন</span>';nv.insertBefore(b,nv.lastElementChild)}
+const ot=window.tab;window.tab=function(n){if(n==9)return TM.home();const r=ot.apply(this,arguments);clr();return r};
+["docs","spec","hs","tg"].forEach(f=>{const o=window[f];if(typeof o=="function")window[f]=function(){clr();return o.apply(this,arguments)}});
+window.TM={setup,home,am:m=>{AM=m;auth()},ar:r=>{AR=r;auth()},go,out,pick,pl,book,bs,ok,can,rej,sch,ss,vp,pay,ps,sp,rx,rs,view,call,join,end};
+})();
+</script>
 </body></html>
