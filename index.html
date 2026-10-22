@@ -2705,26 +2705,28 @@ const ot=window.tab;window.tab=function(n){if(n==9)return TM.home();const r=ot.a
 ["docs","spec","hs","tg"].forEach(f=>{const o=window[f];if(typeof o=="function")window[f]=function(){clr();return o.apply(this,arguments)}});
 /* ---------- অ্যাপে ঢুকলে/চলার সময় নোটিফিকেশন (ডাক্তার: নতুন রিকোয়েস্ট • রোগী: ডাক্তারের আপডেট) ---------- */
 let NLAUNCH="",NBUSY=0,NASK=0,NHID=0;
+const nEn=()=>{try{return localStorage.getItem("rlang")==="en"}catch(e){return false}},nT=(b,e)=>nEn()?e:b,nB=x=>nEn()?String(x):B(x);
 const nEv=a=>{if(PF&&PF.r=="d"){
- if(a.st=="req")return"🔔 "+a.pn+" আপনার কাছে রিকোয়েস্ট পাঠিয়েছেন";
- if(a.st=="paid")return"💳 "+a.pn+" পেমেন্ট পাঠিয়েছেন — যাচাই করুন";
- if(a.st=="cancel")return"❌ "+a.pn+" অ্যাপয়েন্টমেন্ট বাতিল করেছেন"}
+ if(a.st=="req")return nT("🔔 "+a.pn+" আপনার কাছে রিকোয়েস্ট পাঠিয়েছেন","🔔 "+a.pn+" sent you a request");
+ if(a.st=="paid")return nT("💳 "+a.pn+" পেমেন্ট পাঠিয়েছেন — যাচাই করুন","💳 "+a.pn+" sent a payment — please verify");
+ if(a.st=="cancel")return nT("❌ "+a.pn+" অ্যাপয়েন্টমেন্ট বাতিল করেছেন","❌ "+a.pn+" cancelled the appointment")}
  else{
- if(a.st=="sch")return"💳 "+a.dn+" সময় ও পেমেন্ট নির্ধারণ করেছেন — পেমেন্ট করুন";
- if(a.st=="conf")return"✅ "+a.dn+"-এর অ্যাপয়েন্টমেন্ট নিশ্চিত হয়েছে";
- if(a.st=="rej")return"❌ "+a.dn+" রিকোয়েস্ট প্রত্যাখ্যান করেছেন"}
+ if(a.st=="sch")return nT("💳 "+a.dn+" সময় ও পেমেন্ট নির্ধারণ করেছেন — পেমেন্ট করুন","💳 "+a.dn+" has set the time & payment — please pay");
+ if(a.st=="conf")return nT("✅ "+a.dn+"-এর অ্যাপয়েন্টমেন্ট নিশ্চিত হয়েছে","✅ Your appointment with "+a.dn+" is confirmed");
+ if(a.st=="rej")return nT("❌ "+a.dn+" রিকোয়েস্ট প্রত্যাখ্যান করেছেন","❌ "+a.dn+" declined your request")}
  return""};
 function nBanner(title,lines){
  let e=$("tmn");
- if(!e){e=document.createElement("div");e.id="tmn";e.setAttribute("role","alert");
+ if(!e){e=document.createElement("div");e.id="tmn";e.setAttribute("role","alert");e.setAttribute("data-nt","");
   e.style.cssText="position:fixed;left:10px;right:10px;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:99999;display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:16px;background:#0f6b53;color:#fff;box-shadow:0 8px 26px #0006;font-size:13.5px;line-height:1.5;font-weight:600;font-family:inherit;cursor:pointer;overflow-wrap:anywhere;word-break:break-word";
   document.body.appendChild(e)}
- const more=lines.length>3?'<div style="font-weight:500;font-size:12px;margin-top:2px;opacity:.9">এবং আরও '+B(lines.length-3)+'টি</div>':"";
+ const more=lines.length>3?'<div style="font-weight:500;font-size:12px;margin-top:2px;opacity:.9">'+nT("এবং আরও "+B(lines.length-3)+"টি","and "+(lines.length-3)+" more")+'</div>':"";
  e.innerHTML='<span style="font-size:22px">🩺</span><div style="flex:1;min-width:0"><b>'+esc(title)+'</b>'
   +lines.slice(0,3).map(x=>'<div style="font-weight:500;font-size:12.5px;margin-top:2px">'+esc(x)+'</div>').join("")+more
-  +'<div style="font-weight:500;font-size:12px;margin-top:3px;opacity:.9">দেখতে ট্যাপ করুন</div></div>'
-  +'<button type="button" aria-label="বন্ধ" style="flex:none;border:0;background:#ffffff30;color:#fff;border-radius:50%;width:26px;height:26px;font-size:14px;cursor:pointer">✕</button>';
- e.style.display="flex";try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(_){}
+  +'<div style="font-weight:500;font-size:12px;margin-top:3px;opacity:.9">'+nT("দেখতে ট্যাপ করুন","Tap to view")+'</div></div>'
+  +'<button type="button" aria-label="'+nT("বন্ধ","Close")+'" style="flex:none;border:0;background:#ffffff30;color:#fff;border-radius:50%;width:26px;height:26px;font-size:14px;cursor:pointer">✕</button>';
+ const dup=e.style.display=="flex"&&e.dataset.k==title+lines.join("|");e.dataset.k=title+lines.join("|");
+ e.style.display="flex";if(!dup){try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(_){}}
  e.onclick=ev=>{e.style.display="none";if(ev.target.tagName!="BUTTON")TM.home()};
  clearTimeout(window.tmnT);window.tmnT=setTimeout(()=>{e.style.display="none"},12000)}
 async function nSys(title,body){
@@ -2741,13 +2743,14 @@ async function nChk(launch){
   let seen={};try{seen=JSON.parse(LS.getItem(k)||"{}")}catch(e){}
   const fresh=L.filter(a=>nEv(a)&&seen[a.id]!==a.st),lau=launch&&NLAUNCH!==SS.uid;
   if(launch)NLAUNCH=SS.uid;
-  let title="অনলাইন ডাক্তার — নতুন আপডেট",lines=fresh.map(nEv);
+  let title=nT("অনলাইন ডাক্তার — নতুন আপডেট","Online Doctor — new update"),lines=fresh.map(nEv);
   if(d&&lau){
    const rq=L.filter(a=>a.st=="req").length,pd=L.filter(a=>a.st=="paid").length;
-   lines=[];if(rq)lines.push("🔔 "+B(rq)+" জন রোগী আপনার কাছে রিকোয়েস্ট পাঠিয়েছেন");
-   if(pd)lines.push("💳 "+B(pd)+"টি পেমেন্ট যাচাইয়ের অপেক্ষায়");
-   title="রোগীর রিকোয়েস্ট এসেছে"}
+   lines=[];if(rq)lines.push(nT("🔔 "+B(rq)+" জন রোগী আপনার কাছে রিকোয়েস্ট পাঠিয়েছেন","🔔 "+rq+(rq>1?" patients have":" patient has")+" sent you a request"));
+   if(pd)lines.push(nT("💳 "+B(pd)+"টি পেমেন্ট যাচাইয়ের অপেক্ষায়","💳 "+pd+(pd>1?" payments":" payment")+" awaiting verification"));
+   title=nT("রোগীর রিকোয়েস্ট এসেছে","New patient requests")}
   const m={};L.forEach(a=>m[a.id]=a.st);try{LS.setItem(k,JSON.stringify(m))}catch(e){}
+  if(d){try{LS.setItem("tm_sum_"+SS.uid,JSON.stringify({rq:L.filter(a=>a.st=="req").length,pd:L.filter(a=>a.st=="paid").length}))}catch(e){}}
   if(lines.length){
    if(!($("tmx")&&SCR=="dash"&&!document.hidden))nBanner(title,lines);
    nSys(title,lines.slice(0,3).join("\n"))}
@@ -2757,7 +2760,13 @@ document.addEventListener("click",()=>{if(!NASK&&SS&&("Notification" in window)&
 document.addEventListener("visibilitychange",()=>{
  if(document.hidden){NHID=Date.now();return}
  if(NHID&&Date.now()-NHID>3e4){NLAUNCH="";nChk(true)}else nChk(false)});
-setTimeout(()=>nChk(true),2500);
+(function(){
+ if(SS&&PF&&PF.r=="d"){let c=null;try{c=JSON.parse(LS.getItem("tm_sum_"+SS.uid)||"null")}catch(e){}
+  if(c&&(c.rq||c.pd)){const l=[];
+   if(c.rq)l.push(nT("🔔 "+B(c.rq)+" জন রোগী আপনার কাছে রিকোয়েস্ট পাঠিয়েছেন","🔔 "+c.rq+(c.rq>1?" patients have":" patient has")+" sent you a request"));
+   if(c.pd)l.push(nT("💳 "+B(c.pd)+"টি পেমেন্ট যাচাইয়ের অপেক্ষায়","💳 "+c.pd+(c.pd>1?" payments":" payment")+" awaiting verification"));
+   nBanner(nT("রোগীর রিকোয়েস্ট এসেছে","New patient requests"),l)}}
+ nChk(true)})();
 setInterval(()=>{if(!document.hidden)nChk(false)},20000);
 const RAW={home,pick,book,sch,pay,rx,view,setup};
 window.__tmR=function(n){const a=[].slice.call(arguments,1);return RAW[n]&&RAW[n].apply(null,a)};
