@@ -2787,7 +2787,7 @@ window.TM={alt,setup:NV("setup"),home:NV("home"),am:m=>{AM=m;auth()},ar:r=>{AR=r
 </script>
 <style id="landscape-fix">
 /* ===== ফোন ল্যান্ডস্কেপ সাপোর্ট ===== */
-@media (orientation:landscape) and (max-height:540px){
+@media (orientation:landscape) and (max-height:600px){
  :root{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
  /* চওড়া স্ক্রিনে কনটেন্ট */
  main{max-width:860px;padding:12px 14px 64px}
@@ -2815,7 +2815,8 @@ window.TM={alt,setup:NV("setup"),home:NV("home"),am:m=>{AM=m;auth()},ar:r=>{AR=r
  #vp{max-height:94vh;width:min(640px,100%)}
  #al,#tmn{max-width:620px;margin-left:auto;margin-right:auto}
  /* ভিডিও কল */
- .tm-f{height:calc(100vh - 120px);min-height:220px}
+ .tm-f{height:calc(100vh - 120px);height:calc(100dvh - 120px);min-height:220px}
+ .back{top:0}
  .tm-v{aspect-ratio:16/9;max-height:50vh;margin:0 auto}
  /* স্প্ল্যাশ স্ক্রিন */
  #spl .wrap{overflow-y:auto;justify-content:flex-start;padding:calc(env(safe-area-inset-top,0px) + 10px) 28px calc(env(safe-area-inset-bottom,0px) + 10px)}
@@ -2830,4 +2831,21 @@ window.TM={alt,setup:NV("setup"),home:NV("home"),am:m=>{AM=m;auth()},ar:r=>{AR=r
  #spl .fi{padding:8px 4px 6px}
 }
 </style>
+<style id="orient-fix">
+/* ঘোরালে iOS/Android যেন ফন্ট বড় না করে */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{overflow-x:hidden}
+img,video,iframe,svg{max-width:100%}
+/* বড় স্ক্রিন (ট্যাবলেট/ফোল্ড) — পোর্ট্রেট ও ল্যান্ডস্কেপ দুটোতেই */
+@media (min-width:700px){
+ main{max-width:860px}
+ header{max-width:none;padding-left:max(14px,calc(50% - 430px));padding-right:max(14px,calc(50% - 430px))}
+ nav{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+}
+/* পোর্ট্রেটে নচ/সেফ এরিয়া */
+@media (orientation:portrait){
+ :root{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+}
+</style>
+<script>try{screen.orientation&&screen.orientation.unlock&&screen.orientation.unlock()}catch(e){}</script>
 </body></html>
