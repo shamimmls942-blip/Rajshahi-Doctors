@@ -2848,4 +2848,274 @@ img,video,iframe,svg{max-width:100%}
 }
 </style>
 <script>try{screen.orientation&&screen.orientation.unlock&&screen.orientation.unlock()}catch(e){}</script>
+<script id="biz-addon">
+(function(){
+"use strict";
+const DBU="https://admin-faf11-default-rtdb.asia-southeast1.firebasedatabase.app",KEY="AIzaSyB79LzFJzaYZ_vS-OC1Jr1RsA2cB3sAM5U",LS=localStorage,$=id=>document.getElementById(id);
+const X=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const J=k=>{try{return JSON.parse(LS.getItem(k))}catch(e){return null}};
+const https=u=>/^https:\/\/[^\s"'<>]+$/i.test(u||"")?u:"";
+const imgOK=u=>/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(u||"")&&u.length<200000?u:https(u);
+const shrink=f=>new Promise((ok,no)=>{if(!f||!/^image\//.test(f.type))return no(new Error("ছবির ফাইল দিন"));const r=new FileReader();r.onerror=()=>no(new Error("ছবি পড়া যায়নি"));r.onload=()=>{const i=new Image();i.onerror=()=>no(new Error("ছবি খোলা যায়নি"));i.onload=()=>{let w=Math.min(720,i.width),h=Math.round(i.height*w/i.width);if(h>540){h=540;w=Math.round(i.width*h/i.height)}const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,h);x.drawImage(i,0,0,w,h);let q=.8,d=c.toDataURL("image/jpeg",q);while(d.length>90000&&q>.3){q-=.1;d=c.toDataURL("image/jpeg",q)}d.length>120000?no(new Error("ছবিটি অনেক বড়—ছোট ছবি দিন")):ok(d)};i.src=r.result};r.readAsDataURL(f)});
+const imgPv=p=>{const e=document.getElementById(p+"-pv");if(e)e.innerHTML=AS.img&&imgOK(AS.img)?`<img src="${AS.img.replace(/"/g,"")}" alt="">`:"<small>ছবি নেই</small>"};
+const imgBox=p=>`<label class="bz-l">ব্যানার ছবি (ঐচ্ছিক)</label><div id="${p}-pv" class="bz-pv">${imgOK(AS.img)?`<img src="${AS.img.replace(/"/g,"")}" alt="">`:"<small>ছবি নেই</small>"}</div><input type="file" id="${p}-file" accept="image/*"><input id="${p}-iu" placeholder="অথবা ছবির https:// লিংক" value="${/^https:/.test(AS.img||"")?AS.img.replace(/"/g,""):""}" style="direction:ltr;text-align:left"><button type="button" class="btn" data-ba="imgx" style="background:#64748b;margin-top:6px">🗑 ছবি সরান</button><small class="mu">আদর্শ মাপ ১৬:৯ বা ৪:৩ (যেমন ১২৮০×৭২০)। আপলোড করা ছবি স্বয়ংক্রিয়ভাবে ছোট (≈৭২০px, ৯০KB-এর মধ্যে) করে সেভ হয়।</small>`;
+document.addEventListener("change",async e=>{const t=e.target,m=t&&/^(bs|bd)-(file|iu)$/.exec(t.id||"");if(!m)return;const p=m[1];
+ try{if(m[2]=="file"){const f=t.files&&t.files[0];if(!f)return;AS.img=await shrink(f);const u=document.getElementById(p+"-iu");if(u)u.value=""}
+ else{const v=t.value.trim();if(!v){AS.img="";}else if(https(v)){AS.img=v}else{toast("ছবির লিংক https:// হতে হবে");return}}
+ imgPv(p)}catch(er){toast(er.message||"ছবি যোগ হয়নি")}});
+const num=n=>String(n||"").replace(/[^\d+]/g,"");
+const day=()=>{const d=new Date(),p=n=>String(n).padStart(2,"0");return""+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())};
+const iso=()=>{const d=day();return d.slice(0,4)+"-"+d.slice(4,6)+"-"+d.slice(6)};
+const RULES="{\"bizl\":{\".read\":\"root.child('bizadm/'+auth.uid).exists()\",\".write\":\"root.child('bizadm/'+auth.uid).exists()\"},\n\"bizadm\":{\".read\":\"auth != null\",\".write\":false},\n\"cms\":{\".read\":true,\".write\":\"root.child('bizadm/'+auth.uid).exists()\"},\n\"bizo\":{\".read\":\"root.child('bizadm/'+auth.uid).exists()\",\".write\":\"root.child('bizadm/'+auth.uid).exists()\",\"$u\":{\".read\":\"auth.uid==$u\"}},\n\"bizr\":{\".read\":\"root.child('bizadm/'+auth.uid).exists()\",\"$u\":{\".write\":\"auth.uid==$u||root.child('bizadm/'+auth.uid).exists()\"}},\n\"bizc\":{\".read\":true,\".write\":\"root.child('bizadm/'+auth.uid).exists()\",\"profiles\":{\"$q\":{\".write\":\"root.child('bizo/'+auth.uid).val()==$q\",\"vf\":{\".validate\":\"newData.val()==data.val()||root.child('bizadm/'+auth.uid).exists()\"},\"pl\":{\".validate\":\"newData.val()==data.val()||root.child('bizadm/'+auth.uid).exists()\"}}}},\n\"bizs\":{\".read\":\"root.child('bizadm/'+auth.uid).exists()\",\".write\":true,\"$d\":{\"$k\":{\"$id\":{\".read\":\"root.child('bizo/'+auth.uid).val()==$id\",\".validate\":\"newData.isNumber() && $id.length<41\"}}}}}";
+const DEF_PLANS={contact:"01740078692",items:[
+{n:"বেসিক",p:"যোগাযোগ করুন",f:["নিজস্ব প্রোফাইল পেজ","কল, WhatsApp ও ওয়েবসাইট বাটন","সময়সূচি ও পরিচিতি হালনাগাদ"]},
+{n:"স্পন্সরড",p:"যোগাযোগ করুন",hot:1,f:["হোম ও তালিকায় স্পন্সরড ব্যানার","ছবিসহ আকর্ষণীয় কার্ড ও বাটন","দেখা ও ক্লিকের মাসিক রিপোর্ট"]},
+{n:"প্রিমিয়াম",p:"যোগাযোগ করুন",f:["স্পন্সরডের সব সুবিধা","সব পেজে অগ্রাধিকার প্রদর্শন","ডেডিকেটেড সাপোর্ট"]}]};
+let B=J("bizc")||{};
+/* ---------- বেনামী অ্যানালিটিক্স ---------- */
+const optOut=()=>navigator.doNotTrack=="1"||navigator.globalPrivacyControl===true||LS.getItem("biz_oo")=="1";
+let Q={};const seen=new Set();
+const sk=s=>String(s).replace(/[.$#\[\]\/\s]/g,"_").slice(0,40);
+function track(k,id){if(optOut()||!id)return;const p=day()+"/"+k+"/"+sk(id);Q[p]=(Q[p]||0)+1}
+function flush(){if(optOut()){Q={};return}const ks=Object.keys(Q);if(!ks.length)return;const b={};ks.forEach(k=>b[k]={".sv":{increment:Q[k]}});Q={};
+ try{fetch(DBU+"/bizs.json",{method:"PATCH",body:JSON.stringify(b),keepalive:true}).catch(()=>{})}catch(e){}}
+setInterval(flush,20000);document.addEventListener("visibilitychange",()=>{if(document.hidden)flush()});addEventListener("pagehide",flush);
+if(LS.getItem("biz_d")!=day()){try{LS.setItem("biz_d",day())}catch(e){}track("du","all")}
+/* ---------- পাবলিক কনফিগ ---------- */
+async function load(){try{const r=await fetch(DBU+"/bizc.json");if(!r.ok)return;B=await r.json()||{};try{LS.setItem("bizc",JSON.stringify(B))}catch(_){}if($("hl")&&window.hspR)window.hspR();const o=$("bzdh");if(o){o.remove();$("v")&&$("v").dispatchEvent(new Event("bzr"))}}catch(e){}}
+const sponsors=sl=>Object.entries(B.sponsors||{}).map(([id,s])=>Object.assign({id},s)).filter(s=>s.on!==false&&(!sl||(s.sl||"h")==sl||s.sl=="all")&&(!s.f||iso()>=s.f)&&(!s.t||iso()<=s.t));
+const plans=()=>B.plans&&B.plans.items?B.plans:DEF_PLANS;
+/* ---------- হাসপাতাল কার্ডে প্রোফাইল ও বিজ্ঞাপন ---------- */
+function banner(sl){const L=sponsors(sl||"h");if(!L.length)return"";const s=L[Math.floor(Date.now()/3e4)%L.length];
+ if(!seen.has(s.id)){seen.add(s.id);track("si",s.id)}
+ const im=imgOK(s.img);return `<div class="bz-ad-box"><span class="bz-ad">স্পন্সরড</span>${im?`<img class="bz-img" data-bz="sp" data-id="${X(s.id)}" src="${X(im)}" alt="${X(s.title)}" loading="lazy" decoding="async">`:'<div class="bz-nb"></div>'}<div class="bz-bd"><b>${X(s.title)}</b><p>${X(s.text)}</p><button type="button" class="btn" data-bz="sp" data-id="${X(s.id)}">${X(s.cta||"বিস্তারিত দেখুন")} ›</button></div></div>`}
+function prof(p){const a=[];
+ if(p.ap)a.push(`<a class="btn" data-bz="hc" href="tel:${num(p.ap)}">📞 অ্যাপয়েন্টমেন্ট</a>`);
+ if(p.wa)a.push(`<a class="btn" data-bz="hc" rel="noopener" target="_blank" href="https://wa.me/${num(p.wa).replace(/^\+/,"")}">💬 WhatsApp</a>`);
+ if(https(p.web))a.push(`<a class="btn" rel="noopener nofollow" target="_blank" href="${X(p.web)}">🌐 ওয়েবসাইট</a>`);
+ if(/^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(p.em||""))a.push(`<a class="btn" href="mailto:${X(p.em)}">✉️ ইমেইল</a>`);
+ return `<div class="bzp"><b>${p.vf?"✅ হাসপাতাল-পরিচালিত প্রোফাইল":"ℹ️ হাসপাতালের প্রোফাইল"}</b>${p.ab?`<p>${X(p.ab)}</p>`:""}${p.hr?`<p>🕒 ${X(p.hr)}</p>`:""}${a.length?`<div class="row">${a.join("")}</div>`:""}</div>`}
+function deco(){const hl=$("hl");if(!hl)return;
+ let bs=$("bzs");if(!bs){bs=document.createElement("div");bs.id="bzs";hl.before(bs)}bs.innerHTML=banner();
+ const sq=new Set(sponsors().map(s=>s.q).filter(Boolean));
+ hl.querySelectorAll("details.hz").forEach(d=>{const h=window.HOSPD&&HOSPD[+d.id.slice(3)];if(!h)return;
+  const p=(B.profiles||{})[sk(h.q)];const fb=d.querySelector(".fb");
+  if(p&&fb&&!fb.querySelector(".bzp"))fb.insertAdjacentHTML("afterbegin",prof(p));
+  const sm=d.querySelector(".fat small");if(sm&&sq.has(h.q)&&!sm.querySelector(".bz-ad"))sm.insertAdjacentHTML("beforeend",' <span class="bz-ad">স্পন্সরড</span>')});
+ if(!$("bzf"))hl.insertAdjacentHTML("afterend",`<div id="bzf" class="bz-ft"><button type="button" class="btn" data-bz="ow" style="background:#64748b">🔑 হাসপাতালের লগইন</button><label><input type="checkbox" id="bzoo" ${optOut()?"checked":""} ${navigator.doNotTrack=="1"||navigator.globalPrivacyControl?"disabled":""}> বেনামী পরিসংখ্যান বন্ধ রাখুন</label><small>আমরা কোনো নাম, নম্বর, IP বা লোকেশন সংরক্ষণ করি না—শুধু দৈনিক মোট গণনা (যেমন কোন হাসপাতাল কতবার দেখা হয়েছে)।</small></div>`)}
+const oR=window.hspR;if(oR)window.hspR=function(){const r=oR.apply(this,arguments);try{deco()}catch(e){}return r};
+const oO=window.hxOpen;if(oO)window.hxOpen=function(i,o){if(o&&window.HOSPD&&HOSPD[i])track("hv",HOSPD[i].q);return oO.apply(this,arguments)};
+let cur="";const oD=window.doc;if(oD)window.doc=function(id){track("dv",id);cur=String(id);return oD.apply(this,arguments)};
+/* ---------- ক্লিক ট্র্যাকিং ও অ্যাকশন ---------- */
+document.addEventListener("click",e=>{const t=e.target;
+ const bz=t.closest("[data-bz]");
+ if(bz){const a=bz.dataset.bz;
+  if(a=="sp"){const s=sponsors().find(x=>x.id==bz.dataset.id);if(s){track("sk",s.id);const u=https(s.link);if(u)window.open(u,"_blank","noopener,nofollow,sponsored");else if(s.q&&window.hxGo)window.hxGo(s.q)}}
+  if(a=="pl")plansView();
+  if(a=="ow")ownerView();
+  if(a=="hc"){const d=t.closest("details.hz");if(d)track("hc",HOSPD[+d.id.slice(3)].q)}
+  return}
+ const d=t.closest("#hl details.hz"),h=d&&window.HOSPD&&HOSPD[+d.id.slice(3)];
+ if(h){const l=t.closest("a");if(l){const u=l.getAttribute("href")||"";if(u.startsWith("tel:"))track("hc",h.q);else if(u.includes("maps/dir"))track("hd",h.q)}}
+ const c=t.closest(".card.dc");if(c&&t.closest('a[href^="tel:"]')){const o=c.querySelector('[onclick^="doc("]'),m=o&&/doc\('([^']+)'\)/.exec(o.getAttribute("onclick"));if(m)track("dc",m[1])}
+},true);
+document.addEventListener("change",e=>{if(e.target.id=="bzoo"){try{LS.setItem("biz_oo",e.target.checked?"1":"0")}catch(_){}if(e.target.checked)Q={}}});
+/* ---------- হাসপাতালের জন্য প্যাকেজ (পাবলিক) ---------- */
+function modal(h){let m=$("bzm");if(!m){m=document.createElement("div");m.id="bzm";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");document.body.appendChild(m);m.addEventListener("click",e=>{if(e.target==m||e.target.closest("[data-bm=x]"))m.hidden=true})}m.hidden=false;m.innerHTML=`<div class="bz-sh"><button type="button" class="bz-x" data-bm="x" aria-label="বন্ধ">✕</button>${h}</div>`}
+function plansView(){const P=plans(),c=num(P.contact||DEF_PLANS.contact),w=m=>"https://wa.me/"+c.replace(/^\+/,"").replace(/^0/,"880")+"?text="+encodeURIComponent(m);
+ modal(`<div class="bz-hero"><div class="bz-hi">📣</div><h3>আপনিও স্পন্সর হোন</h3><p>স্পন্সর যুক্ত করে শুধু অ্যাডমিন — যোগাযোগ করলেই আমরা ব্যবস্থা করব</p></div>
+ <div class="bz-who">${["🏥 হাসপাতাল","🩺 ডাক্তার","🏨 ক্লিনিক","🔬 ডায়াগনস্টিক","💊 ফার্মেসি"].map(x=>`<span>${x}</span>`).join("")}</div>
+ ${P.items.map(p=>`<div class="bz-pk${p.hot?" hot":""}">${p.hot?'<span class="bz-pop">⭐ জনপ্রিয়</span>':""}<b>${X(p.n)}</b><div class="bz-pr">${X(p.p)}</div><ul>${(p.f||[]).map(f=>`<li>${X(f)}</li>`).join("")}</ul><a class="btn" rel="noopener" target="_blank" href="${w("আসসালামু আলাইকুম, \u201C"+p.n+"\u201D প্যাকেজ সম্পর্কে জানতে চাই।")}">এই প্যাকেজ সম্পর্কে জানুন ›</a></div>`).join("")}
+ <div class="bz-sp"><div><i>১</i><span>যোগাযোগ করুন</span></div><div><i>২</i><span>তথ্য ও ছবি দিন</span></div><div><i>৩</i><span>স্পন্সরড হিসেবে লাইভ</span></div></div>
+ <div class="bz-act"><a class="btn" href="tel:${c}">📞 কল করুন</a><a class="btn" rel="noopener" target="_blank" href="${w("আসসালামু আলাইকুম, স্পন্সরশিপ সম্পর্কে জানতে চাই।")}">💬 WhatsApp</a></div>
+ <small class="bz-sf">🔒 কার্ড, PIN বা OTP নেওয়া হয় না। পেমেন্ট শুধু অফিসিয়াল ইনভয়েসে করুন।</small>`)}
+/* ---------- অ্যাডমিন: ব্যবসা ও আয় ---------- */
+let AT="",ATt=0,AS={t:"p",q:null,days:30};
+async function tk(){if(AT&&Date.now()-ATt<3e6)return AT;const a=J("radm");if(!a||!a.r)throw new Error("আগে অ্যাডমিন লগইন করুন");
+ const r=await fetch("https://securetoken.googleapis.com/v1/token?key="+KEY,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:"grant_type=refresh_token&refresh_token="+encodeURIComponent(a.r)}),d=await r.json();if(!r.ok)throw new Error("সেশন শেষ, আবার লগইন করুন");AT=d.id_token;ATt=Date.now();return AT}
+async function api(p,m,b){const r=await fetch(DBU+"/"+p+".json?auth="+await tk(),{method:m||"GET",body:b===undefined?undefined:JSON.stringify(b)});if(!r.ok)throw new Error("সেভ/লোড হয়নি—ডাটাবেস রুলস দেখুন");return r.json()}
+const toast=m=>{try{window.toast(m)}catch(e){alert(m)}};
+const hopts=sel=>HOSPD.map(h=>`<option value="${X(h.q)}"${h.q==sel?" selected":""}>${X(h.n)}</option>`).join("");
+const val=id=>($(id)||{}).value||"";
+function panel(h){let p=$("bizp");if(!p){p=document.createElement("div");p.id="bizp";p.setAttribute("role","dialog");document.body.appendChild(p);p.addEventListener("click",aclick);p.addEventListener("change",e=>{if(e.target.dataset.ba=="hs"){AS.q=e.target.value;aview()}})}p.hidden=false;p.innerHTML=h}
+function aview(){const T=[["p","প্রোফাইল"],["s","স্পন্সর"],["k","প্যাকেজ"],["d","ডাক্তার"],["e","আয়"],["r","রিপোর্ট"],["m","মালিক"]];
+ panel(`<div class="adh"><b>💼 ব্যবসা ও আয়</b><button data-ba="x">✕</button></div><div class="adb"><div class="adt">${T.map(t=>`<button data-ba="t" data-id="${t[0]}" class="${AS.t==t[0]?"on":""}">${t[1]}</button>`).join("")}</div><div id="bzc">লোড হচ্ছে…</div></div>`);
+ ({p:aprof,s:aspon,k:aplan,r:arep,m:aown,d:adsp,e:aled})[AS.t]().catch(e=>{$("bzc").textContent=e.message})}
+async function aprof(){const q=AS.q||HOSPD[0].q,p=(B.profiles||{})[sk(q)]||{},f=(k,l,ph)=>`<label class="bz-l">${l}</label><input id="bp-${k}" value="${X(p[k]||"")}" placeholder="${ph||""}">`;
+ $("bzc").innerHTML=`<div class="adx"><select data-ba="hs" id="bp-q">${hopts(q)}</select>${f("ap","অ্যাপয়েন্টমেন্ট ফোন","01XXXXXXXXX")}${f("wa","WhatsApp নম্বর","8801XXXXXXXXX")}${f("web","ওয়েবসাইট (https://)","")}${f("em","ইমেইল","")}${f("hr","সময়সূচি","শনি–বৃহঃ ৮টা–১০টা")}<label class="bz-l">পরিচিতি</label><textarea id="bp-ab" rows="3">${X(p.ab||"")}</textarea><label class="bz-l"><input type="checkbox" id="bp-vf" ${p.vf?"checked":""} style="width:auto"> হাসপাতাল নিজে যাচাই করেছে (✅ চিহ্ন)</label><label class="bz-l">প্যাকেজ</label><input id="bp-pl" value="${X(p.pl||"")}"><button class="btn" data-ba="ps" style="width:100%;margin-top:8px">সেভ করুন</button></div>`}
+async function aspon(){const S=await api("bizc/sponsors"),L=Object.entries(S||{}),e=AS.q&&AS.q!="new"?S[AS.q]:null;
+ if(AS.q){const s=e||{};$("bzc").innerHTML=`<div class="adx"><b>${e?"স্পন্সর সম্পাদনা":"নতুন স্পন্সর"}</b>${(()=>{const k="s:"+AS.q;if(AS.imgFor!==k){AS.imgFor=k;AS.img=s.img||""}return ""})()}<label class="bz-l">হাসপাতাল (ঐচ্ছিক)</label><select id="bs-q"><option value="">—</option>${hopts(s.q)}</select><input id="bs-title" placeholder="শিরোনাম" value="${X(s.title||"")}"><textarea id="bs-text" rows="3" placeholder="বিজ্ঞাপনের লেখা">${X(s.text||"")}</textarea>${imgBox("bs")}<input id="bs-link" placeholder="https:// লিংক (ঐচ্ছিক)" value="${X(s.link||"")}"><input id="bs-cta" placeholder="বাটনের লেখা" value="${X(s.cta||"")}"><label class="bz-l">কোথায় দেখাবে</label><select id="bs-sl">${[["h","হাসপাতাল ট্যাব"],["home","হোম পেজ"],["doc","ডাক্তারের তালিকা"],["all","সব জায়গায়"]].map(o=>`<option value="${o[0]}"${(s.sl||"h")==o[0]?" selected":""}>${o[1]}</option>`).join("")}</select><label class="bz-l">শুরু / শেষ (YYYY-MM-DD)</label><input id="bs-f" value="${X(s.f||"")}"><input id="bs-t" value="${X(s.t||"")}"><label class="bz-l"><input type="checkbox" id="bs-on" ${s.on===false?"":"checked"} style="width:auto"> চালু</label><div class="row"><button class="btn" data-ba="ss">সেভ</button><button class="btn" data-ba="sc" style="background:#64748b">বাতিল</button></div></div>`;return}
+ $("bzc").innerHTML=`<button class="btn" data-ba="sn" style="width:100%;margin-bottom:8px">＋ নতুন স্পন্সর</button>`+(L.length?L.map(([id,s])=>`<div class="adr">${imgOK(s.img)?`<img class="bz-th" src="${X(imgOK(s.img))}" alt="">`:""}<div><b>${X(s.title)}</b><small>${s.on===false?"বন্ধ":"চালু"} · ${X(s.f||"—")} → ${X(s.t||"—")}</small></div><button data-ba="se" data-id="${X(id)}">✏️</button><button data-ba="sd" data-id="${X(id)}">🗑</button></div>`).join(""):"<p class='mu'>কোনো স্পন্সর নেই</p>")}
+async function aplan(){const P=(await api("bizc/plans"))||DEF_PLANS;$("bzc").innerHTML=`<div class="adx"><b>যোগাযোগ নম্বর</b><input id="bk-c" value="${X(P.contact||"")}"><b>প্যাকেজ (JSON)</b><textarea id="bk-j" rows="14" style="direction:ltr;text-align:left;font-size:12px">${X(JSON.stringify(P.items,null,1))}</textarea><button class="btn" data-ba="ks" style="width:100%">সেভ করুন</button><details class="fa" style="margin-top:12px"><summary>🔒 Firebase Rules (বিদ্যমান cms/tm-এর সাথে মার্জ)</summary><p style="direction:ltr;text-align:left;font-size:11px;white-space:pre-wrap">${X(RULES)}</p></details></div>`}
+async function arep(){const S=(await api("bizs"))||{},ds=Object.keys(S).filter(d=>Date.now()-new Date(d.slice(0,4)+"-"+d.slice(4,6)+"-"+d.slice(6))<AS.days*864e5);
+ const A={};ds.forEach(d=>Object.entries(S[d]).forEach(([k,o])=>{A[k]=A[k]||{};Object.entries(o).forEach(([i,n])=>A[k][i]=(A[k][i]||0)+n)}));
+ const sum=k=>Object.values(A[k]||{}).reduce((a,b)=>a+b,0),nm=q=>{const h=HOSPD.find(x=>sk(x.q)==q);return h?h.n:q},dn=i=>{try{const d=D.find(x=>sk(x.id)==i);return d?d.name:i}catch(e){return i}};
+ const top=(k,f,n)=>Object.entries(A[k]||{}).sort((a,b)=>b[1]-a[1]).slice(0,n||8).map(([i,c])=>`<div class="bar"><span style="flex:1">${X(f(i))}</span><b>${c}</b></div>`).join("")||"<p class='mu'>এখনো তথ্য নেই</p>";
+ const imp=sum("si"),clk=sum("sk");
+ $("bzc").innerHTML=`<div class="seg"><button data-ba="d" data-id="7" class="${AS.days==7?"on l":""}">৭ দিন</button><button data-ba="d" data-id="30" class="${AS.days==30?"on l":""}">৩০ দিন</button></div>
+ <div class="adx"><b>সারসংক্ষেপ</b><p>দৈনিক সক্রিয় ডিভাইস (যোগফল): <b>${sum("du")}</b><br>হাসপাতাল দেখা: <b>${sum("hv")}</b> · কল: <b>${sum("hc")}</b> · দিকনির্দেশ: <b>${sum("hd")}</b><br>ডাক্তার প্রোফাইল দেখা: <b>${sum("dv")}</b> · কল: <b>${sum("dc")}</b><br>বিজ্ঞাপন দেখা: <b>${imp}</b> · ক্লিক: <b>${clk}</b> · CTR: <b>${imp?(clk/imp*100).toFixed(1):"0"}%</b></p></div>
+ <div class="adx"><b>সবচেয়ে বেশি দেখা হাসপাতাল</b>${top("hv",nm)}</div><div class="adx"><b>সবচেয়ে বেশি খোঁজা ডাক্তার</b>${top("dv",dn)}</div><div class="adx"><b>বিজ্ঞাপন (ক্লিক)</b>${top("sk",i=>((B.sponsors||{})[i]||{}).title||i,5)}</div><div class="adx"><b>স্পন্সরড ডাক্তার</b><p>দেখা: <b>${sum("ds")}</b> · ক্লিক (কল/WhatsApp/ওয়েব): <b>${sum("dk")}</b></p>${top("dk",dn,5)}</div><p class="mu">ডিভাইসের পরিচয় সংরক্ষণ হয় না; ‘দৈনিক সক্রিয় ডিভাইস’ প্রতিদিন প্রতি ডিভাইসে একবার গোনা হয়।</p>`}
+async function aclick(e){const b=e.target.closest("[data-ba]");if(!b)return;const a=b.dataset.ba,id=b.dataset.id;try{
+ if(await ax(a,id,b))return;
+ if(a=="x"){$("bizp").hidden=true;return}
+ if(a=="t"){AS.t=id;AS.q=null;return aview()}
+ if(a=="d"){AS.days=+id;return aview()}
+ if(a=="ps"){const q=val("bp-q"),o={ap:val("bp-ap").trim(),wa:val("bp-wa").trim(),web:val("bp-web").trim(),em:val("bp-em").trim(),hr:val("bp-hr").trim(),ab:val("bp-ab").trim(),pl:val("bp-pl").trim(),vf:$("bp-vf").checked};
+  if(o.web&&!https(o.web))return toast("ওয়েবসাইট https:// দিয়ে শুরু হতে হবে");
+  await api("bizc/profiles/"+sk(q),"PUT",o);await load();toast("প্রোফাইল সেভ হয়েছে");return}
+ if(a=="ma"){await api("bizo/"+id,"PUT",b.dataset.q);await api("bizr/"+id,"DELETE");toast("অনুমোদিত");return aview()}
+ if(a=="mr"){if(!confirm("নিশ্চিত?"))return;await api("bizo/"+id,"DELETE");await api("bizr/"+id,"DELETE");return aview()}
+ if(a=="sn"){AS.q="new";return aview()}if(a=="se"){AS.q=id;return aview()}if(a=="sc"){AS.q=null;AS.imgFor=null;return aview()}
+ if(a=="ss"){const o={q:val("bs-q"),title:val("bs-title").trim(),text:val("bs-text").trim(),link:val("bs-link").trim(),cta:val("bs-cta").trim(),sl:val("bs-sl"),f:val("bs-f").trim(),t:val("bs-t").trim(),on:$("bs-on").checked};if(AS.img&&!imgOK(AS.img))return toast("ছবিটি সঠিক নয়");o.img=AS.img||"";
+  if(!o.title)return toast("শিরোনাম লিখুন");if(o.link&&!https(o.link))return toast("লিংক https:// হতে হবে");
+  try{await api("bizc/sponsors/"+(AS.q&&AS.q!="new"?AS.q:"s"+Date.now()),"PUT",o)}catch(er){return toast(er.message)}AS.q=null;AS.imgFor=null;await load();toast("সেভ হয়েছে");return aview()}
+ if(a=="sd"){if(!confirm("স্পন্সর মুছবেন?"))return;await api("bizc/sponsors/"+id,"DELETE");await load();return aview()}
+ if(a=="ks"){let it;try{it=JSON.parse(val("bk-j"));if(!Array.isArray(it))throw 0}catch(_){return toast("JSON ঠিক নেই")}await api("bizc/plans","PUT",{contact:val("bk-c").trim(),items:it});await load();toast("প্যাকেজ সেভ হয়েছে")}
+}catch(er){toast(er.message||"সমস্যা হয়েছে")}}
+/* অ্যাডমিন প্যানেলে বাটন বসানো */
+new MutationObserver(()=>{const a=document.querySelector("#adm .adb .adt");if(a&&!$("bzbtn")){const b=document.createElement("button");b.id="bzbtn";b.className="btn";b.style.cssText="width:100%;margin-bottom:10px";b.textContent="💼 ব্যবসা ও আয় (প্রোফাইল, স্পন্সর, রিপোর্ট)";b.onclick=()=>{AS.t="p";AS.q=null;aview()};a.before(b)}}).observe(document.body,{childList:true,subtree:true});
+/* ---------- হাসপাতালের মালিকের পোর্টাল ---------- */
+let OU=J("bizu"),OT="",OTt=0,OS={d:7};
+const hq=q=>HOSPD.find(x=>sk(x.q)==q);
+async function oauth(path,body){const r=await fetch("https://identitytoolkit.googleapis.com/v1/accounts:"+path+"?key="+KEY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({returnSecureToken:true},body))}),d=await r.json(),s=JSON.stringify(d);
+ if(!r.ok)throw new Error(/EXISTS/.test(s)?"এই ইমেইল আগে থেকেই আছে—লগইন করুন":/WEAK/.test(s)?"পাসওয়ার্ড কমপক্ষে ৬ অক্ষর দিন":"ইমেইল বা পাসওয়ার্ড ভুল");
+ OU={r:d.refreshToken,e:d.email,u:d.localId};OT=d.idToken;OTt=Date.now();LS.setItem("bizu",JSON.stringify(OU))}
+function ologout(){OU=null;OT="";LS.removeItem("bizu")}
+async function otk(){if(!OU)throw new Error("আগে লগইন করুন");if(OT&&Date.now()-OTt<3e6)return OT;
+ const r=await fetch("https://securetoken.googleapis.com/v1/token?key="+KEY,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:"grant_type=refresh_token&refresh_token="+encodeURIComponent(OU.r)}),d=await r.json();
+ if(!r.ok){ologout();throw new Error("সেশন শেষ, আবার লগইন করুন")}OT=d.id_token;OTt=Date.now();return OT}
+async function oapi(p,m,b){const r=await fetch(DBU+"/"+p+".json?auth="+await otk(),{method:m||"GET",body:b===undefined?undefined:JSON.stringify(b)});if(!r.ok)throw new Error("অনুমতি নেই বা ডাটাবেস রুলস সেট করা হয়নি");return r.json()}
+const bd=n=>String(n).replace(/\d/g,c=>"০১২৩৪৫৬৭৮৯"[c]);
+async function ostats(q,n){const ds=[];for(let i=0;i<n;i++){const d=new Date(Date.now()-i*864e5),p=x=>String(x).padStart(2,"0");ds.push(""+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate()))}
+ const T={hv:0,hc:0,hd:0};await Promise.all(ds.flatMap(d=>Object.keys(T).map(async k=>{try{T[k]+=+(await oapi("bizs/"+d+"/"+k+"/"+q))||0}catch(e){}})));return T}
+async function ownerView(){if(!OU)return modal(`<h3>🔑 হাসপাতাল/ক্লিনিকের লগইন</h3><input id="bo-e" type="email" placeholder="ইমেইল" autocomplete="username"><input id="bo-p" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" autocomplete="current-password"><div class="row"><button class="btn" data-bo="li">লগইন</button><button class="btn" data-bo="su" style="background:#64748b">নতুন একাউন্ট</button></div><p class="mu">একাউন্ট খুললে অ্যাডমিন আপনার হাসপাতাল যাচাই করে অনুমোদন দেবেন।</p>`);
+ modal("লোড হচ্ছে…");
+ try{const q=await oapi("bizo/"+OU.u);
+  if(!q){const rq=await oapi("bizr/"+OU.u);return modal(rq?`<h3>⏳ অনুমোদনের অপেক্ষায়</h3><p>${X((hq(rq.q)||{}).n||rq.q)}-এর জন্য আপনার অনুরোধ জমা আছে। অ্যাডমিন যাচাই করলে এখানে প্রোফাইল ও রিপোর্ট পাবেন।</p><button class="btn" data-bo="lo">লগআউট</button>`:`<h3>আপনার হাসপাতাল বেছে নিন</h3><select id="bo-q">${HOSPD.map(h=>`<option value="${X(sk(h.q))}">${X(h.n)}</option>`).join("")}</select><p class="mu">তালিকায় না থাকলে অ্যাডমিনকে জানান।</p><div class="row"><button class="btn" data-bo="rq">অনুমোদনের অনুরোধ</button><button class="btn" data-bo="lo" style="background:#64748b">লগআউট</button></div>`)}
+  const h=hq(q)||{n:q},p=(B.profiles||{})[q]||{},T=await ostats(q,OS.d),f=(k,l)=>`<label class="bz-l">${l}</label><input id="bo-${k}" value="${X(p[k]||"")}">`;
+  modal(`<h3>${X(h.n)}</h3><div class="seg"><button data-bo="d" data-id="7" class="${OS.d==7?"on l":""}">৭ দিন</button><button data-bo="d" data-id="30" class="${OS.d==30?"on l":""}">৩০ দিন</button></div><div class="card bz-pk">👁 প্রোফাইল দেখা: <b>${bd(T.hv)}</b><br>📞 কল: <b>${bd(T.hc)}</b><br>🧭 দিকনির্দেশ: <b>${bd(T.hd)}</b><br><small class="mu">বেনামী মোট গণনা; কারও পরিচয় জানা যায় না।</small></div><button class="btn" data-bo="sh" data-t="${X(h.n+" — গত "+bd(OS.d)+" দিন\nপ্রোফাইল দেখা: "+bd(T.hv)+", কল: "+bd(T.hc)+", দিকনির্দেশ: "+bd(T.hd))}" style="width:100%;margin:8px 0">📤 রিপোর্ট শেয়ার</button><h4>প্রোফাইল সম্পাদনা</h4>${f("ap","অ্যাপয়েন্টমেন্ট ফোন")}${f("wa","WhatsApp")}${f("web","ওয়েবসাইট (https://)")}${f("em","ইমেইল")}${f("hr","সময়সূচি")}<label class="bz-l">পরিচিতি</label><textarea id="bo-ab" rows="3">${X(p.ab||"")}</textarea><button class="btn" data-bo="sv" data-id="${X(q)}" style="width:100%;margin-top:8px">সেভ করুন</button><button class="btn" data-bo="lo" style="width:100%;margin-top:8px;background:#64748b">লগআউট</button>`)
+ }catch(e){modal(`<p>${X(e.message)}</p><button class="btn" data-bo="lo">লগআউট</button>`)}}
+async function oclick(e){const b=e.target.closest("[data-bo]");if(!b)return;const a=b.dataset.bo;try{
+ if(a=="li"||a=="su"){await oauth(a=="li"?"signInWithPassword":"signUp",{email:val("bo-e").trim(),password:val("bo-p")});return ownerView()}
+ if(a=="lo"){ologout();return ownerView()}
+ if(a=="d"){OS.d=+b.dataset.id;return ownerView()}
+ if(a=="rq"){await oapi("bizr/"+OU.u,"PUT",{q:val("bo-q"),e:OU.e,t:Date.now()});return ownerView()}
+ if(a=="sh"){const t=b.dataset.t;if(navigator.share)navigator.share({text:t}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast("কপি হয়েছে"));return}
+ if(a=="sv"){const o={ap:val("bo-ap").trim(),wa:val("bo-wa").trim(),web:val("bo-web").trim(),em:val("bo-em").trim(),hr:val("bo-hr").trim(),ab:val("bo-ab").trim()};
+  if(o.web&&!https(o.web))return toast("ওয়েবসাইট https:// দিয়ে শুরু হতে হবে");
+  await oapi("bizc/profiles/"+b.dataset.id,"PATCH",o);await load();toast("প্রোফাইল সেভ হয়েছে")}
+}catch(er){toast(er.message||"সমস্যা হয়েছে")}}
+document.addEventListener("click",oclick);
+async function aown(){const R=(await api("bizr"))||{},O=(await api("bizo"))||{},P=Object.entries(R).filter(([u])=>!O[u]);
+ $("bzc").innerHTML=`<div class="adx"><b>অনুমোদনের অপেক্ষায় (${P.length})</b>${P.map(([u,r])=>`<div class="adr"><div><b>${X((hq(r.q)||{}).n||r.q)}</b><small>${X(r.e)}</small></div><button data-ba="ma" data-id="${X(u)}" data-q="${X(r.q)}">✅</button><button data-ba="mr" data-id="${X(u)}">✕</button></div>`).join("")||"<p class='mu'>কোনো অনুরোধ নেই</p>"}</div><div class="adx"><b>অনুমোদিত মালিক</b>${Object.entries(O).map(([u,q])=>`<div class="adr"><div><b>${X((hq(q)||{}).n||q)}</b><small>${X((R[u]||{}).e||u)}</small></div><button data-ba="mr" data-id="${X(u)}">বাতিল</button></div>`).join("")||"<p class='mu'>কেউ নেই</p>"}</div>`}
+
+/* ---------- স্টাইল ---------- */
+const st=document.createElement("style");st.textContent=`
+.bz-ad{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 8px;border-radius:999px;background:#e9a40026;color:#8a5d00;border:1px solid #e9a40080}
+:root[data-theme=dark] .bz-ad{color:#f2c34d}
+.bz-ad-box{border:1.5px dashed #e9a400;border-radius:16px;padding:12px;margin:0 0 12px;background:var(--card)}
+.bz-img{display:block;width:100%;max-height:220px;object-fit:cover;border-radius:12px;margin:8px 0;background:var(--bg);cursor:pointer}.bz-dc .bz-img{cursor:default}.bz-pv{border:1px dashed var(--bd);border-radius:12px;padding:6px;margin:4px 0 8px;text-align:center;background:var(--bg)}.bz-pv img{max-width:100%;max-height:160px;border-radius:8px}.bz-th{width:56px;height:40px;object-fit:cover;border-radius:8px;flex:none}.bz-ad-box b{display:block;margin:6px 0 2px}.bz-ad-box p{margin:0 0 8px;font-size:13.5px}.bz-ad-box small{display:block;margin-top:6px;font-size:11px;color:var(--mu)}
+.bzp{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:10px;margin:0 0 10px}.bzp p{margin:6px 0;font-size:13.5px}
+.bzp .row .btn{text-decoration:none;color:#fff}
+.bz-ft{margin:14px 0;display:grid;gap:8px}.bz-ft label{font-size:13px;display:flex;gap:8px;align-items:center}.bz-ft input{width:auto;margin:0}.bz-ft small{font-size:11.5px;color:var(--mu)}
+#bzm,#bizp{position:fixed;inset:0;z-index:60;background:#000a;display:flex;align-items:flex-end;justify-content:center}
+#bizp{background:var(--bg);align-items:stretch;overflow:auto;display:block;padding-top:env(safe-area-inset-top,0px)}
+#bzm[hidden],#bizp[hidden]{display:none}
+.bz-sh{background:var(--bg);color:var(--tx);width:min(560px,100%);max-height:90vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));position:relative}
+.bz-x{position:absolute;right:10px;top:10px;border:0;background:none;color:var(--tx);font-size:20px}
+.bz-pk{padding:12px;margin:8px 0}.bz-pr{color:var(--pr);font-weight:700;margin:2px 0 4px}.bz-pk ul{margin:0;padding-left:18px;font-size:13.5px}
+.bz-l{display:block;font-size:12px;color:var(--mu);margin:8px 0 3px}
+#bizp .adb{padding:12px}#bizp .adt{display:flex;gap:6px;margin-bottom:10px}#bizp .adt button{flex:1}
+.bz-ad{font-size:10.5px;font-weight:700;letter-spacing:.2px;padding:2px 9px;border-radius:999px;background:var(--bg);color:var(--mu);border:1px solid var(--bd)}
+:root[data-theme=dark] .bz-ad{color:var(--mu)}
+.bz-ad-box{position:relative;padding:0;overflow:hidden;border:1px solid var(--bd);border-radius:20px;background:var(--card);box-shadow:var(--sh)}
+.bz-ad-box>.bz-ad{position:absolute;top:10px;left:10px;z-index:2;background:#000b;color:#fff;border:0;backdrop-filter:blur(6px)}
+.bz-ad-box .bz-img{margin:0;border-radius:0;width:100%;aspect-ratio:16/9;max-height:210px;object-fit:cover}
+.bz-nb{height:64px;background:linear-gradient(135deg,#0d8f70,#075c49 60%,#d9b56f)}
+.bz-bd{padding:12px 14px 14px}.bz-ad-box .bz-bd b{display:block;margin:0 0 3px;font-size:16px}.bz-ad-box .bz-bd p{margin:0 0 12px;font-size:13.5px;color:var(--mu);line-height:1.5}
+.bz-bd .btn{width:100%}
+.bz-dc{position:relative;padding-top:40px}.bz-dc>.bz-ad{position:absolute;top:12px;right:12px}
+.bz-tag{margin-bottom:6px}
+.bz-note{display:block;text-align:center;font-size:11px;color:var(--mu);margin:2px 0 12px}
+.bz-cta{display:flex;align-items:center;gap:12px;width:100%;margin:6px 0 12px;padding:13px 14px;border:0;border-radius:18px;text-align:left;font-family:inherit;color:#fff;background:linear-gradient(135deg,#0d8f70,#075c49);box-shadow:0 8px 20px #075c4940;cursor:pointer}
+.bz-cta:active{transform:scale(.985)}
+.bz-ci{flex:none;width:42px;height:42px;display:grid;place-items:center;font-size:21px;border-radius:14px;background:#ffffff26}
+.bz-ct{flex:1;min-width:0}.bz-ct b{display:block;font-size:15.5px;color:#fff}.bz-ct small{display:block;font-size:12px;color:#ffffffcc;margin-top:1px}
+.bz-ca{font-size:26px;line-height:1;opacity:.85}
+.bz-hero{text-align:center;padding:6px 8px 12px}.bz-hi{width:56px;height:56px;margin:0 auto 8px;display:grid;place-items:center;font-size:28px;border-radius:18px;background:linear-gradient(135deg,#0d8f70,#075c49);box-shadow:0 8px 20px #075c4940}
+.bz-hero h3{margin:0 0 4px;font-size:20px}.bz-hero p{margin:0;font-size:13.5px;color:var(--mu)}
+.bz-who{display:flex;gap:6px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none}.bz-who::-webkit-scrollbar{display:none}
+.bz-who span{flex:none;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--card);border:1px solid var(--bd)}
+.bz-pk{position:relative;padding:14px;margin:0 0 10px;border:1px solid var(--bd);border-radius:18px;background:var(--card);box-shadow:var(--sh)}
+.bz-pk.hot{border:2px solid var(--pr)}
+.bz-pop{position:absolute;top:-10px;right:14px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;color:#fff;background:linear-gradient(135deg,#d9b56f,#b8892f)}
+.bz-pk>b{font-size:17px}.bz-pk .bz-pr{margin:2px 0 8px;font-size:13px}
+.bz-pk ul{list-style:none;margin:0 0 12px;padding:0}.bz-pk li{position:relative;padding:3px 0 3px 24px;font-size:13.5px}
+.bz-pk li:before{content:"✓";position:absolute;left:0;top:3px;width:17px;height:17px;display:grid;place-items:center;font-size:11px;font-weight:700;border-radius:50%;color:#fff;background:var(--pr)}
+.bz-pk>.btn{display:block;text-align:center;text-decoration:none;color:#fff}
+.bz-sp{display:flex;gap:8px;margin:14px 0}.bz-sp div{flex:1;text-align:center;font-size:12px}
+.bz-sp i{display:grid;place-items:center;width:28px;height:28px;margin:0 auto 5px;font-style:normal;font-weight:700;border-radius:50%;color:var(--pr);background:var(--card);border:1.5px solid var(--pr)}
+.bz-act{position:sticky;bottom:-16px;display:flex;gap:8px;padding:10px 0;background:var(--bg)}.bz-act .btn{flex:1;text-align:center;text-decoration:none;color:#fff}
+.bz-sf{display:block;text-align:center;font-size:11.5px;color:var(--mu)}
+`;document.head.appendChild(st);
+/* ---------- স্পন্সরড ডাক্তার (বিজ্ঞাপন চিহ্নিত) ---------- */
+const allD=()=>{try{return D}catch(e){return[]}},spn=k=>{try{return(SP.find(x=>x[0]==k)||[])[2]||""}catch(e){return""}};
+const waN=n=>num(n).replace(/^\+/,"").replace(/^0/,"880");
+const dsp=()=>Object.entries(B.dsp||{}).map(([k,v])=>{const d=allD().find(x=>sk(x.id)==k);return d&&v.on!==false&&(!v.f||iso()>=v.f)&&(!v.t||iso()<=v.t)?Object.assign({k,d},v):null}).filter(Boolean);
+const sn=new Set(),imp=s=>{if(!sn.has(s.k)){sn.add(s.k);track("ds",s.k)}};
+const NOTE='<small class="bz-note">স্পন্সরড বিজ্ঞাপন · ডাক্তারের মান বা সুপারিশ নয়</small>';
+function dcard(s,det){const d=s.d,a=[],k=X(s.k),L=(h,t,x)=>`<a class="btn" data-bd="k" data-id="${k}" ${x||""} href="${h}">${t}</a>`;
+ if(s.ap)a.push(L("tel:"+num(s.ap),"📞 অ্যাপয়েন্টমেন্ট"));
+ if(s.wa)a.push(L("https://wa.me/"+waN(s.wa),"💬 WhatsApp",'rel="noopener" target="_blank"'));
+ if(https(s.web))a.push(L(X(s.web),"🌐 ওয়েবসাইট",'rel="noopener nofollow sponsored" target="_blank"'));
+ const im=imgOK(s.img);return `<div class="card bz-dc"><span class="bz-ad">স্পন্সরড${det?" প্রোফাইল":""}</span>${im?`<img class="bz-img" src="${X(im)}" alt="${X(d.name)}" loading="lazy" decoding="async">`:""}${det?"":`<b>${X(d.name)}</b><small>${X(d.deg)}</small><small>${X(spn(d.sp))} · ${X(d.hosp)}</small>`}${s.hr?`<small>🕒 ${X(s.hr)}</small>`:""}${s.note?`<p>${X(s.note)}</p>`:""}<div class="row">${det?"":`<button type="button" class="btn" data-bd="v" data-id="${X(d.id)}">প্রোফাইল দেখুন</button>`}${a.join("")}</div></div>`}
+function decoD(){const v=$("v");if(!v)return;
+ const hm=$("res")&&$("qa");
+ if(hm&&!$("bzdh")){const L=dsp(),p=L.length>3?[0,1,2].map(i=>L[(Math.floor(Date.now()/6e4)+i)%L.length]):L;p.forEach(imp);
+  $("res").insertAdjacentHTML("beforebegin",`<div id="bzdh" class="bz-hd">${banner("home")}${p.length?`<h3 class="sech"><span>⭐ ফিচার্ড ডাক্তার <span class="bz-ad">স্পন্সরড</span></span></h3>${p.map(x=>dcard(x)).join("")}${NOTE}`:""}</div>`)}
+ const sh=v.querySelector(".sph"),c0=v.querySelector(".card.dc");
+ if(sh&&c0){const t=sh.textContent,m=(()=>{try{return SP.filter(x=>t.includes(x[2])).sort((a,b)=>b[2].length-a[2].length)[0]}catch(e){return null}})(),old=$("bzds");
+  if(m&&(!old||old.dataset.k!=m[0]||!old.isConnected)){old&&old.remove();const L=dsp().filter(x=>x.d.sp==m[0]);L.forEach(imp);const h=banner("doc")+(L.length?L.map(x=>dcard(x)).join("")+NOTE:"");
+   if(h)c0.insertAdjacentHTML("beforebegin",`<div id="bzds" class="bz-hd" data-k="${m[0]}">${h}</div>`)}}
+ const S=new Set(dsp().map(x=>String(x.d.id)));
+ v.querySelectorAll(".card.dc").forEach(c=>{if(c.querySelector(".bz-tag"))return;const o=c.querySelector('[onclick^="doc("]'),m=o&&/doc\('([^']+)'\)/.exec(o.getAttribute("onclick"));if(m&&S.has(m[1]))c.insertAdjacentHTML("afterbegin",'<span class="bz-ad bz-tag">স্পন্সরড</span>')});
+ if(v.querySelector(".ptab")){const s=dsp().find(x=>String(x.d.id)==cur),o=$("bzdd"),f=v.querySelector(":scope > .card");
+  if(o&&(!s||o.dataset.k!=s.k))o.remove();
+  if(s&&f&&!$("bzdd")){imp(s);f.insertAdjacentHTML("afterend",`<div id="bzdd" data-k="${X(s.k)}">${dcard(s,1)}</div>`)}}}
+let rq=0;const runD=()=>{rq=0;try{decoD()}catch(e){}};
+if($("v")){new MutationObserver(()=>{if(!rq)rq=requestAnimationFrame(runD)}).observe($("v"),{childList:true,subtree:true});runD()}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-bd]");if(!b)return;const a=b.dataset.bd;
+ if(a=="k")track("dk",b.dataset.id);else if(a=="v"&&window.doc)window.doc(b.dataset.id)},true);
+/* ---------- অ্যাডমিন: স্পন্সরড ডাক্তার ও আয়ের খাতা ---------- */
+const dnm=k=>(allD().find(x=>sk(x.id)==k)||{}).name||k,addD=n=>new Date(Date.now()+n*864e5).toISOString().slice(0,10),TY={h:"হাসপাতাল",d:"ডাক্তার",b:"ব্যানার"};
+async function adsp(){const S=(await api("bizc/dsp"))||{};
+ if(AS.q){const k=AS.q,s=S[k]||{},q=(AS.dq||"").toLowerCase(),ds=allD().filter(d=>!q||(d.name+d.hosp+d.deg).toLowerCase().includes(q)).slice(0,40),f=(i,l,ph)=>`<label class="bz-l">${l}</label><input id="bd-${i}" value="${X(s[i]||"")}" placeholder="${ph||""}">`;
+  $("bzc").innerHTML=`<div class="adx"><b>${S[k]?"স্পন্সরড ডাক্তার সম্পাদনা":"নতুন স্পন্সরড ডাক্তার"}</b>${(()=>{const kk="d:"+k;if(AS.imgFor!==kk){AS.imgFor=kk;AS.img=s.img||""}return ""})()}${S[k]?`<p><b>${X(dnm(k))}</b></p>`:`<input id="bd-sq" placeholder="ডাক্তার/হাসপাতালের নাম খুঁজুন" value="${X(AS.dq||"")}"><button class="btn" data-ba="dsr" style="margin:6px 0">🔍 খুঁজুন</button><select id="bd-id">${ds.map(d=>`<option value="${X(sk(d.id))}">${X(d.name)} — ${X(d.hosp)}</option>`).join("")}</select>`}${imgBox("bd")}${f("ap","অ্যাপয়েন্টমেন্ট ফোন","01XXXXXXXXX")}${f("wa","WhatsApp নম্বর","01XXXXXXXXX")}${f("web","ওয়েবসাইট (https://)")}${f("hr","চেম্বারের সময়")}${f("note","ছোট পরিচিতি (সর্বোচ্চ ১২০ অক্ষর)")}${f("f","শুরু (YYYY-MM-DD)")}${f("t","শেষ (YYYY-MM-DD)")}<label class="bz-l"><input type="checkbox" id="bd-on" ${s.on===false?"":"checked"} style="width:auto"> চালু</label><div class="row"><button class="btn" data-ba="dss">সেভ</button><button class="btn" data-ba="dsc" style="background:#64748b">বাতিল</button></div></div>`;return}
+ $("bzc").innerHTML=`<button class="btn" data-ba="dsn" style="width:100%;margin-bottom:8px">＋ নতুন স্পন্সরড ডাক্তার</button>`+(Object.keys(S).length?Object.entries(S).map(([k,s])=>`<div class="adr"><div><b>${X(dnm(k))}</b><small>${s.on===false?"বন্ধ":"চালু"} · ${X(s.f||"—")} → ${X(s.t||"—")}${s.t&&s.t<iso()?" · মেয়াদ শেষ":""}</small></div><button data-ba="dse" data-id="${X(k)}">✏️</button><button data-ba="dsd" data-id="${X(k)}">🗑</button></div>`).join(""):"<p class='mu'>কোনো স্পন্সরড ডাক্তার নেই</p>")+`<p class="mu">স্পন্সরড ডাক্তার হোম, বিভাগের তালিকা ও প্রোফাইলে ‘বিজ্ঞাপন’ চিহ্নসহ দেখায়; সাধারণ তালিকার ক্রম বদলায় না।</p>`}
+async function aled(){const L=(await api("bizl/ledger"))||{};
+ if(AS.q){const s=L[AS.q]||{},f=(i,l,t)=>`<label class="bz-l">${l}</label><input id="bl-${i}" ${t||""} value="${X(s[i]??"")}">`;
+  $("bzc").innerHTML=`<div class="adx"><b>${L[AS.q]?"এন্ট্রি সম্পাদনা":"নতুন আয়ের এন্ট্রি"}</b>${f("w","কার কাছ থেকে (হাসপাতাল/ডাক্তার/প্রতিষ্ঠান)")}<label class="bz-l">ধরন</label><select id="bl-ty">${Object.entries(TY).map(([k,v])=>`<option value="${k}"${s.ty==k?" selected":""}>${v}</option>`).join("")}</select>${f("amt","টাকা",'type="number"')}${f("f","শুরু (YYYY-MM-DD)")}${f("t","মেয়াদ শেষ (YYYY-MM-DD)")}${f("note","নোট")}<label class="bz-l"><input type="checkbox" id="bl-p" ${s.p?"checked":""} style="width:auto"> টাকা পেয়েছি</label><div class="row"><button class="btn" data-ba="ls">সেভ</button><button class="btn" data-ba="lc" style="background:#64748b">বাতিল</button></div></div>`;return}
+ const E=Object.entries(L).sort((a,b)=>(b[1].f||"").localeCompare(a[1].f||"")),m=iso().slice(0,7),sm=a=>a.reduce((x,[,e])=>x+(+e.amt||0),0),pd=E.filter(([,e])=>e.p),soon=E.filter(([,e])=>e.t&&e.t>=iso()&&e.t<=addD(7));
+ $("bzc").innerHTML=`<div class="adx"><b>আয়ের সারসংক্ষেপ</b><p>এই মাসে পাওয়া: <b>৳${bd(sm(pd.filter(([,e])=>(e.f||"").slice(0,7)==m)))}</b><br>মোট পাওয়া: <b>৳${bd(sm(pd))}</b> · বাকি: <b>৳${bd(sm(E.filter(([,e])=>!e.p)))}</b></p>${soon.length?`<p>⏰ ৭ দিনে মেয়াদ শেষ: ${soon.map(([,e])=>X(e.w)+" ("+X(e.t)+")").join(", ")}</p>`:""}</div><button class="btn" data-ba="ln" style="width:100%;margin-bottom:8px">＋ নতুন এন্ট্রি</button>`+(E.map(([k,e])=>`<div class="adr"><div><b>${X(e.w)} · ৳${bd(+e.amt||0)}</b><small>${TY[e.ty]||""} · ${e.p?"পেয়েছি":"বাকি"} · ${X(e.f||"—")} → ${X(e.t||"—")}</small></div><button data-ba="le" data-id="${X(k)}">✏️</button><button data-ba="ld" data-id="${X(k)}">🗑</button></div>`).join("")||"<p class='mu'>কোনো এন্ট্রি নেই</p>")+`<p class="mu">এই খাতা শুধু অ্যাডমিন দেখতে পারে (Firebase Rules-এ ‘bizl’ যোগ করতে হবে—প্যাকেজ ট্যাবে নতুন Rules দেওয়া আছে)।</p>`}
+async function ax(a,id){
+ if(a=="dsn"){AS.q="new";AS.dq="";aview();return 1}
+ if(a=="dse"||a=="le"){AS.q=id;aview();return 1}
+ if(a=="imgx"){AS.img="";imgPv("bs");imgPv("bd");["bs-iu","bd-iu","bs-file","bd-file"].forEach(i=>{const e=$(i);if(e)e.value=""});return 1}
+ if(a=="dsc"||a=="lc"){AS.q=null;AS.imgFor=null;aview();return 1}
+ if(a=="ln"){AS.q="new";aview();return 1}
+ if(a=="dsr"){AS.dq=val("bd-sq");aview();return 1}
+ if(a=="dss"){const k=AS.q=="new"?val("bd-id"):AS.q;if(!k){toast("ডাক্তার বেছে নিন");return 1}
+  const o={ap:val("bd-ap").trim(),wa:val("bd-wa").trim(),web:val("bd-web").trim(),hr:val("bd-hr").trim(),note:val("bd-note").trim().slice(0,120),img:imgOK(AS.img)||"",f:val("bd-f").trim(),t:val("bd-t").trim(),on:$("bd-on").checked};
+  if(o.web&&!https(o.web)){toast("ওয়েবসাইট https:// দিয়ে শুরু হতে হবে");return 1}
+  try{await api("bizc/dsp/"+k,"PUT",o)}catch(er){toast(er.message);return 1}AS.q=null;AS.imgFor=null;await load();$("bzdh")&&$("bzdh").remove();toast("সেভ হয়েছে");aview();return 1}
+ if(a=="dsd"){if(confirm("স্পন্সরড ডাক্তার সরাবেন?")){await api("bizc/dsp/"+id,"DELETE");await load();aview()}return 1}
+ if(a=="ls"){const o={w:val("bl-w").trim(),ty:val("bl-ty"),amt:+val("bl-amt")||0,f:val("bl-f").trim(),t:val("bl-t").trim(),note:val("bl-note").trim(),p:$("bl-p").checked};
+  if(!o.w){toast("নাম লিখুন");return 1}await api("bizl/ledger/"+(AS.q&&AS.q!="new"?AS.q:"e"+Date.now()),"PUT",o);AS.q=null;toast("সেভ হয়েছে");aview();return 1}
+ if(a=="ld"){if(confirm("এন্ট্রি মুছবেন?")){await api("bizl/ledger/"+id,"DELETE");aview()}return 1}
+ return 0}
+const s2=document.createElement("style");s2.textContent=`.bz-dc{padding:12px;margin:0 0 10px;border:1.5px dashed #e9a400;position:relative}.bz-dc b{display:block;margin:6px 0 2px}.bz-dc small{display:block;color:var(--mu);font-size:12.5px}.bz-dc p{margin:6px 0;font-size:13.5px}.bz-dc .row{margin-top:8px}.bz-dc .btn{text-decoration:none;color:#fff}.bz-hd{margin:0 0 12px}.bz-hd>small{display:block;font-size:11px;color:var(--mu);margin:4px 0 8px}.card.dc{position:relative}.bz-tag{position:absolute;top:8px;right:8px;z-index:1}#bizp .adt{overflow-x:auto}#bizp .adt button{font-size:12.5px;padding:8px 6px;white-space:nowrap}`;document.head.appendChild(s2);
+
+load();setInterval(load,3e5);if($("hl")&&oR)oR();
+})();
+</script>
 </body></html>
