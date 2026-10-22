@@ -29,7 +29,7 @@
     }
   ],
   "prefer_related_applications": false,
-  "orientation": "portrait",
+  "orientation": "any",
   "categories": [
     "medical",
     "health"
