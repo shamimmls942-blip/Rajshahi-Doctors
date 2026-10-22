@@ -2785,4 +2785,49 @@ new MutationObserver(()=>{if(CALL&&!$("tv")&&!$("tmw")&&!document.querySelector(
 window.TM={alt,setup:NV("setup"),home:NV("home"),am:m=>{AM=m;auth()},ar:r=>{AR=r;auth()},go,out,pick:NV("pick"),pl,book:NV("book"),bs,ok,can,rej,sch:NV("sch"),ss,vp,pay:NV("pay"),ps,sp,rx:NV("rx"),rs,view:NV("view"),call,join,end};
 })();
 </script>
+<style id="landscape-fix">
+/* ===== ফোন ল্যান্ডস্কেপ সাপোর্ট ===== */
+@media (orientation:landscape) and (max-height:540px){
+ :root{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+ /* চওড়া স্ক্রিনে কনটেন্ট */
+ main{max-width:860px;padding:12px 14px 64px}
+ header{max-width:860px;padding:8px 12px 6px}
+ header{padding-left:max(14px,calc(50% - 430px));padding-right:max(14px,calc(50% - 430px))}
+ header .lg{width:44px;height:42px}
+ header h1,header h1 .cs{font-size:22px}
+ header #th{transform:none}
+ /* নিচের নেভিগেশন ছোট */
+ nav{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);border-radius:14px 14px 0 0}
+ nav button,nav button.on{flex-direction:row;align-items:center;justify-content:center;gap:6px;padding:6px 2px;font-size:11px}
+ nav button .qi,nav button .ic{width:20px;height:20px}
+ #ib{bottom:calc(52px + env(safe-area-inset-bottom,0px))}
+ #ts{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+ #admfab{bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+ /* হিরো ব্যানার */
+ .hb.hbfull{margin:-8px 0 12px}
+ .hb.hbfull img{aspect-ratio:4/1}
+ .hb{min-height:120px}
+ /* গ্রিড */
+ .qg{grid-template-columns:repeat(4,1fr)}
+ .qg .qb:last-child:nth-child(3n+1){grid-column:auto}
+ /* ড্রয়ার, পপআপ, অ্যালার্ট */
+ #dr{padding-left:env(safe-area-inset-left,0px);width:min(300px,50vw)}
+ #vp{max-height:94vh;width:min(640px,100%)}
+ #al,#tmn{max-width:620px;margin-left:auto;margin-right:auto}
+ /* ভিডিও কল */
+ .tm-f{height:calc(100vh - 120px);min-height:220px}
+ .tm-v{aspect-ratio:16/9;max-height:50vh;margin:0 auto}
+ /* স্প্ল্যাশ স্ক্রিন */
+ #spl .wrap{overflow-y:auto;justify-content:flex-start;padding:calc(env(safe-area-inset-top,0px) + 10px) 28px calc(env(safe-area-inset-bottom,0px) + 10px)}
+ #spl .lg{width:84px;height:84px}
+ #spl .lg .dc{width:62px;height:62px}
+ #spl .lg .dc svg{width:38px;height:38px}
+ #spl h1{margin-top:10px;font-size:26px}
+ #spl .sb{margin-top:6px}
+ #spl .tg{margin-top:6px}
+ #spl .ecg{margin-top:8px;height:34px}
+ #spl .ft{margin-top:12px;gap:10px}
+ #spl .fi{padding:8px 4px 6px}
+}
+</style>
 </body></html>
