@@ -1,5 +1,5 @@
 // অফলাইন + অটো-আপডেট। নেট থাকলে সবসময় নতুন ভার্সন; না থাকলে ক্যাশ।
-const CACHE = "rajshahi-v8";
+const CACHE = "rajshahi-v11";
 const PRE = ["./", "manifest.json", "icon-192.png"];
 self.addEventListener("install", (e) => {
   e.waitUntil(
@@ -29,3 +29,22 @@ self.addEventListener("fetch", (e) => {
           return hit || net;
         })
       )
+    );
+    return;
+  }
+  if (u.origin !== self.location.origin) return;
+  const fromCache = () =>
+    caches.match(req, { ignoreSearch: true }).then((r) => r || (req.mode === "navigate" ? caches.match("./") : undefined));
+  const net = fetch(req, { cache: "no-store" }).then((res) => {
+    if (res && res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {}); }
+    return res;
+  });
+  // পেজ (navigate) এ ১৫ সেকেন্ড পর্যন্ত নতুন ভার্সনের জন্য অপেক্ষা; অন্য ফাইলে ৮ সেকেন্ড
+  const wait = req.mode === "navigate" ? 15000 : 8000;
+  const slow = new Promise((_, rej) => setTimeout(() => rej(new Error("slow")), wait));
+  e.respondWith(
+    Promise.race([net, slow]).catch(() =>
+      fromCache().then((r) => r || net.catch(() => Response.error()))
+    )
+  );
+});
