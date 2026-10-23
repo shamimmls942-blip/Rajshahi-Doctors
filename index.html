@@ -532,7 +532,7 @@ nav button::before,nav button.on::after{display:none}
 .hsw .mic{right:52px;top:7px;width:36px;height:36px}
 .hsw .qc{right:92px;top:11px}
 .mq{margin:0 -10px 0;position:relative;z-index:2;padding:10px 0;overflow:hidden;white-space:nowrap;direction:ltr;background:var(--card);border:1px solid var(--bd);border-top:0;border-radius:0 0 14px 14px;box-shadow:0 4px 14px #0a4d3a14}
-.mqt{display:inline-flex;width:max-content;will-change:transform;animation:mqs 18s linear infinite!important;transform:translate3d(0,0,0);backface-visibility:hidden}
+.mqt{display:inline-flex;width:max-content;will-change:transform;animation:mqs 14s linear infinite!important;transform:translate3d(0,0,0);backface-visibility:hidden}
 .mqt span{flex:none;padding-right:56px;font:700 15px var(--sans);color:var(--pr)}
 @media (hover:hover){.mq:hover .mqt{animation-play-state:paused}}
 .hb.hbfull{margin-bottom:0!important;border-radius:22px 22px 0 0!important;box-shadow:none!important}
@@ -946,7 +946,7 @@ body.nh main{max-width:640px;padding:0 0 100px}
 .nh-pad{padding:0 14px}
 .nhb{position:relative;margin-top:16px;border-radius:18px;overflow:hidden;border:1px solid var(--bd)}
 .nh-tr{display:flex;transition:transform .45s ease}.nhb .mq{margin:0!important;padding:9px 0!important;border:0!important;border-top:1px solid var(--bd)!important;border-radius:0!important;box-shadow:none!important;background:var(--card)}
-.nhb .mqt{animation-duration:26s!important}
+.nhb .mqt{animation-duration:19s!important}
 .nhb .mqt span{font:600 13px var(--sans);padding-right:48px;color:var(--pr)}
 .nhb .mq:active .mqt{animation-play-state:paused}
 @media (prefers-reduced-motion:reduce){.nhb .mqt{animation:none!important}}
@@ -3400,4 +3400,4 @@ new MutationObserver(sync).observe($('v'),{childList:true});
 try{badge()}catch(e){}
 home();sync();
 })();
-</script></body></html>
+</script><div id="vstamp" style="display:none;position:fixed;left:6px;bottom:4px;z-index:2147483647;font:10px/1 monospace;color:#fff;background:#000a;padding:2px 5px;border-radius:4px;pointer-events:none">v2026-10-23c</div><script>try{if(/[?&]v(=|&|$)/.test(location.search))document.getElementById("vstamp").style.display="block"}catch(e){}</script></body></html>
