@@ -919,7 +919,11 @@ body.nh main{max-width:640px;padding:0 0 100px}
 .nh-sw .mic .si{color:#fff;width:18px;height:18px}
 .nh-pad{padding:0 14px}
 .nhb{position:relative;margin-top:16px;border-radius:18px;overflow:hidden;border:1px solid var(--bd)}
-.nh-tr{display:flex;transition:transform .45s ease}
+.nh-tr{display:flex;transition:transform .45s ease}.nhb .mq{margin:0!important;padding:9px 0!important;border:0!important;border-top:1px solid var(--bd)!important;border-radius:0!important;box-shadow:none!important;background:var(--card)}
+.nhb .mqt{animation-duration:26s!important}
+.nhb .mqt span{font:600 13px var(--sans);padding-right:48px;color:var(--pr)}
+.nhb .mq:active .mqt{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){.nhb .mqt{animation:none!important}}
 .nh-sl{flex:none;width:100%;height:158px;position:relative;background:linear-gradient(100deg,#dff3ec,#bfe5d8 60%,#a8dccb)}
 .nh-sl.im{background:#dff3ec}.nh-sl.im img{width:100%;height:100%;object-fit:contain;display:block}
 .nh-sl>img{position:absolute;right:0;bottom:0;height:100%;width:auto;-webkit-mask-image:linear-gradient(90deg,transparent,#000 22%);mask-image:linear-gradient(90deg,transparent,#000 22%)}
@@ -1071,6 +1075,14 @@ body #ts{bottom:calc(76px + env(safe-area-inset-bottom,0px))!important}
  body nav.nb2 button span{font-size:11px!important}
  body #ts{bottom:calc(52px + env(safe-area-inset-bottom,0px))!important}
 }
+</style><style id="nav-hdr">
+/* নেভিগেশন = হেডারের কালার */
+html:root[data-theme] body nav.nb2{background:radial-gradient(420px 220px at 88% 140%,#2fb88f55,transparent),linear-gradient(135deg,#073d30 0%,#0a5a46 55%,#0f8a6a 100%)!important;border:0!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:0 -6px 24px #04171255!important}
+html:root[data-theme] body nav.nb2 button{color:#b9d9cd!important}
+html:root[data-theme] body nav.nb2 button.on{color:#fff!important;background:linear-gradient(180deg,#ffffff1f,#ffffff08)!important}
+html:root[data-theme] body nav.nb2 button.on::after{background:#fff!important;box-shadow:0 1px 6px #fff8}
+html:root[data-theme] body nav.nb2 button:active{background:#ffffff1f!important}
+html:root[data-theme] body nav.nb2 #fc{box-shadow:0 0 0 2px #0a5a46}
 </style>
 </head><body>
 <div id="spl" role="dialog" aria-label="স্বাগতম">
@@ -3344,10 +3356,12 @@ window.nhAll=function(){$('v').innerHTML=`<div class="nh-pad" style="padding-top
 window.home=function(){
  const ex=[];
  const sl=`<div class="nh-sl"><img src="${A.hero}" alt=""><div class="nh-bt${EN?' en':''}" data-nt><em>${T("আপনার সুস্থতাই আমাদের অগ্রাধিকার","YOUR HEALTH MATTERS")}</em><h2>${T("সেরা স্বাস্থ্যসেবা,<br>সুস্থ আপনি","Better Healthcare<br>For a Healthier You")}</h2>${EN?"":`<p>${T("রাজশাহীর সেরা ডাক্তার, হাসপাতাল, ল্যাব ও স্বাস্থ্যসেবা — সব এক জায়গায়।","")}</p>`}<button onclick="goRes()">${T("এখনই দেখুন →","Explore now →")}</button></div></div>`+ex.map(s=>`<div class="nh-sl im"><img src="${s}" alt="" draggable="false"></div>`).join('');
+ const mqs=T("🚑 জরুরি প্রয়োজনে কল করুন ৯৯৯  •  🩸 রক্তদাতা খুঁজুন ও রক্ত দিন  •  👨‍⚕️ রাজশাহীর সেরা ডাক্তারের অ্যাপয়েন্টমেন্ট নিন  •  🏥 যাচাইকৃত হাসপাতালের তথ্য","🚑 Emergency? Call 999  •  🩸 Find blood donors & donate  •  👨‍⚕️ Book top Rajshahi doctors  •  🏥 Verified hospital info");
+ const mqh=`<div class="mq" data-nt aria-label="${mqs.replace(/"/g,'')}"><div class="mqt" aria-hidden="true">${`<span>${mqs}</span>`.repeat(4)}</div></div>`;
  const dots=Array.from({length:1+ex.length},(_,k)=>`<i class="${k?'':'on'}" onclick="nhSlide(${k})"></i>`).join('');
  $('v').innerHTML=`<div class="nh-top"></div>
  <div class="sw nh-sw"><svg class="si" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I.search}</svg><input id="q" type="text" enterkeyhint="search" placeholder="${T('ডাক্তার, হাসপাতাল, টেস্ট খুঁজুন…','Search doctors, hospitals, tests…')}" oninput="res(this.value)" onkeydown="if(event.key==='Enter')sq()" autocomplete="off" aria-label="খুঁজুন"><button class="qc" id="qc" onclick="setQ('')" aria-label="মুছুন">✕</button><button class="mic" id="mic" onclick="vsr()" aria-label="কথা বলে খুঁজুন"><svg class="si" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button></div>
- <div class="nh-pad"><div class="nhb" id="nhb"><div class="nh-tr" id="nhtr">${sl}</div></div>
+ <div class="nh-pad"><div class="nhb" id="nhb"><div class="nh-tr" id="nhtr">${sl}</div>${mqh}</div>
  <div id="qa"><div class="nh-h" data-nt><h3>${ic(I.grid)}${T("স্বাস্থ্যসেবা","Healthcare Services")}</h3><button id="nhtg" onclick="nhTog()">${T("সব দেখুন →","View all →")}</button></div>
  <div class="nh-g" data-nt id="nhg">${SVC.map((c,k)=>`<button class="nh-c${k>5?' x':''}" onclick="${c[4]}"><span class="ci" style="background:${c[7]};color:${c[6]}">${ic(c[5])}</span><b>${T(c[0],c[2])}</b><small>${T(c[1],c[3])}</small><span class="ch">›</span></button>`).join('')}</div>
  <div class="nh-em" data-nt><span class="ei">${ic(I.siren)}</span><div><b>${T("জরুরি স্বাস্থ্যসেবা","Emergency Health Service")}</b><small>${T("জরুরি প্রয়োজনে কল করুন ৯৯৯","For urgent care, call 999")}</small></div><a href="tel:999">${ic(I.phone,2)}${T("এখনই কল","Call now")}</a></div>
