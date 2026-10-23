@@ -1,5 +1,5 @@
 // অফলাইন + অটো-আপডেট। নেট থাকলে সবসময় নতুন ভার্সন; না থাকলে ক্যাশ।
-const CACHE = "rajshahi-v5";
+const CACHE = "rajshahi-v7";
 const PRE = ["./", "manifest.json", "icon-192.png"];
 self.addEventListener("install", (e) => {
   e.waitUntil(
@@ -40,7 +40,7 @@ self.addEventListener("fetch", (e) => {
     return res;
   });
   // পেজ (navigate) এ ১৫ সেকেন্ড পর্যন্ত নতুন ভার্সনের জন্য অপেক্ষা; অন্য ফাইলে ৮ সেকেন্ড
-  const wait = req.mode === "navigate" ? 15000 : 8000;
+  const wait = req.mode === "navigate" ? 4000 : 6000;
   const slow = new Promise((_, rej) => setTimeout(() => rej(new Error("slow")), wait));
   e.respondWith(
     Promise.race([net, slow]).catch(() =>

@@ -1,5 +1,31 @@
 <!DOCTYPE html>
 <html lang="bn" data-theme="light"><head><meta charset="utf-8">
+<script>
+/* পারফরম্যান্স: ব্যাকগ্রাউন্ডে টাইমার থামানো + একই URL-এর EventSource একটাই */
+(function(){try{
+var SI=window.setInterval;
+window.setInterval=function(f,t){var a=[].slice.call(arguments,2);if(typeof f!=='function')return SI.apply(window,arguments);
+ return SI.apply(window,[function(){if(document.hidden)return;f.apply(null,a)},t])};
+var ES=window.EventSource;if(ES){var P={};
+ window.EventSource=function(u,o){if(P[u]&&P[u].readyState!==2)return P[u];return P[u]=new ES(u,o)};
+ window.EventSource.prototype=ES.prototype;}
+}catch(e){}})();
+</script>
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
+<script>
+/* আপডেট-ফিক্স: পুরোনো ক্যাশ মুছে sw.js নতুন করে রেজিস্টার, একবার রিলোড */
+(function(){try{
+var V='ui-2026-10-23b';
+if('serviceWorker' in navigator){
+ navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(function(r){r.update()}).catch(function(){});
+ var rl=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(rl||localStorage.getItem('uiv')!==V)return;rl=true;location.reload()});
+}
+if(localStorage.getItem('uiv')===V)return;
+var p=window.caches?caches.keys().then(function(ks){return Promise.all(ks.map(function(k){return caches.delete(k)}))}):Promise.resolve();
+p.catch(function(){}).then(function(){localStorage.setItem('uiv',V);location.reload()});
+}catch(e){}})();
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>window.__ip=null;addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__ip=e});</script><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><meta name="theme-color" content="#0a3329"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ডাক্তার"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet"></noscript><meta name="description" content="রাজশাহীর ডাক্তার, হাসপাতাল, এম্বুলেন্স ও রক্তদাতার তথ্য এক জায়গায়"><meta property="og:title" content="রাজশাহী স্বাস্থ্যসেবা"><title>রাজশাহীর চিকিৎসা সেবা একজায়গায়</title>
 <style>
@@ -1234,11 +1260,11 @@ let M=(()=>{try{return JSON.parse(LS.getItem("rcms2"))||{}}catch(e){return{}}})(
 const st=document.createElement("style");st.textContent="#xbar{position:fixed;top:0;left:0;right:0;z-index:99999;background:#b45309;color:#fff;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;display:flex;gap:10px;align-items:center;font-size:13px}#xbar button{margin-left:auto;border:0;border-radius:8px;padding:6px 12px;font-family:inherit;background:#fff;color:#b45309;font-weight:700}body.xedit *{outline:1px dashed #b4530955}";document.head.appendChild(st);
 const th=document.createElement("style");th.id="xth";document.head.appendChild(th);
 function inUI(n){const e=n.nodeType==1?n:n.parentElement;return!e||!!e.closest("#adm,#xbar,#admfab,script,style,textarea")}
-function walk(){pend=0;const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),L=[];let n;while(n=w.nextNode())L.push(n);const X=M.txt||{};
+function walk(){pend=0;if(!orig.size&&!Object.keys(M.txt||{}).length)return;const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),L=[];let n;while(n=w.nextNode())L.push(n);const X=M.txt||{};
 L.forEach(n=>{if(inUI(n))return;const v=n.nodeValue,t=v.trim();if(!t)return;const o=orig.get(n),base=o&&t===o.n?o.o:t,e=X[H(base)],m=v.match(/^(\s*)([\s\S]*?)(\s*)$/);
 if(e&&e.n&&e.n!==base){if(t!==e.n)n.nodeValue=m[1]+e.n+m[3];orig.set(n,{o:base,n:e.n})}else if(o&&t===o.n){n.nodeValue=m[1]+base+m[3];orig.delete(n)}});
 document.querySelectorAll("[placeholder]").forEach(i=>{if(i.closest("#adm"))return;const p=i.dataset.xo||i.getAttribute("placeholder"),e=X[H(p)];if(e&&e.n){i.dataset.xo=p;i.setAttribute("placeholder",e.n)}})}
-const sched=()=>{if(!pend){pend=1;setTimeout(walk,80)}};
+const sched=()=>{if(!pend){pend=1;setTimeout(walk,300)}};
 function theme(){const c=(M.th||{}).pr;th.textContent=c?`:root,:root[data-theme],:root:not([data-theme="light"]){--pr:${c}}`:"";const mt=document.querySelector('meta[name="theme-color"]');if(mt&&c)mt.content=c}
 function apply(){theme();walk()}
 try{new MutationObserver(sched).observe(document.body,{childList:true,subtree:true,characterData:true})}catch(e){}
