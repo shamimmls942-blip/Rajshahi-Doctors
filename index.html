@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="bn" data-theme="light"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>window.__ip=null;addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__ip=e});</script><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><meta name="theme-color" content="#0a3329"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ডাক্তার"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet"></noscript><meta name="description" content="রাজশাহীর ডাক্তার, হাসপাতাল, এম্বুলেন্স ও রক্তদাতার তথ্য এক জায়গায়"><meta property="og:title" content="রাজশাহী স্বাস্থ্যসেবা"><title>রাজশাহীর চিকিৎসা সেবা একজায়গায়</title>
+<script>window.__ip=null;addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__ip=e});</script><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><meta name="theme-color" content="#0a3329"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ডাক্তার"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet"></noscript><meta name="description" content="রাজশাহীর ডাক্তার, হাসপাতাল, এম্বুলেন্স ও রক্তদাতার তথ্য এক জায়গায়"><meta property="og:title" content="রাজশাহী স্বাস্থ্যসেবা"><title>রাজশাহীর চিকিৎসা সেবা একজায়গায়</title>
 <style>
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -233,7 +233,7 @@ h3:first-child:before{content:"";position:absolute;left:0;top:.28em;bottom:.28em
 #mb i{display:block;width:20px;height:2.5px;border-radius:2px;background:#0a4d3c}
 #mb,#th{background:#ffffffd9;z-index:2;border:1px solid #0a4d3c33;color:#0a4d3c;backdrop-filter:blur(6px);top:10px}
 nav{display:flex;z-index:5;top:8px;width:calc(100% - 20px);max-width:620px;overflow:hidden;backdrop-filter:blur(14px);position:sticky;border-radius:20px;box-shadow:0 14px 34px #04171255,0 0 0 1px #d8b87340;margin-top:calc(min(100vw,760px)*-.075)}
-:root{box-sizing:border-box;--bg:#f4f8f6;--card:#fff;--tx:#1f2937;--mu:#64748b;--bd:#e3ece8;--pr:#0f8a6a;--au:#cfe3da;--au2:#8fc7b0;--sh:0 10px 30px #0c5f4a1c;--serif:"Noto Serif Bengali","Kalpurush",Georgia,serif;--sans:"Noto Sans Bengali","Kalpurush",system-ui,sans-serif;}
+:root{box-sizing:border-box;--bg:#f4f8f6;--card:#fff;--tx:#1f2937;--mu:#64748b;--bd:#e3ece8;--pr:#0f8a6a;--au:#cfe3da;--au2:#8fc7b0;--sh:0 10px 30px #0c5f4a1c;--serif:"Noto Serif Bengali","Kalpurush",Georgia,serif;--sans:"Hind Siliguri","Noto Sans Bengali","Kalpurush",system-ui,sans-serif;}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 main>*{animation:rise .38s cubic-bezier(.2,.7,.2,1) both}
 main>*:nth-child(2){animation-delay:.04s}
@@ -417,6 +417,12 @@ h3:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--au)
 svg.e{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.2em;flex:none;overflow:visible}
 .sci{color:var(--pr)}
 .mi em svg.e{width:1.25em;height:1.25em}
+.mi em,.nh-r em{color:var(--pr)}
+.mi em svg.e,.nh-r em svg{width:20px;height:20px;vertical-align:0;display:block;margin:auto}
+.nh-r em svg{fill:none;stroke:currentColor;stroke-width:1.8}
+.mi em{display:grid;place-items:center;line-height:1}
+:root[data-theme="dark"] .mi em,:root[data-theme="dark"] .nh-r em{color:var(--au2)}
+
 .btn.sos svg.e,.btn.sos svg.e *,.vt button.on svg.e,.vt button.on svg.e *,.btn:not(.g) svg.e,.btn:not(.g) svg.e *{filter:none;color:#fff;stroke:#fff;fill:none}
 .btn.sos svg.e [fill="#fff"],
 .faq button{border:1px solid var(--bd);background:var(--card)}
@@ -940,8 +946,8 @@ body.nh main{max-width:640px;padding:0 0 100px}
 .nh-c:active{transform:scale(.97)}
 .nh-c .ci{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;margin-bottom:8px}
 .nh-c .ci svg{width:22px;height:22px}
-.nh-c b{display:block;font-size:13px;font-weight:700}
-.nh-c small{display:block;font-size:10px;color:var(--mu);margin-top:2px;line-height:1.3}
+.nh-c b{display:block;font-size:13.5px;font-weight:600;letter-spacing:0}
+.nh-c small{display:block;font-size:10.5px;font-weight:400;color:color-mix(in srgb,var(--mu) 78%,var(--card));margin-top:2px;line-height:1.3}
 .nh-c .ch{position:absolute;right:8px;top:18px;color:var(--mu);font-size:16px}
 .nh-em{margin-top:14px;display:flex;align-items:center;gap:10px;padding:11px;border-radius:14px;background:#fdecee;border:1px solid #f6c9ce}
 .nh-em .ei{width:40px;height:40px;border-radius:50%;background:#d93b3b;color:#fff;display:grid;place-items:center;flex:none}
@@ -1009,6 +1015,14 @@ body.nh header .ht{min-width:0}
 .nh-sw input{background:transparent!important;box-shadow:none!important;border:0!important;border-radius:0!important;height:auto!important;padding:10px 4px!important;font-size:14.5px!important}
 .nh-sw:focus-within{border-color:var(--pr)!important;box-shadow:0 10px 26px #0f8a6a40,0 0 0 3px #0f8a6a22!important}
 .nh-sw .mic{width:40px!important;height:40px!important;background:linear-gradient(135deg,#14a37e,#0a6a52)!important;box-shadow:0 4px 10px #0a6a5255}
+.nh-sw .go{width:40px;height:40px;border-radius:50%;flex:none;padding:0;display:grid;place-items:center;border:0;background:linear-gradient(135deg,#14a37e,#0a6a52);color:#fff;cursor:pointer;box-shadow:0 4px 10px #0a6a5255;transition:filter .15s,transform .15s}
+.nh-sw .go svg{width:19px;height:19px;color:#fff;stroke:#fff}
+.nh-sw .go:hover{filter:brightness(1.1)}
+.nh-sw .go:active{transform:scale(.93)}
+#v .nh-sw #mic:not(.on){background:#e4f4ee!important;border:1.5px solid #bfe2d5!important;box-shadow:none!important}
+#v .nh-sw #mic:not(.on) svg{stroke:var(--pr)!important;color:var(--pr)!important}
+:root[data-theme="dark"] #v .nh-sw #mic:not(.on){background:#16302a!important;border-color:#2c5a4b!important}
+:root[data-theme="dark"] #v .nh-sw #mic:not(.on) svg{stroke:var(--au2)!important;color:var(--au2)!important}
 .nh-bt button{white-space:nowrap}
 .nh-bt{width:56%}
 .nh-bt h2{font-size:17px}
@@ -1095,15 +1109,15 @@ addEventListener('pageshow',function(e){if(e.persisted)show()});
 <header><svg class="lg" viewBox="0 0 64 60" aria-hidden="true"><path d="M32 56C10 40 4 28 4 18 4 10 10 5 17 5c6 0 11 3 15 8 4-5 9-8 15-8 7 0 13 5 13 13 0 10-6 22-28 38z" fill="#e8f5f1" stroke="#0f8a6a" stroke-width="4" stroke-linejoin="round"/><circle cx="32" cy="27" r="14" fill="#0f8a6a"/><path d="M32 20v14M25 27h14" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/></svg><div class="ht"><h1>রাজশাহী<span class="cs">স্বাস্থ্যসেবা</span></h1></div><button id="th" onclick="theme()" aria-label="থিম"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 0 1 0-20 8 8 0 0 0 10 10 10 10 0 0 1-10 10z"/></svg></button><button id="mb" onclick="menu()" aria-label="মেনু" aria-expanded="false" aria-controls="dr"><i></i><i></i><i></i></button></header>
 <div id="ov" onclick="menu(0)"></div>
 <aside id="dr" aria-hidden="true"><div class="dh"><b>রাজশাহীর চিকিৎসা সেবা একজায়গায়</b><span>মেনু</span></div>
-<button class="mi on" id="m0" onclick="tab(0)"><em>🏠</em><div>হোম<small>ডাক্তার ও বিভাগ খুঁজুন</small></div></button><button class="mi" id="m6" onclick="tab(6)"><em>🩺</em><div>স্বাস্থ্য<small>রিমাইন্ডার, রেকর্ড, টুলস ও জরুরি সাহায্য</small></div></button>
-<button class="mi" id="m7" onclick="tab(7)"><em>🏥</em><div>হাসপাতাল<small>যাচাইকৃত তথ্য ও যোগাযোগ</small></div></button>
-<button class="mi" id="m5" onclick="tab(5)"><em>🚑</em><div>এম্বুলেন্স<small>জরুরি ও এম্বুলেন্স নম্বর</small></div></button>
-<button class="mi" id="m8" onclick="tab(8)"><em>🩸</em><div>রক্তদান<small>রক্ত দিন, ডোনার খুঁজুন ও অনুরোধ করুন</small></div></button>
-<button class="mi" id="m4" onclick="tab(4)"><em>🧪</em><div>টেস্ট ও এক্স-রে<small>পরীক্ষার মূল্য তালিকা</small></div></button>
-<button class="mi" id="m1" onclick="tab(1)"><em>🩹</em><div>প্রাথমিক চিকিৎসা<small>সাধারণ সমস্যার করণীয়</small></div></button>
-<button class="mi" id="m2" onclick="tab(2)"><em>💚</em><div>সেভ করা ডাক্তার<small>আপনার পছন্দের তালিকা</small></div><span class="bd" id="mfc"></span></button>
+<button class="mi on" id="m0" onclick="tab(0)"><em><svg class="e" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.6 12 4l9 7.6V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></em><div>হোম<small>ডাক্তার ও বিভাগ খুঁজুন</small></div></button><button class="mi" id="m6" onclick="tab(6)"><em><svg class="e" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg></em><div>স্বাস্থ্য<small>রিমাইন্ডার, রেকর্ড, টুলস ও জরুরি সাহায্য</small></div></button>
+<button class="mi" id="m7" onclick="tab(7)"><em><svg class="e" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M12 7v6M9 10h6M10 21v-4h4v4"/></svg></em><div>হাসপাতাল<small>যাচাইকৃত তথ্য ও যোগাযোগ</small></div></button>
+<button class="mi" id="m5" onclick="tab(5)"><em><svg class="e" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 16V7h12v9M14 10h4l4 4v2h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M8 9v4M6 11h4"/></svg></em><div>এম্বুলেন্স<small>জরুরি ও এম্বুলেন্স নম্বর</small></div></button>
+<button class="mi" id="m8" onclick="tab(8)"><em><svg class="e" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.7s6.5 6.9 6.5 11.6A6.5 6.5 0 0 1 5.5 14.3C5.5 9.6 12 2.7 12 2.7z"/></svg></em><div>রক্তদান<small>রক্ত দিন, ডোনার খুঁজুন ও অনুরোধ করুন</small></div></button>
+<button class="mi" id="m4" onclick="tab(4)"><em><svg class="e" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.5a1 1 0 0 0 .9 1.5h12.8a1 1 0 0 0 .9-1.5l-5.1-10.1a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7M7 16h10"/></svg></em><div>টেস্ট ও এক্স-রে<small>পরীক্ষার মূল্য তালিকা</small></div></button>
+<button class="mi" id="m1" onclick="tab(1)"><em><svg class="e" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M12 11v5M9.5 13.5h5"/></svg></em><div>প্রাথমিক চিকিৎসা<small>সাধারণ সমস্যার করণীয়</small></div></button>
+<button class="mi" id="m2" onclick="tab(2)"><em><svg class="e" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/></svg></em><div>সেভ করা ডাক্তার<small>আপনার পছন্দের তালিকা</small></div><span class="bd" id="mfc"></span></button>
 <div class="dv"></div>
-<button class="mi" onclick="theme()"><em>🌓</em><div>থিম পরিবর্তন<small>লাইট / ডার্ক</small></div></button>
+<button class="mi" onclick="theme()"><em><svg class="e" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 18a6 6 0 0 0 0-12v12z"/></svg></em><div>থিম পরিবর্তন<small>লাইট / ডার্ক</small></div></button>
 
 <div class="dv"></div><div style="text-align:center;padding:10px 16px 0"><div class="mu">যেকোনো প্রয়োজনে বা অভিযোগ জানান</div><a href="tel:01740078692" style="display:inline-block;margin-top:6px;font-size:20px;font-weight:700;color:var(--pr);text-decoration:none">📞 01740078692</a></div>
 <p class="mu" style="margin:auto 16px 14px;padding-top:16px">তথ্য শুধু আপনার ডিভাইসে সংরক্ষিত</p></aside>
@@ -1337,7 +1351,7 @@ window.rSetLang=function(l){
   if(tm&&tm.parentNode&&!document.getElementById("lgm")){
     var m=document.createElement("button");
     m.id="lgm";m.type="button";m.className="mi";m.setAttribute("data-nt","");
-    m.innerHTML='<em>🌐</em><div>ভাষা / Language<small>'+(EN?"English → বাংলা":"বাংলা → English")+'</small></div>';
+    m.innerHTML='<em><svg class="e" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></em><div>ভাষা / Language<small>'+(EN?"English → বাংলা":"বাংলা → English")+'</small></div>';
     m.addEventListener("click",function(){window.rSetLang()});
     tm.parentNode.insertBefore(m,tm);
   }
@@ -2884,7 +2898,7 @@ function end(back){const c=CALL;stopM();if(c)clearInterval(c.tm);CALL=null;const
 
 /* ---------- হোম/ডাক্তার পেজ/মেনুতে সংযোগ ---------- */
 const od=window.doc;window.doc=function(id){od.apply(this,arguments);const c=document.querySelector("#v .dc.full");if(c&&!$("tmb")){const x=document.createElement("div");x.id="tmb";x.className="row";x.style.margin="8px 0";x.innerHTML=`<button class="btn" onclick="TM.book('${id}','c')">📅 অ্যাপয়েন্টমেন্ট রিকোয়েস্ট</button><button class="btn" onclick="TM.book('${id}','v')">🎥 ভিডিও পরামর্শ</button>`;c.after(x)}};
-const dv=document.querySelector("#dr .dv");if(dv&&!$("m9")){const b=document.createElement("button");b.className="mi";b.id="m9";b.onclick=()=>TM.home();b.innerHTML="<em>🩺</em><div>অনলাইন ডাক্তার<small>রিকোয়েস্ট, ভিডিও কল, ড্যাশবোর্ড</small></div>";dv.before(b)}
+const dv=document.querySelector("#dr .dv");if(dv&&!$("m9")){const b=document.createElement("button");b.className="mi";b.id="m9";b.onclick=()=>TM.home();b.innerHTML="<em><svg class='e' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><rect x='3' y='6' width='13' height='12' rx='2'/><path d='M16 10l5-3v10l-5-3'/></svg></em><div>অনলাইন ডাক্তার<small>রিকোয়েস্ট, ভিডিও কল, ড্যাশবোর্ড</small></div>";dv.before(b)}
 const ot=window.tab;window.tab=function(n){if(n==9)return TM.home();const r=ot.apply(this,arguments);clr();return r};
 ["docs","spec","hs","tg"].forEach(f=>{const o=window[f];if(typeof o=="function")window[f]=function(){clr();return o.apply(this,arguments)}});
 /* ---------- অ্যাপে ঢুকলে/চলার সময় নোটিফিকেশন (ডাক্তার: নতুন রিকোয়েস্ট • রোগী: ডাক্তারের আপডেট) ---------- */
@@ -3338,15 +3352,17 @@ window.nhDocs=nhDocs;
 let ti=0,tt;
 function slide(i){const t=$('nhtr');if(!t)return;const n=t.children.length;ti=(i+n)%n;t.style.transform='translateX(-'+ti*100+'%)';[...document.querySelectorAll('.nh-dots i')].forEach((d,k)=>d.classList.toggle('on',k==ti))}
 window.nhSlide=slide;
-const ALL=[['🏠','হোম','ডাক্তার ও বিভাগ খুঁজুন','tab(0)'],['👨‍⚕️','ডাক্তার','ডাক্তার ও বিভাগ খুঁজুন','docs()'],['🩺','স্বাস্থ্য','রিমাইন্ডার, রেকর্ড, টুলস ও জরুরি সাহায্য','tab(6)'],['🏥','হাসপাতাল','যাচাইকৃত তথ্য ও যোগাযোগ','tab(7)'],['🚑','এম্বুলেন্স','জরুরি ও এম্বুলেন্স নম্বর','tab(5)'],['🩸','রক্তদান','রক্ত দিন, ডোনার খুঁজুন ও অনুরোধ করুন','tab(8)'],['🧪','টেস্ট ও এক্স-রে','পরীক্ষার মূল্য তালিকা','tab(4)'],['🩹','প্রাথমিক চিকিৎসা','সাধারণ সমস্যার করণীয়','tab(1)'],['💚','সেভ করা ডাক্তার','আপনার পছন্দের তালিকা','tab(2)']];
+const AI={home:'<path d="M3 11.6 12 4l9 7.6V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0 1 14 0"/>',pulse:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>',hosp:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M12 7v6M9 10h6M10 21v-4h4v4"/>',amb:'<path d="M2 16V7h12v9M14 10h4l4 4v2h-2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M8 9v4M6 11h4"/>',drop:'<path d="M12 2.7s6.5 6.9 6.5 11.6A6.5 6.5 0 0 1 5.5 14.3C5.5 9.6 12 2.7 12 2.7z"/>',flask:'<path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.5a1 1 0 0 0 .9 1.5h12.8a1 1 0 0 0 .9-1.5l-5.1-10.1a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7M7 16h10"/>',aid:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M12 11v5M9.5 13.5h5"/>',heart:'<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>'};
+const ALL=[['home','হোম','ডাক্তার ও বিভাগ খুঁজুন','tab(0)'],['user','ডাক্তার','ডাক্তার ও বিভাগ খুঁজুন','docs()'],['pulse','স্বাস্থ্য','রিমাইন্ডার, রেকর্ড, টুলস ও জরুরি সাহায্য','tab(6)'],['hosp','হাসপাতাল','যাচাইকৃত তথ্য ও যোগাযোগ','tab(7)'],['amb','এম্বুলেন্স','জরুরি ও এম্বুলেন্স নম্বর','tab(5)'],['drop','রক্তদান','রক্ত দিন, ডোনার খুঁজুন ও অনুরোধ করুন','tab(8)'],['flask','টেস্ট ও এক্স-রে','পরীক্ষার মূল্য তালিকা','tab(4)'],['aid','প্রাথমিক চিকিৎসা','সাধারণ সমস্যার করণীয়','tab(1)'],['heart','সেভ করা ডাক্তার','আপনার পছন্দের তালিকা','tab(2)']];
 window.nhTog=function(){const g=$('nhg'),o=g.classList.toggle('open');$('nhtg').textContent=o?T('কম দেখুন ↑','Show less ↑'):T('সব দেখুন →','View all →')};
-window.nhAll=function(){$('v').innerHTML=`<div class="nh-pad" style="padding-top:14px"><button class="back" onclick="tab(0)" aria-label="ফিরে যান"><span class="ar">←</span><span>ফিরে যান<small>হোমে</small></span></button><div class="nh-h" style="margin-top:6px"><h3>${ic(I.grid)}সব ট্যাব</h3></div><div class="nh-l">${ALL.map(a=>`<button class="nh-r" onclick="${a[3]}"><em>${a[0]}</em><div><b>${a[1]}</b><small>${a[2]}</small></div><span>›</span></button>`).join('')}</div></div>`;scrollTo(0,0)};
+window.nhAll=function(){$('v').innerHTML=`<div class="nh-pad" style="padding-top:14px"><button class="back" onclick="tab(0)" aria-label="ফিরে যান"><span class="ar">←</span><span>ফিরে যান<small>হোমে</small></span></button><div class="nh-h" style="margin-top:6px"><h3>${ic(I.grid)}সব ট্যাব</h3></div><div class="nh-l">${ALL.map(a=>`<button class="nh-r" onclick="${a[3]}"><em>${ic(AI[a[0]])}</em><div><b>${a[1]}</b><small>${a[2]}</small></div><span>›</span></button>`).join('')}</div></div>`;scrollTo(0,0)};
+window.nhGo=function(){const q=$('q');if(!q)return;const v=q.value.trim();if(!v){q.focus();return}try{res(v)}catch(e){}q.blur();const r=$('res');if(r)setTimeout(()=>r.scrollIntoView({behavior:'smooth',block:'start'}),60)};
 window.home=function(){
  const ex=[];
  const sl=`<div class="nh-sl"><img src="${A.hero}" alt=""><div class="nh-bt${EN?' en':''}" data-nt><em>${T("আপনার সুস্থতাই আমাদের অগ্রাধিকার","YOUR HEALTH MATTERS")}</em><h2>${T("সেরা স্বাস্থ্যসেবা,<br>সুস্থ আপনি","Better Healthcare<br>For a Healthier You")}</h2>${EN?"":`<p>${T("রাজশাহীর সেরা ডাক্তার, হাসপাতাল, ল্যাব ও স্বাস্থ্যসেবা — সব এক জায়গায়।","")}</p>`}<button onclick="goRes()">${T("এখনই দেখুন →","Explore now →")}</button></div></div>`+ex.map(s=>`<div class="nh-sl im"><img src="${s}" alt="" draggable="false"></div>`).join('');
  const dots=Array.from({length:1+ex.length},(_,k)=>`<i class="${k?'':'on'}" onclick="nhSlide(${k})"></i>`).join('');
  $('v').innerHTML=`<div class="nh-top"></div>
- <div class="sw nh-sw"><svg class="si" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I.search}</svg><input id="q" type="text" enterkeyhint="search" placeholder="${T('ডাক্তার, হাসপাতাল, টেস্ট খুঁজুন…','Search doctors, hospitals, tests…')}" oninput="res(this.value)" onkeydown="if(event.key==='Enter')sq()" autocomplete="off" aria-label="খুঁজুন"><button class="qc" id="qc" onclick="setQ('')" aria-label="মুছুন">✕</button><button class="mic" id="mic" onclick="vsr()" aria-label="কথা বলে খুঁজুন"><svg class="si" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button></div>
+ <div class="sw nh-sw"><svg class="si" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I.search}</svg><input id="q" type="text" enterkeyhint="search" placeholder="${T('ডাক্তার, হাসপাতাল, টেস্ট খুঁজুন…','Search doctors, hospitals, tests…')}" oninput="res(this.value)" onkeydown="if(event.key==='Enter')nhGo()" autocomplete="off" aria-label="খুঁজুন"><button class="qc" id="qc" onclick="setQ('')" aria-label="মুছুন">✕</button><button class="mic" id="mic" onclick="vsr()" aria-label="কথা বলে খুঁজুন"><svg class="si" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button class="go" id="nhgo" type="button" onclick="nhGo()" aria-label="${T('খুঁজুন','Search')}">${ic('<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',2)}</button></div>
  <div class="nh-pad"><div class="nhb" id="nhb"><div class="nh-tr" id="nhtr">${sl}</div></div>
  <div id="qa"><div class="nh-h" data-nt><h3>${ic(I.grid)}${T("স্বাস্থ্যসেবা","Healthcare Services")}</h3><button id="nhtg" onclick="nhTog()">${T("সব দেখুন →","View all →")}</button></div>
  <div class="nh-g" data-nt id="nhg">${SVC.map((c,k)=>`<button class="nh-c${k>5?' x':''}" onclick="${c[4]}"><span class="ci" style="background:${c[7]};color:${c[6]}">${ic(c[5])}</span><b>${T(c[0],c[2])}</b><small>${T(c[1],c[3])}</small><span class="ch">›</span></button>`).join('')}</div>
