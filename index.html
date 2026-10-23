@@ -15,7 +15,7 @@ var ES=window.EventSource;if(ES){var P={};
 <script>
 /* আপডেট-ফিক্স: পুরোনো ক্যাশ মুছে sw.js নতুন করে রেজিস্টার, একবার রিলোড */
 (function(){try{
-var V='ui-2026-10-24c';
+var V='ui-2026-10-24d';
 if('serviceWorker' in navigator){
  navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(function(r){r.update()}).catch(function(){});
  var rl=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(rl||localStorage.getItem('uiv')!==V)return;rl=true;location.reload()});
@@ -946,8 +946,8 @@ body.nh main{max-width:640px;padding:0 0 100px}
 .nh-pad{padding:0 14px}
 .nhb{position:relative;margin-top:16px;border-radius:18px;overflow:hidden;border:1px solid var(--bd)}
 .nh-tr{display:flex;transition:transform .45s ease}.nhb .mq{margin:0!important;padding:9px 0!important;border:0!important;border-top:1px solid var(--bd)!important;border-radius:0!important;box-shadow:none!important;background:var(--card)}
-.nhb .mqt{animation-duration:19s!important}
-.nhb .mqt span{font:600 13px var(--sans);padding-right:48px;color:var(--pr)}
+.nhb .mqt{animation-duration:21s!important}
+.nhb .mqt span{font:600 14.5px var(--sans);padding-right:50px;color:var(--pr)}
 .nhb .mq:active .mqt{animation-play-state:paused}
 @media (prefers-reduced-motion:reduce){.nhb .mqt{animation:none!important}}
 .nh-sl{flex:none;width:100%;height:158px;position:relative;background:linear-gradient(100deg,#dff3ec,#bfe5d8 60%,#a8dccb)}
@@ -5084,4 +5084,4 @@ window.insUI=function(){
 try{badge()}catch(e){}
 home();sync();document.documentElement.classList.add("nhr");
 })();
-</script><div id="vstamp" style="display:none;position:fixed;left:6px;bottom:4px;z-index:2147483647;font:10px/1 monospace;color:#fff;background:#000a;padding:2px 5px;border-radius:4px;pointer-events:none">v2026-10-24c</div><script>try{if(/[?&]v(=|&|$)/.test(location.search))document.getElementById("vstamp").style.display="block"}catch(e){}</script></body></html>
+</script><div id="vstamp" style="display:none;position:fixed;left:6px;bottom:4px;z-index:2147483647;font:10px/1 monospace;color:#fff;background:#000a;padding:2px 5px;border-radius:4px;pointer-events:none">v2026-10-24d</div><script>try{if(/[?&]v(=|&|$)/.test(location.search))document.getElementById("vstamp").style.display="block"}catch(e){}</script></body></html>
