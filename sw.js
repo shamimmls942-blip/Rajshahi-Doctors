@@ -1,10 +1,10 @@
-// অফলাইন + অটো-আপডেট। ফন্টও সংরক্ষণ করে, তাই নেট ছাড়া বাংলা ফন্ট সহ খোলে।
-const CACHE = "rajshahi-v4";
+// অফলাইন + অটো-আপডেট। নেট থাকলে সবসময় নতুন ভার্সন; না থাকলে ক্যাশ।
+const CACHE = "rajshahi-v5";
 const PRE = ["./", "manifest.json", "icon-192.png"];
 self.addEventListener("install", (e) => {
   e.waitUntil(
     caches.open(CACHE)
-      .then((c) => Promise.all(PRE.map((u) => c.add(u).catch(() => {}))))
+      .then((c) => Promise.all(PRE.map((u) => c.add(new Request(u, { cache: "reload" })).catch(() => {}))))
       .then(() => self.skipWaiting())
   );
 });
@@ -39,7 +39,9 @@ self.addEventListener("fetch", (e) => {
     if (res && res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {}); }
     return res;
   });
-  const slow = new Promise((_, rej) => setTimeout(() => rej(new Error("slow")), 4000));
+  // পেজ (navigate) এ ১৫ সেকেন্ড পর্যন্ত নতুন ভার্সনের জন্য অপেক্ষা; অন্য ফাইলে ৮ সেকেন্ড
+  const wait = req.mode === "navigate" ? 15000 : 8000;
+  const slow = new Promise((_, rej) => setTimeout(() => rej(new Error("slow")), wait));
   e.respondWith(
     Promise.race([net, slow]).catch(() =>
       fromCache().then((r) => r || net.catch(() => Response.error()))
