@@ -27,7 +27,7 @@ p.catch(function(){}).then(function(){localStorage.setItem('uiv',V);location.rel
 </script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>window.__ip=null;addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__ip=e});</script><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><meta name="theme-color" content="#0a3329"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ডাক্তার"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript></noscript><meta name="description" content="রাজশাহীর ডাক্তার, হাসপাতাল, এম্বুলেন্স ও রক্তদাতার তথ্য এক জায়গায়"><meta property="og:title" content="রাজশাহী স্বাস্থ্যসেবা"><title>রাজশাহীর চিকিৎসা সেবা একজায়গায়</title>
+<script>window.__ip=null;addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__ip=e});</script><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><meta name="theme-color" content="#075c49"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ডাক্তার"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript></noscript><meta name="description" content="রাজশাহীর ডাক্তার, হাসপাতাল, এম্বুলেন্স ও রক্তদাতার তথ্য এক জায়গায়"><meta property="og:title" content="রাজশাহী স্বাস্থ্যসেবা"><title>রাজশাহীর চিকিৎসা সেবা একজায়গায়</title>
 <style>
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -5084,4 +5084,38 @@ window.insUI=function(){
 try{badge()}catch(e){}
 home();sync();document.documentElement.classList.add("nhr");
 })();
-</script><div id="vstamp" style="display:none;position:fixed;left:6px;bottom:4px;z-index:2147483647;font:10px/1 monospace;color:#fff;background:#000a;padding:2px 5px;border-radius:4px;pointer-events:none">v2026-10-24d</div><script>try{if(/[?&]v(=|&|$)/.test(location.search))document.getElementById("vstamp").style.display="block"}catch(e){}</script></body></html>
+</script><div id="vstamp" style="display:none;position:fixed;left:6px;bottom:4px;z-index:2147483647;font:10px/1 monospace;color:#fff;background:#000a;padding:2px 5px;border-radius:4px;pointer-events:none">v2026-10-24d</div><script>try{if(/[?&]v(=|&|$)/.test(location.search))document.getElementById("vstamp").style.display="block"}catch(e){}</script><style id="theme-green">
+/* ===== সবুজ থিম (শুধু রঙ, লেআউট অপরিবর্তিত) ===== */
+:root{--pr:#0a7c61;--au:#e3d3a8;--au2:#c9a95c}
+/* হেডার: সলিড সবুজ + নিচে সোনালি লাইন */
+.nh-top{background:linear-gradient(135deg,#075c49 0%,#0a7a60 55%,#0f8a6a 100%)!important;border-bottom:3px solid #d9b56f}
+.nh-top::before{background:none!important}
+/* নিচের নেভ: গাঢ় সবুজ, সাদা লেখা */
+nav.nb2,body nav.nb2{background:#0a5c48!important;border-top:0!important;border-radius:20px 20px 0 0!important;box-shadow:0 -6px 24px #04171233!important;backdrop-filter:none!important}
+body nav.nb2 button,nav.nb2 button{color:#cfe6dd!important}
+body nav.nb2 button.on,nav.nb2 button.on{color:#fff!important;background:#ffffff1f!important}
+body nav.nb2 button.on::after{background:linear-gradient(90deg,#d9b56f,#f0d9a0)}
+/* হোম কার্ড: সব আইকন একই সবুজ লাইন-স্টাইল */
+.nh-c .ci{background:transparent!important;color:#0a7c61!important}
+.nh-c .ci svg{color:#0a7c61!important;stroke:#0a7c61!important}
+.nh-c{border-color:#e3ece8}
+.nh-r em,.sp>span,.card.sc .sci{background:#e3f1ec!important;border-color:#cfe3da!important;color:#0a7c61!important}
+.nh-c .ci{width:42px!important;height:42px!important;border-radius:0!important;margin-bottom:8px!important;justify-content:flex-start}
+.nh-c .ci svg{width:36px!important;height:36px!important;stroke-width:1.5!important;fill:none}
+.nh-c .ci svg *{stroke-width:1.5!important}
+/* চিপ: ক্রিম + সোনালি বর্ডার */
+.chip,.qk .chip,.spk .chip{background:#fdf9ef;border:1.5px solid #e3d3a8;color:#0a5c48}
+.chip.on,.chip.on2,.fsort .chip.on,.ff .chip.on{background:#0a7c61;border-color:#0a7c61;color:#fff}
+/* সার্চ বক্স */
+.nh-sw{border:1.5px solid #bfe2d5!important}
+.nh-sw .mic,.nh-sw #mic{background:#0a6b55!important}
+/* গোলাপি অংশ → সবুজ */
+.bl-ic,.bl-ch,.bl-bk{background:#e3f1ec!important;color:#0a7c61!important}
+.bl-nt{background:linear-gradient(90deg,#0a7c6126,#fff0)!important;border-color:#0a7c6140!important;border-left-color:#0a7c61!important}
+.bl-nl{background:#0a7c61!important}
+/* বাটন ও ড্রয়ার হেডার */
+.btn,.vb,.hx-call,.hz-act .main{background:linear-gradient(180deg,#0f8a6a,#0a5c48)!important;border-color:#0a4a39!important}
+.btn.sos,.sos,.hx-call.em,.hz-act .main.em{background:linear-gradient(180deg,#d94545,#b52c2c)!important;border-color:#9c2323!important}
+.dh,.tc .th{background:linear-gradient(135deg,#075c49,#0f8a6a)!important;border-bottom:3px solid #d9b56f!important}
+</style>
+</body></html>
