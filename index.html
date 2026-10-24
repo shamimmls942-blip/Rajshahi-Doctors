@@ -541,7 +541,7 @@ nav button::before,nav button.on::after{display:none}
 .chips.qk{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:6px -14px 10px;padding:2px 14px 4px;-webkit-overflow-scrolling:touch}
 .chips.qk::-webkit-scrollbar{display:none}
 .chips.qk .chip{flex:none;white-space:nowrap;cursor:pointer}
-header{background:radial-gradient(420px 220px at 88% -40%,#2fb88f55,transparent),linear-gradient(135deg,#073d30 0%,#0a5a46 55%,#0f8a6a 100%);max-width:none;border-radius:0;padding:16px max(14px,calc(50% - 306px)) 13px;margin-bottom:10px;position:relative}
+header{background:linear-gradient(100deg,#065846 0%,#09725a 50%,#0e8668 100%);max-width:none;border-radius:0;padding:16px max(14px,calc(50% - 306px)) 13px;margin-bottom:10px;position:relative}
 header:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#d9b56f,#f0d9a0,#d9b56f)}
 header .lg{background:#fff;border-radius:50%;padding:7px;box-sizing:content-box;width:44px;height:41px;box-shadow:0 4px 12px #0004}
 header h1,header h1 .cs,:root[data-theme="dark"] header h1,:root[data-theme="dark"] header h1 .cs{color:#fff;text-shadow:0 1px 2px #0003}
@@ -1029,6 +1029,10 @@ body.nh header h1,body.nh header h1 .cs{font-size:27px!important;font-weight:800
 
 .nh-c.x{display:none}.nh-g.open .nh-c.x{display:block}
 .nh-top{height:104px!important}
+.nh-top{background:linear-gradient(100deg,#065846 0%,#09725a 50%,#0e8668 100%)!important;overflow:visible!important}
+.nh-top::before{display:none!important}
+.nh-top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#c3a364,#d9b56f,#f0d9a0,#d9b56f,#c3a364);z-index:1}
+:root[data-theme="dark"] .nh-top{background:linear-gradient(100deg,#04211b 0%,#0a3329 50%,#0d5744 100%)!important}
 body.nh header h1,body.nh header h1 .cs{font-size:25px!important;line-height:1.12!important}
 body.nh header h1 .cs{display:block!important;margin-left:0!important}
 body.nh header h1{margin:0}
@@ -5084,38 +5088,4 @@ window.insUI=function(){
 try{badge()}catch(e){}
 home();sync();document.documentElement.classList.add("nhr");
 })();
-</script><div id="vstamp" style="display:none;position:fixed;left:6px;bottom:4px;z-index:2147483647;font:10px/1 monospace;color:#fff;background:#000a;padding:2px 5px;border-radius:4px;pointer-events:none">v2026-10-24d</div><script>try{if(/[?&]v(=|&|$)/.test(location.search))document.getElementById("vstamp").style.display="block"}catch(e){}</script><style id="theme-green">
-/* ===== সবুজ থিম (শুধু রঙ, লেআউট অপরিবর্তিত) ===== */
-:root{--pr:#0a7c61;--au:#e3d3a8;--au2:#c9a95c}
-/* হেডার: সলিড সবুজ + নিচে সোনালি লাইন */
-.nh-top{background:linear-gradient(135deg,#075c49 0%,#0a7a60 55%,#0f8a6a 100%)!important;border-bottom:3px solid #d9b56f}
-.nh-top::before{background:none!important}
-/* নিচের নেভ: গাঢ় সবুজ, সাদা লেখা */
-nav.nb2,body nav.nb2{background:#0a5c48!important;border-top:0!important;border-radius:20px 20px 0 0!important;box-shadow:0 -6px 24px #04171233!important;backdrop-filter:none!important}
-body nav.nb2 button,nav.nb2 button{color:#cfe6dd!important}
-body nav.nb2 button.on,nav.nb2 button.on{color:#fff!important;background:#ffffff1f!important}
-body nav.nb2 button.on::after{background:linear-gradient(90deg,#d9b56f,#f0d9a0)}
-/* হোম কার্ড: সব আইকন একই সবুজ লাইন-স্টাইল */
-.nh-c .ci{background:transparent!important;color:#0a7c61!important}
-.nh-c .ci svg{color:#0a7c61!important;stroke:#0a7c61!important}
-.nh-c{border-color:#e3ece8}
-.nh-r em,.sp>span,.card.sc .sci{background:#e3f1ec!important;border-color:#cfe3da!important;color:#0a7c61!important}
-.nh-c .ci{width:42px!important;height:42px!important;border-radius:0!important;margin-bottom:8px!important;justify-content:flex-start}
-.nh-c .ci svg{width:36px!important;height:36px!important;stroke-width:1.5!important;fill:none}
-.nh-c .ci svg *{stroke-width:1.5!important}
-/* চিপ: ক্রিম + সোনালি বর্ডার */
-.chip,.qk .chip,.spk .chip{background:#fdf9ef;border:1.5px solid #e3d3a8;color:#0a5c48}
-.chip.on,.chip.on2,.fsort .chip.on,.ff .chip.on{background:#0a7c61;border-color:#0a7c61;color:#fff}
-/* সার্চ বক্স */
-.nh-sw{border:1.5px solid #bfe2d5!important}
-.nh-sw .mic,.nh-sw #mic{background:#0a6b55!important}
-/* গোলাপি অংশ → সবুজ */
-.bl-ic,.bl-ch,.bl-bk{background:#e3f1ec!important;color:#0a7c61!important}
-.bl-nt{background:linear-gradient(90deg,#0a7c6126,#fff0)!important;border-color:#0a7c6140!important;border-left-color:#0a7c61!important}
-.bl-nl{background:#0a7c61!important}
-/* বাটন ও ড্রয়ার হেডার */
-.btn,.vb,.hx-call,.hz-act .main{background:linear-gradient(180deg,#0f8a6a,#0a5c48)!important;border-color:#0a4a39!important}
-.btn.sos,.sos,.hx-call.em,.hz-act .main.em{background:linear-gradient(180deg,#d94545,#b52c2c)!important;border-color:#9c2323!important}
-.dh,.tc .th{background:linear-gradient(135deg,#075c49,#0f8a6a)!important;border-bottom:3px solid #d9b56f!important}
-</style>
-</body></html>
+</script><div id="vstamp" style="display:none;position:fixed;left:6px;bottom:4px;z-index:2147483647;font:10px/1 monospace;color:#fff;background:#000a;padding:2px 5px;border-radius:4px;pointer-events:none">v2026-10-24d</div><script>try{if(/[?&]v(=|&|$)/.test(location.search))document.getElementById("vstamp").style.display="block"}catch(e){}</script></body></html>
