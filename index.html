@@ -5084,4 +5084,129 @@ window.insUI=function(){
 try{badge()}catch(e){}
 home();sync();document.documentElement.classList.add("nhr");
 })();
-</script><div id="vstamp" style="display:none;position:fixed;left:6px;bottom:4px;z-index:2147483647;font:10px/1 monospace;color:#fff;background:#000a;padding:2px 5px;border-radius:4px;pointer-events:none">v2026-10-24d</div><script>try{if(/[?&]v(=|&|$)/.test(location.search))document.getElementById("vstamp").style.display="block"}catch(e){}</script></body></html>
+</script><div id="vstamp" style="display:none;position:fixed;left:6px;bottom:4px;z-index:2147483647;font:10px/1 monospace;color:#fff;background:#000a;padding:2px 5px;border-radius:4px;pointer-events:none">v2026-10-24d</div><script>try{if(/[?&]v(=|&|$)/.test(location.search))document.getElementById("vstamp").style.display="block"}catch(e){}</script><!-- RMC-ADDON-START: login, appointment, admin, e-prescription (demo, localStorage) -->
+<style>
+#rmFab{position:fixed;left:14px;bottom:78px;z-index:99998;background:#0f766e;color:#fff;border:0;border-radius:28px;padding:11px 16px;font:600 14px system-ui,sans-serif;box-shadow:0 4px 14px #0004}
+#rmOv{display:none;position:fixed;inset:0;z-index:99999;background:#0009;font-family:system-ui,sans-serif}
+#rmBox{position:absolute;inset:0;margin:auto;max-width:560px;height:100%;background:var(--rb,#fff);color:var(--rt,#1a1a1a);overflow:auto;padding:14px 14px 40px}
+@media(prefers-color-scheme:dark){#rmBox{--rb:#161b1d;--rt:#eee}#rmBox input,#rmBox select,#rmBox textarea{background:#222;color:#eee}}
+#rmBox h3{margin:6px 0 10px;font-size:18px}#rmBox .c{border:1px solid #8884;border-radius:12px;padding:10px;margin:8px 0;font-size:14px}
+#rmBox input,#rmBox select,#rmBox textarea{width:100%;box-sizing:border-box;padding:10px;margin:4px 0;border:1px solid #8886;border-radius:8px;font:14px inherit}
+#rmBox button{background:#0f766e;color:#fff;border:0;border-radius:8px;padding:8px 12px;margin:3px 3px 3px 0;font:600 13px inherit}
+#rmBox button.g{background:#8886;color:inherit}#rmBox button.r{background:#b91c1c}
+.tb{display:flex;gap:4px;overflow-x:auto;margin:8px 0}.tb button{white-space:nowrap}.bd{font-size:12px;padding:2px 8px;border-radius:10px;background:#8884}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:8px}.st div{border:1px solid #8884;border-radius:12px;padding:12px;text-align:center}.st b{font-size:24px;display:block}
+</style>
+<button id="rmFab" onclick="RM.open()">👤 অ্যাকাউন্ট / বুকিং</button>
+<div id="rmOv"><div id="rmBox"></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(()=>{
+const URL_='https://rbkiatfgyxfhzlnvjjdc.supabase.co',KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJia2lhdGZneXhmaHpsbnZqamRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NDc0ODMsImV4cCI6MjEwODQyMzQ4M30.RwqKQrbKW7uI_vE5yMB0kvpyi9RbFlE7tqyddONw_xc';
+const Q=id=>document.getElementById(id),v=id=>(Q(id)||{}).value||'';
+const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=t=>new Date(t).toLocaleString('bn-BD',{dateStyle:'medium',timeStyle:'short'});
+const B=(t,f,c='')=>`<button class="${c}" onclick="${f}">${t}</button>`;
+const L=a=>a.join('')||'<p>কিছু নেই</p>',BD=/^01\d{9}$/;
+const G=['A+','A-','B+','B-','O+','O-','AB+','AB-'].map(o=>`<option>${o}</option>`).join('');
+let sb,PR=null,T='',RS=0,CH=null,GL={},AIR='',pt;
+const tabs={patient:[['docs','ডাক্তার'],['appts','অ্যাপয়েন্টমেন্ট'],['rx','প্রেসক্রিপশন'],['rec','রেকর্ড'],['chat','চ্যাট'],['near','ম্যাপ'],['ai','AI সহকারী'],['blood','রক্ত'],['amb','অ্যাম্বুলেন্স'],['n','নোটিফিকেশন']],
+doctor:[['slots','স্লট'],['appts','রোগী'],['chat','চ্যাট'],['n','নোটিফিকেশন']],admin:[['dash','ড্যাশবোর্ড'],['docs','ডাক্তার'],['appts','অ্যাপয়েন্টমেন্ট'],['blood','রক্ত'],['amb','অ্যাম্বুলেন্স'],['n','নোটিফিকেশন']]};
+const badge=s=>`<span class="bd">${{confirmed:'✅ নিশ্চিত',cancelled:'❌ বাতিল',completed:'✔ সম্পন্ন',pending:'⏳ পেন্ডিং',verified:'✓ ভেরিফাইড',rejected:'🚫 প্রত্যাখ্যাত',open:'খোলা',accepted:'গ্রহণ করা হয়েছে',fulfilled:'সম্পন্ন',requested:'অনুরোধ করা হয়েছে',onway:'রওনা দিয়েছে',arrived:'পৌঁছেছে',done:'সম্পন্ন'}[s]||s}</span>`;
+const ok=({data,error})=>{if(error)throw error;return data};
+const rpc=(n,a)=>sb.rpc(n,a).then(ok);
+const go=f=>async(...a)=>{try{await f(...a)}catch(e){alert(e&&e.message?e.message:'সমস্যা হয়েছে, আবার চেষ্টা করুন')}};
+const box=h=>Q('rmBox').innerHTML=h;
+async function init(){if(sb)return true;if(!window.supabase||URL_.startsWith('PASTE')){box(`<button class="g" onclick="RM.close()">✕</button><div class="c">⚙ সেটআপ বাকি: ফাইলের শুরুতে SUPABASE URL ও KEY বসাতে হবে (সেটআপ গাইড দেখুন)।</div>`);return false}
+ sb=window.supabase.createClient(URL_,KEY);return true}
+async function loadPR(){const {data:{session}}=await sb.auth.getSession();PR=null;if(session){PR=ok(await sb.from('profiles').select('*').eq('id',session.user.id).single())}}
+async function R(){if(!await init())return;box('<p>লোড হচ্ছে…</p>');
+ try{if(!PR)await loadPR();
+ if(!PR)return box(`<button class="g" onclick="RM.close()">✕</button><h3>লগইন</h3><input id="le" placeholder="ইমেইল"><input id="lp" type="password" placeholder="পাসওয়ার্ড"><button onclick="RM.login()">লগইন</button>
+<h3>নতুন অ্যাকাউন্ট</h3><input id="rn" placeholder="নাম"><input id="re" placeholder="ইমেইল"><input id="rp" type="password" placeholder="পাসওয়ার্ড (৮+ অক্ষর)">
+<select id="rr" onchange="document.getElementById('dx').style.display=this.value=='doctor'?'block':'none'"><option value="patient">রোগী</option><option value="doctor">ডাক্তার</option></select>
+<div id="dx" style="display:none"><input id="rs" placeholder="বিশেষত্ব"><input id="rg" placeholder="BMDC রেজিস্ট্রেশন নং"><input id="rl" placeholder="চেম্বার/হাসপাতাল"></div><button onclick="RM.reg()">রেজিস্টার</button>
+<p style="font-size:12px;opacity:.7">রেজিস্টার করে আপনি আমাদের গোপনীয়তা নীতি ও শর্তে সম্মত হচ্ছেন। ডাক্তার অ্যাকাউন্ট অ্যাডমিন যাচাইয়ের পর সক্রিয় হবে।</p>`);
+ const tl=tabs[PR.role];T=tl.some(x=>x[0]===T)?T:tl[0][0];clearInterval(pt);
+ const h=`<button class="g" onclick="RM.close()">✕</button><button class="g" onclick="RM.out()">লগআউট</button><h3>${E(PR.name)} <span class="bd">${PR.role}</span> ${PR.role==='doctor'?badge(PR.status):''}</h3><div class="tb">${tl.map(x=>`<button class="${x[0]===T?'':'g'}" onclick="RM.tab('${x[0]}')">${x[1]}</button>`).join('')}</div>`;
+ box(h+await body());if(T==='chat'&&CH)pt=setInterval(thread,4000)}catch(e){box(`<button class="g" onclick="RM.close()">✕</button><div class="c">ত্রুটি: ${E(e.message)}<br><small>ইন্টারনেট ও সেটআপ ঠিক আছে কিনা দেখুন।</small></div>`)}}
+const nm=x=>E(x?.name||'?');
+const AP='*,patient:profiles!patient_id(name),doctor:profiles!doctor_id(name,spec,place)';
+function ap(a){const pat=PR.role==='patient',o=pat?a.doctor:a.patient,oid=pat?a.doctor_id:a.patient_id;
+ return `<div class="c"><b>${nm(o)}</b> ${badge(a.status)}<br>🗓 ${fmt(a.at)}<br>
+${a.status==='confirmed'&&pat?B('বাতিল',`RM.cx(${a.id})`,'r')+B('রিশিডিউল',`RM.rs(${a.id},'${a.doctor_id}')`,'g'):''}
+${a.status==='confirmed'&&!pat?B('প্রেসক্রিপশন লিখুন',`RM.rxf(${a.id},'${E(a.patient?.name)}')`)+B('বাতিল',`RM.cx(${a.id})`,'r'):''}
+${a.status==='confirmed'?B('🎥 ভিডিও কল',`RM.vc('${a.room}')`,'g'):''}${B('💬 চ্যাট',`RM.ch('${oid}')`,'g')}${!pat?B('📋 রেকর্ড',`RM.rv('${a.patient_id}')`,'g'):''}</div>`}
+async function myAppts(){return ok(await sb.from('appointments').select(AP).order('at',{ascending:false}))}
+async function body(){const m=PR;
+ if(T==='n')return L(ok(await sb.from('notifs').select('*').order('id',{ascending:false}).limit(50)).map(x=>`<div class="c">${E(x.text)}<br><small>${fmt(x.created)}</small></div>`));
+ if(T==='near'){const q=t=>'https://www.google.com/maps/search/'+encodeURIComponent(t+' রাজশাহী');return '<p>রাজশাহীতে খুঁজুন (Google Maps):</p>'+[['হাসপাতাল','hospital'],['ফার্মেসি','pharmacy'],['ডায়াগনস্টিক','diagnostic center'],['ইমার্জেন্সি','emergency hospital']].map(x=>`<a href="${q(x[1])}" target="_blank"><button>${x[0]}</button></a>`).join('')+'<h3>ডাক্তারের চেম্বার</h3>'+L(ok(await sb.from('profiles').select('name,place').eq('role','doctor').eq('status','verified')).map(u=>`<div class="c"><b>${nm(u)}</b><br>${E(u.place)}<br><a href="${q(u.place)}" target="_blank">📍 ম্যাপ / রুট</a></div>`))}
+ if(T==='ai')return `<div class="c" style="font-size:12px">⚠ এটি চিকিৎসা নির্ণয় নয়, শুধু সাধারণ তথ্য। জরুরি অবস্থায় ৯৯৯ বা হাসপাতালে যান।</div><input id="aq" placeholder="যেমন: আমার জ্বর ও কাশি"><button onclick="RM.ask()">জিজ্ঞাসা করুন</button>${AIR}`;
+ if(T==='chat')return await chat();
+ if(m.role==='patient'){
+  if(T==='docs'){const ds=ok(await sb.from('profiles').select('id,name,spec,place,fee').eq('role','doctor').eq('status','verified')),fs=await rpc('free_slots');
+   return (RS?`<div class="c">নতুন সময় বাছুন (পুরনোটা বাতিল হবে) ${B('থাক','RM.rs(0)','g')}</div>`:'')+L(ds.map(d=>`<div class="c"><b>${nm(d)}</b> ${badge('verified')}<br>${E(d.spec)} · ${E(d.place)}<br>ফি ৳${d.fee} (চেম্বারে পরিশোধযোগ্য)<br>${fs.filter(s=>s.doctor_id===d.id).slice(0,12).map(s=>B(fmt(s.at),`RM.bk('${d.id}','${s.at}')`,'g')).join('')||'<i>কোনো স্লট নেই</i>'}</div>`))}
+  if(T==='appts')return L((await myAppts()).map(ap));
+  if(T==='rx')return L(ok(await sb.from('rx').select('*,doctor:profiles!doctor_id(name,spec,reg,place),patient:profiles!patient_id(name)').order('id',{ascending:false})).map(r=>`<div class="c"><b>${nm(r.doctor)}</b> · ${fmt(r.created)}<br>রোগ নির্ণয়: ${E(r.dx)}<br>ওষুধ: ${E(r.med)}<br>${B('PDF / প্রিন্ট',`RM.pdf(${r.id})`)}</div>`).map((x,i)=>x));
+  if(T==='rec')return `<textarea id="rt" placeholder="রিপোর্ট/ইতিহাস নোট"></textarea>${B('সংরক্ষণ','RM.ar()')}`+L(ok(await sb.from('records').select('*').order('id',{ascending:false})).map(r=>`<div class="c">${E(r.text)}<br><small>${fmt(r.created)}</small></div>`));
+  if(T==='blood'){const my=ok(await sb.from('donors').select('*').maybeSingle());const rs=ok(await sb.from('blood').select('*').order('id',{ascending:false}));
+   const cards=await Promise.all(rs.map(async r=>{const own=r.by_id===m.id;const mt=own&&r.status!=='fulfilled'?await rpc('blood_matches',{p_id:r.id}):[];
+    return `<div class="c"><b>${r.grp}</b> · ${E(r.area)} ${badge(r.status)}<br>${E(r.note)}${own?'<br>মিলে যাওয়া ডোনার: '+(mt.map(x=>`<a href="tel:${E(x.phone)}">${nm(x)} ${E(x.phone)}</a>`).join(', ')||'এখনো নেই')+'<br>'+(r.status!=='fulfilled'?B('সম্পন্ন',`RM.bful(${r.id})`):''):''}${!own&&r.status==='open'?B('আমি রক্ত দিতে পারব',`RM.bacc(${r.id})`):''}</div>`}));
+   return (my?`<div class="c">আপনি ডোনার: ${my.grp} · ${E(my.area)} ${B('সরান','RM.undonor()','r')}</div>`:`<h3>ডোনার হন</h3><select id="bg">${G}</select><input id="ba" placeholder="এলাকা"><input id="bp" placeholder="ফোন (01XXXXXXXXX)">${B('ডোনার হিসেবে যুক্ত','RM.donor()')}`)+`<h3>রক্ত দরকার</h3><select id="rg2">${G}</select><input id="ra" placeholder="এলাকা/হাসপাতাল"><input id="rnn" placeholder="নোট/ফোন">${B('রিকোয়েস্ট পাঠান','RM.breq()')}<h3>রিকোয়েস্টসমূহ</h3>`+L(cards)}
+  if(T==='amb'){const rs=ok(await sb.from('amb').select('*').order('id',{ascending:false}));
+   return `<input id="al" placeholder="ঠিকানা/ল্যান্ডমার্ক"><input id="aph" placeholder="ফোন (01XXXXXXXXX)">${B('📍 লোকেশন নিন','RM.geo()','g')}<span id="gs" style="font-size:12px">${GL.lat?'লোকেশন পাওয়া গেছে':''}</span><br>${B('🚑 অ্যাম্বুলেন্স ডাকুন','RM.areq()','r')}<p style="font-size:12px">জরুরি হলে ৯৯৯ এ কল করুন।</p>`+L(rs.map(ambc))}}
+ if(m.role==='doctor'){
+  if(m.status!=='verified')return `<div class="c">আপনার প্রোফাইল ${badge(m.status)} — অ্যাডমিন অনুমোদনের পর স্লট ও রোগী দেখতে পাবেন।</div>`;
+  if(T==='slots'){const s=ok(await sb.from('slots').select('*').gt('at',new Date().toISOString()).order('at')),ap_=(await myAppts()).filter(a=>a.status==='confirmed').map(a=>new Date(a.at).getTime());
+   return `<input id="sd" type="date"><input id="stm" type="time">${B('স্লট যোগ','RM.as()')}`+L(s.map(x=>{const bk=ap_.includes(new Date(x.at).getTime());return `<span class="bd">${fmt(x.at)}${bk?' 🔒':` <a href="#" onclick="RM.ds(${x.id});return false">✕</a>`}</span> `}))}
+  return L((await myAppts()).map(ap))}
+ if(T==='dash'){const s=await rpc('admin_stats');return `<div class="st"><div><b>${s.patients}</b>রোগী</div><div><b>${s.doctors}</b>ডাক্তার</div><div><b>${s.appointments}</b>অ্যাপয়েন্টমেন্ট</div><div><b>${s.donors}</b>রক্তদাতা</div></div>`}
+ if(T==='docs')return L(ok(await sb.from('profiles').select('*').eq('role','doctor').order('created',{ascending:false})).map(d=>`<div class="c"><b>${nm(d)}</b> ${badge(d.status)}<br>${E(d.spec)} · ${E(d.reg)} · ${E(d.place)}<br>${B('ভেরিফাই',`RM.vf('${d.id}','verified')`)}${B('প্রত্যাখ্যান',`RM.vf('${d.id}','rejected')`,'r')}</div>`));
+ if(T==='blood')return L(ok(await sb.from('blood').select('*,by:profiles!by_id(name)').order('id',{ascending:false})).map(r=>`<div class="c"><b>${r.grp}</b> · ${E(r.area)} ${badge(r.status)}<br>${E(r.note)}<br>${nm(r.by)}</div>`));
+ if(T==='amb')return L(ok(await sb.from('amb').select('*').order('id',{ascending:false})).map(ambc));
+ return L((await myAppts()).map(a=>`<div class="c">${nm(a.patient)} → ${nm(a.doctor)} ${badge(a.status)}<br>${fmt(a.at)}</div>`))}
+function ambc(r){return `<div class="c">${badge(r.status)}<br>📍 ${E(r.loc)} ${r.lat?`<a href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}" target="_blank">ম্যাপ</a>`:''}<br>📞 ${E(r.phone)}${r.driver?`<br>🚑 ${E(r.driver)} · ETA ${r.eta} মিনিট`:''}<br>${PR.role==='admin'&&r.status!=='done'?B(r.status==='requested'?'ড্রাইভার নির্ধারণ':'পরের ধাপ',`RM.an(${r.id},${r.status==='requested'})`):''}</div>`}
+async function partners(){const as=await myAppts(),mp=new Map();as.forEach(a=>{const pat=PR.role==='patient';mp.set(pat?a.doctor_id:a.patient_id,pat?a.doctor:a.patient)});return mp}
+async function chat(){const p=await partners();if(!p.size)return '<p>চ্যাট করতে আগে একটি অ্যাপয়েন্টমেন্ট নিন।</p>';if(!p.has(CH))CH=[...p.keys()][0];
+ return `<div>${[...p].map(([i,u])=>B(nm(u),`RM.ch('${i}')`,i===CH?'':'g')).join('')}</div><div class="c" id="cth" style="max-height:45vh;overflow:auto">${await thr()}</div><input id="cm" placeholder="মেসেজ লিখুন">${B('পাঠান','RM.send()')}`}
+async function thr(){const d=ok(await sb.from('msgs').select('*').or(`and(from_id.eq.${PR.id},to_id.eq.${CH}),and(from_id.eq.${CH},to_id.eq.${PR.id})`).order('id'));
+ return d.map(x=>`<p style="text-align:${x.from_id===PR.id?'right':'left'}"><span class="bd">${E(x.body)}</span><br><small>${fmt(x.created)}</small></p>`).join('')||'কোনো মেসেজ নেই'}
+async function thread(){if(T!=='chat'||!Q('cth'))return clearInterval(pt);try{const h=await thr(),c=Q('cth');if(c.innerHTML!==h){c.innerHTML=h;c.scrollTop=c.scrollHeight}}catch(e){}}
+const RU=[[/বুকে ব্যথা|chest pain|শ্বাসকষ্ট|breath|অজ্ঞান|খিঁচুনি|রক্তবমি/i,'🚨 এটি জরুরি লক্ষণ হতে পারে। এখনই ৯৯৯ এ কল করুন বা নিকটস্থ ইমার্জেন্সিতে যান।','মেডিসিন'],[/জ্বর|fever|কাশি|cough|সর্দি/i,'বিশ্রাম নিন, পর্যাপ্ত পানি পান করুন। ৩ দিনের বেশি জ্বর বা শ্বাসকষ্ট হলে ডাক্তার দেখান।','মেডিসিন'],[/পেট|ডায়রিয়া|বমি|গ্যাস/i,'ORS ও পানি পান করুন, হালকা খাবার খান। রক্ত যাওয়া বা তীব্র ব্যথা হলে দ্রুত ডাক্তার দেখান।','মেডিসিন'],[/মাথা ?ব্যথা|headache/i,'বিশ্রাম ও পানি পান করুন। হঠাৎ তীব্র ব্যথা বা দুর্বলতা হলে জরুরি সেবা নিন।','মেডিসিন'],[/ত্বক|চুলকানি|ফুসকুড়ি|rash/i,'জায়গাটি পরিষ্কার ও শুকনো রাখুন, নিজে স্টেরয়েড ক্রিম ব্যবহার করবেন না।','চর্ম'],[/চোখ|eye/i,'চোখ কচলাবেন না, পরিষ্কার পানিতে ধুয়ে নিন। দৃষ্টি ঝাপসা হলে দ্রুত দেখান।','চক্ষু'],[/দাঁত|মাড়ি/i,'কুসুম গরম পানিতে কুলকুচি করুন। ফোলা বা জ্বর থাকলে দ্রুত দেখান।','ডেন্টাল'],[/গর্ভ|পিরিয়ড|মাসিক/i,'নিয়মিত চেকআপ জরুরি। অতিরিক্ত রক্তপাত বা ব্যথা হলে দ্রুত দেখান।','গাইনি'],[/হাড়|জয়েন্ট|কোমর|ব্যথা/i,'বিশ্রাম নিন, ভারী কাজ এড়ান। আঘাত বা ফোলা থাকলে এক্স-রে লাগতে পারে।','অর্থো']];
+const A=f=>go(async(...a)=>{await f(...a)});
+window.RM={async open(){Q('rmOv').style.display='block';await R()},close(){Q('rmOv').style.display='none';clearInterval(pt)},tab(t){T=t;R()},
+out:A(async()=>{await sb.auth.signOut();PR=null;T='';R()}),
+login:A(async()=>{ok(await sb.auth.signInWithPassword({email:v('le').trim(),password:v('lp')}));PR=null;T='';R()}),
+reg:A(async()=>{const r=v('rr');if(!v('rn').trim()||v('rp').length<8)throw Error('নাম ও ৮+ অক্ষরের পাসওয়ার্ড দিন');if(r==='doctor'&&!v('rg').trim())throw Error('BMDC নং দিন');
+ const d=ok(await sb.auth.signUp({email:v('re').trim(),password:v('rp'),options:{data:{name:v('rn').trim(),role:r,spec:v('rs'),reg:v('rg'),place:v('rl')}}}));
+ if(!d.session){alert('ইমেইলে একটি কনফার্মেশন লিংক পাঠানো হয়েছে। লিংকে চাপ দিয়ে তারপর লগইন করুন।');return}PR=null;T='';R()}),
+bk:A(async(d,t)=>{if(!confirm(fmt(t)+' সময়ে বুক করবেন?'))return;await rpc('book_appointment',{p_doc:d,p_at:t,p_old:RS||null});RS=0;T='appts';R()}),
+cx:A(async id=>{if(!confirm('বাতিল করবেন?'))return;await rpc('cancel_appointment',{p_id:id});R()}),
+rs(id){RS=id;T='docs';R()},
+as:A(async()=>{if(!v('sd')||!v('stm'))throw Error('তারিখ ও সময় দিন');ok(await sb.from('slots').insert({doctor_id:PR.id,at:new Date(v('sd')+'T'+v('stm')).toISOString()}));R()}),
+ds:A(async id=>{ok(await sb.from('slots').delete().eq('id',id));R()}),
+vf:A(async(u,s)=>{await rpc('admin_set_status',{p_uid:u,p_status:s});R()}),
+ar:A(async()=>{if(!v('rt').trim())return;ok(await sb.from('records').insert({text:v('rt').trim()}));R()}),
+rv:A(async pid=>{const r=ok(await sb.from('records').select('*').eq('patient_id',pid).order('id',{ascending:false}));box(`<button class="g" onclick="RM.tab('appts')">← পিছনে</button><h3>রোগীর রেকর্ড</h3>`+L(r.map(x=>`<div class="c">${E(x.text)}<br><small>${fmt(x.created)}</small></div>`)))}),
+rxf(id,n){box(`<h3>প্রেসক্রিপশন — ${n}</h3><input id="x1" placeholder="রোগ নির্ণয়"><textarea id="x2" placeholder="ওষুধ, ডোজ, মেয়াদ (প্রতি লাইনে একটি)"></textarea><textarea id="x3" placeholder="পরামর্শ"></textarea>${B('সংরক্ষণ',`RM.rxs(${id})`)}${B('পিছনে','RM.tab(\'appts\')','g')}`)},
+rxs:A(async id=>{await rpc('write_rx',{p_appt:id,p_dx:v('x1'),p_med:v('x2'),p_adv:v('x3')});T='appts';R()}),
+pdf:A(async id=>{const r=ok(await sb.from('rx').select('*,doctor:profiles!doctor_id(name,spec,reg,place),patient:profiles!patient_id(name)').eq('id',id).single()),w=window.open('','_blank');if(!w)throw Error('পপআপ অনুমতি দিন');
+ w.document.write(`<meta charset=utf-8><title>Prescription</title><body style="font-family:sans-serif;max-width:640px;margin:30px auto"><h2>${nm(r.doctor)}</h2><p>${E(r.doctor.spec)} · ${E(r.doctor.reg)} · ${E(r.doctor.place)}</p><hr><p><b>রোগী:</b> ${nm(r.patient)} &nbsp; <b>তারিখ:</b> ${fmt(r.created)}</p><p><b>রোগ নির্ণয়:</b> ${E(r.dx)}</p><h3>℞</h3><pre style="font:inherit;white-space:pre-wrap">${E(r.med)}</pre><p><b>পরামর্শ:</b> ${E(r.adv)}</p><script>onload=()=>print()<\/script>`);w.document.close()}),
+vc(room){window.open('https://meet.jit.si/RMC-'+room,'_blank')},
+ch(i){CH=i;T='chat';R()},
+send:A(async()=>{const t=v('cm').trim();if(!t)return;ok(await sb.from('msgs').insert({to_id:CH,body:t}));Q('cm').value='';thread()}),
+donor:A(async()=>{ok(await sb.from('donors').upsert({grp:v('bg'),area:v('ba').trim(),phone:v('bp').trim()}));R()}),
+undonor:A(async()=>{ok(await sb.from('donors').delete().eq('user_id',PR.id));R()}),
+breq:A(async()=>{await rpc('request_blood',{p_grp:v('rg2'),p_area:v('ra'),p_note:v('rnn')});R()}),
+bacc:A(async id=>{if(!await rpc('accept_blood',{p_id:id}))alert('অনুরোধটি আর খোলা নেই');R()}),
+bful:A(async id=>{await rpc('fulfil_blood',{p_id:id});R()}),
+geo(){if(!navigator.geolocation)return alert('সাপোর্ট নেই');navigator.geolocation.getCurrentPosition(p=>{GL={lat:p.coords.latitude,lng:p.coords.longitude};Q('gs').textContent='লোকেশন পাওয়া গেছে'},()=>alert('লোকেশন অনুমতি দিন'))},
+areq:A(async()=>{await rpc('request_ambulance',{p_loc:v('al'),p_lat:GL.lat??null,p_lng:GL.lng??null,p_phone:v('aph').trim()});R()}),
+an:A(async(id,first)=>{let d='',e=null;if(first){d=prompt('ড্রাইভারের নাম ও নম্বর');if(!d)return;e=+prompt('ETA (মিনিট)','10')||10}await rpc('amb_advance',{p_id:id,p_driver:d,p_eta:e});R()}),
+ask:A(async()=>{const q=v('aq').trim();if(!q)return;const r=RU.find(x=>x[0].test(q));
+ const ds=r?ok(await sb.from('profiles').select('name,place,spec').eq('role','doctor').eq('status','verified')).filter(u=>(u.spec||'').includes(r[2])):[];
+ AIR=r?`<div class="c">${r[1]}<br><b>প্রস্তাবিত বিশেষত্ব:</b> ${r[2]}<br>${ds.map(d=>nm(d)+' ('+E(d.place)+')').join('<br>')||'এই বিশেষত্বের ভেরিফাইড ডাক্তার এখনো নেই'}</div>`:'<div class="c">বিষয়টি বুঝতে পারিনি। লক্ষণ আরও স্পষ্ট করে লিখুন বা ডাক্তারের পরামর্শ নিন।</div>';R()})};
+})();
+</script>
+<!-- RMC-ADDON-END -->
+</body></html>
