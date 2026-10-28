@@ -1,4 +1,4 @@
-// অফলাইন + অটো-আপডেট। নেট থাকলে সবসময় নতুন ভার্সন; না থাকলে ক্যাশ।
+importScripts('push-handlers.js');// অফলাইন + অটো-আপডেট। নেট থাকলে সবসময় নতুন ভার্সন; না থাকলে ক্যাশ।
 const CACHE = "rajshahi-v11";
 const PRE = ["./", "manifest.json", "icon-192.png"];
 self.addEventListener("install", (e) => {
